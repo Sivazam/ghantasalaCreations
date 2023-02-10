@@ -1,7 +1,7 @@
 {
   "name": "qna",
   "version": "0.1.0",
-  "homepage": "http://github-Sivazam.github.io/ghantasalaCreations",
+  "homepage": "http://Sivazam.github.io/ghantasalaCreations",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
