@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/ghantasalaCreations/static/css/main.c713b6e5.css",
-    "main.js": "/ghantasalaCreations/static/js/main.84a8ff66.js",
+    "main.css": "/ghantasalaCreations/static/css/main.de293ad6.css",
+    "main.js": "/ghantasalaCreations/static/js/main.a8838206.js",
     "static/js/787.05276c2a.chunk.js": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js",
-    "static/media/bg.jpg": "/ghantasalaCreations/static/media/bg.0cb27639a4bdb5962330.jpg",
     "index.html": "/ghantasalaCreations/index.html",
-    "main.c713b6e5.css.map": "/ghantasalaCreations/static/css/main.c713b6e5.css.map",
-    "main.84a8ff66.js.map": "/ghantasalaCreations/static/js/main.84a8ff66.js.map",
+    "main.de293ad6.css.map": "/ghantasalaCreations/static/css/main.de293ad6.css.map",
+    "main.a8838206.js.map": "/ghantasalaCreations/static/js/main.a8838206.js.map",
     "787.05276c2a.chunk.js.map": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c713b6e5.css",
-    "static/js/main.84a8ff66.js"
+    "static/css/main.de293ad6.css",
+    "static/js/main.a8838206.js"
   ]
 }
