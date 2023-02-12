@@ -41,14 +41,19 @@
 
 .Home{
   background-image: url(/public/bg.jpg);
+  
+  /* background: black; */
+  /* opacity: 1; */
+  /* background-image: url(/public/bluBg.jpeg); */
   background-size: cover;
   height: 100%;
   width: 100%;
+  /* padding: 0px 0px 50px 0px; */
 }
 
 
 .lm90{
-  margin-left: 11%;
+  margin-left: 7%;
   margin-right: 4%;
 }
 
@@ -56,22 +61,132 @@
 
   /* width: 50%;
   height: 50%; */
-  padding: 10px 20px;
+  padding: 25px 25px 5px 25px;
   cursor: pointer;
   color: #fff;
-  margin: 10px 5px;
-  background: rgba(255, 255, 255, 0.2);
+  margin: 10px 20px;
+  /* background: rgba(255, 255, 255, 0.2); */
+  background: rgba(41, 40, 40, 0.6);
   /* background: rgba(13, 13, 13, 0.861); */
   border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)
+  border: 3px solid yellow;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+
 }
+
 
 
 .mainText{
-  /* -webkit-text-stroke: 0.3px red; */
-  -webkit-text-fill-color: white;
-  font-size: 1.8rem;
-  text-shadow: 3px 3px black;
+  /* -webkit-text-stroke: 0.1px red; */
+  -webkit-text-fill-color: yellow;
+  /* font-weight: 900; */
+  font-size: 2rem;
+  text-align: center;
+  justify-content: center;
+  font-family: 'Noto Serif Telugu', serif;
+  /* font-family: 'Tiro Telugu', serif; */
+  text-shadow: 3px 3px red;
 
 }
 
+
+.logoIcon{
+  border-radius: 50%;
+  border: 2px solid white;
+  height: 70px;
+  width: 70px;
+  margin-right: 20px;
+  margin:20px 20px 0px 10px;
+  background-color: white;
+  background-size: cover;
+  
+}
+
+.icon{
+  margin: 0px 20px;
+background-color: white;
+border-radius: 50%;
+border:1.5px solid black;
+background-size:auto;
+
+}
+
+
+#navBar{
+  background: rgba(41, 40, 40, 0.4) !important; 
+  /* color: white; */
+  /* -webkit-text-fill-color: white !important; */
+}
+
+.active{
+  color:blue !important;
+}
+
+
+
+label{
+  margin: 10px 0px;
+}
+
+
+
+/* Base */
+/* body {
+  padding: 0;
+  margin: 0;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+} */
+/* h1 {
+  color: hsl(0, 0%, 28%);
+  font-size: 50px;
+  font-weight: bold;
+  font-family: monospace;
+  letter-spacing: 7px;
+  cursor: pointer;
+}
+
+h1 span {
+  transition: 0.5s ease-out;
+}
+h1:hover span:nth-child(1) {
+  margin-right: 5px;
+}
+h1:hover span:nth-child(1):after {
+  content: "'";
+}
+h1:hover span:nth-child(2) {
+  margin-left: 30px;
+}
+h1:hover span {
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
+} */
+
+
+.floating { 
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  /* margin-left: 30px; */
+  margin-top: 5px;
+  -webkit-text-fill-color: yellow;
+  /* font-weight: 900; */
+  font-size: 2rem;
+  text-align: center;
+  justify-content: center;
+  font-family: 'Noto Serif Telugu', serif;
+  /* font-family: 'Tiro Telugu', serif; */
+  text-shadow: 3px 3px red;
+}
+
+
+@keyframes floating {
+  0% { transform: translate(0,  0px); }
+  50%  { transform: translate(0, 15px); }
+  100%   { transform: translate(0, -0px); }   
+}

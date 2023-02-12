@@ -1,0 +1,14 @@
+TO-DO
+
+
+dropdown menu troubleshoot
+mobile maode - inc height of navbar
+spacing and margin check
+
+
+use modal in map fun
+collect form data using state -  send to telegran bot api
+collect data when invoked "know the answer btn" - ( only collect for the first time)
+
+on submit , show some messaged and submitted animation
+shld have a close/back btn to navigatre to more questions
