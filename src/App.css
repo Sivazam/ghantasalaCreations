@@ -75,6 +75,11 @@
 }
 
 
+.textAreaStyle{
+  
+}
+
+
 
 .mainText{
   /* -webkit-text-stroke: 0.1px red; */
@@ -189,4 +194,33 @@ h1:hover span {
   0% { transform: translate(0,  0px); }
   50%  { transform: translate(0, 15px); }
   100%   { transform: translate(0, -0px); }   
+}
+
+
+
+
+
+.bounceInRight:hover {
+    cursor: pointer;
+    animation-name: bounce;
+    -moz-animation-name: bounce;
+  
+}
+
+@keyframes bounceInRight {
+	0%, 100%, 20%, 50%, 80% {
+		-webkit-transform: translateY(0);
+		-ms-transform:     translateY(0);
+		transform:         translateY(0)
+	}
+	40% {
+		-webkit-transform: translateY(-30px);
+		-ms-transform:     translateY(-30px);
+		transform:         translateY(-30px)
+	}
+	60% {
+		-webkit-transform: translateY(-15px);
+		-ms-transform:     translateY(-15px);
+		transform:         translateY(-15px)
+	}
 }

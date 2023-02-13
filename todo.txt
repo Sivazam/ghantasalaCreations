@@ -5,6 +5,9 @@ dropdown menu troubleshoot
 mobile maode - inc height of navbar
 spacing and margin check
 
+fix audio play/pause functionality
+
+
 
 use modal in map fun
 collect form data using state -  send to telegran bot api
@@ -12,3 +15,19 @@ collect data when invoked "know the answer btn" - ( only collect for the first t
 
 on submit , show some messaged and submitted animation
 shld have a close/back btn to navigatre to more questions
+
+
+menu highlight on active
+
+
+
+
+
+login issue and questions to others issues RESOLUTION: - no need to maintain a login
+
+will remeber data entered in the form and display it every time a question is clicked. if they wish to enter someone
+else details, they can delete the feilds and enter new data and click submit. 
+
+USE Telgeram bot to push notification:
+ref - https://www.youtube.com/watch?v=qjKYNYbw0WM
+

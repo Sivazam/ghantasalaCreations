@@ -3,22 +3,27 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 // import Cards from "./Cards";
 import Navrbar from "./Navbar";
-// import FormCollect from "./FormCollect";
+import FormCollect from "./FormCollect";
 import useSound from 'use-sound'
 import Om from '../src/images/sounds/bgMusic.mp3'
 import TestCards from "./TestCards";
+import Footer from "./Footer";
+import OwnQuetion from "./OwnQuestion";
 
 
 
 
 export default function HomePage()
 {
+
+
     // const song = new Audio("bgMusic.mp3");
 
-    const [play] = useSound(Om)
-    const [stop] = useSound(Om,{volume:0})
+    const [play,{stop}] = useSound(Om)
 
-    
+    // play();
+    // const [stop] = useSound("")
+
 
 
     // const song = new Audio("bgMusic.mp3");
@@ -28,17 +33,19 @@ export default function HomePage()
     
      function tog(){
         if(click){
-            setClick(false)
+            setClick(false);
             stop()
+
         }else{
-            setClick(true)
+            setClick(true);
             play()
+
 
         }
     }
    
     return(
-        <div className="Home " style={{paddingBottom:'50px'}} onLoad={play}>
+        <div className="Home " style={{paddingBottom:'0px'}} onLoad={play}>
             {/* <audio id="audio" loop autoPlay> 
                 <source src="bgMusic.mp3" type="audio/mp3" />
             </audio> */}
@@ -56,6 +63,7 @@ export default function HomePage()
 
                 </div>
                 <TestCards/>
+                <OwnQuetion/>
                 {/* <Cards/> */}
                 <div style={{}}>
                 {/* <FormCollect/> */}
@@ -65,7 +73,8 @@ export default function HomePage()
             
             {/* <button >play</button> */}
             {/* <button onClick={() => {song.pause();}}>pause</button> */}
-            
+            <Footer />
+
         </div>
     )
 }
