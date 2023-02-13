@@ -18,7 +18,7 @@ export default function Cards(){
             <div className="row lm90">
                 {qna.map((x,i) => {
                     return (<>
-                     <div className="col-xl-5 col-md-12  col-sm-12 col-xs-12 card-main" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={play} key={i} id={i}>
+                     <div className="col-xl-5 col-md-12  col-sm-12 col-xs-12 card-main" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={play} key={i} id={i} >
                         <h4 className="mainText" style={{fontWeight:800}} key={i}>{x.question}</h4>
 
                         

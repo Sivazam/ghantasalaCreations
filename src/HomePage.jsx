@@ -51,7 +51,7 @@ export default function HomePage()
             </audio> */}
             <Navrbar/>
 
-            <div className="row container-fluid" >
+            <div className="row" >
                 <div className="col-11"></div>
                 <div className="col" style={{margin:'20px',color:'whitesmoke'}}>
                     
@@ -59,7 +59,7 @@ export default function HomePage()
                 <input type="checkbox" className="custom-control-input" id="customSwitch1" checked />
                 <label className="custom-control-label" for="customSwitch1"></label>
                 </div> */}
-                {click ? <VolumeUpIcon style={{cursor:"pointer"}} onClick={() => {tog();}}/> : <VolumeOffIcon style={{cursor:"pointer"}} onClick={() => { tog();}}/>}
+                {click ? <VolumeUpIcon style={{cursor:"pointer",color:'green', background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => {tog();}}/> : <VolumeOffIcon style={{cursor:"pointer",color:'red',background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => { tog();}}/>}
 
                 </div>
                 <TestCards/>

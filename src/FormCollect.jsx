@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+
 
 export default function FormCollect(prop){
 
@@ -32,14 +34,19 @@ export default function FormCollect(prop){
     console.log(details.name)
 
   }
-    return(
-        <div style={{  background: "rgba(41, 40, 40, 0.6)" ,  color:'white', padding:'30px 0px', margin:'50px 0px ', marginLeft:'20px'}}>
+    return(<>
+      
+        <div style={{ color:'white', padding:'30px 0px'}}>
            <form style={{padding:'30px'}}>
+           <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">{prop.question}</h5>
+                                <button style={{border:"none", background:'none'}} type="button" className="" data-bs-dismiss="modal" aria-label="Close"><CloseOutlinedIcon style={{color:'red',background:"none"}}/></button>
+                            </div>
   {/* <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
   </div> */}
-  <h4 style={{margin:'15px 0px'}}>{prop.question}</h4>
+  {/* <h4 style={{margin:'15px 0px'}}></h4> */}
    <div class="form-group">
     <label for="exampleInputPassword1">Full Name *</label>
     <input name="name" type="text"  class="form-control" id="exampleInputPassword1" placeholder="Full Name"  onChange={handleChange}/>
@@ -70,9 +77,9 @@ export default function FormCollect(prop){
     <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
     <small id="emailHelp" class="form-text " style={{color:'grey'}}>We'll never share your email with anyone else.</small>
   </div>
- 
   <button type="submit" class="btn btn-success" style={{marginTop:'20px'}}>మీరు సమాధానం తెలుసుకోవాలనుకుంటున్నారా</button>
 </form>
         </div>
+        </>
     )
 }

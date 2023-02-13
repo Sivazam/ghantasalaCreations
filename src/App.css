@@ -53,8 +53,8 @@
 
 
 .lm90{
-  margin-left: 7%;
-  margin-right: 4%;
+  margin: 0 7%;
+justify-content: center;
 }
 
 .card-main{
