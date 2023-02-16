@@ -1,28 +1,28 @@
 {
   "files": {
-    "main.css": "/ghantasalaCreations/static/css/main.bee5fc37.css",
-    "main.js": "/ghantasalaCreations/static/js/main.4fafd2d3.js",
+    "main.css": "/ghantasalaCreations/static/css/main.ef3ddb20.css",
+    "main.js": "/ghantasalaCreations/static/js/main.f07f92cc.js",
     "static/js/845.6b08ed0e.chunk.js": "/ghantasalaCreations/static/js/845.6b08ed0e.chunk.js",
     "static/js/787.05276c2a.chunk.js": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js",
     "static/media/bgMusic.mp3": "/ghantasalaCreations/static/media/bgMusic.36e86beaa9f7f294d474.mp3",
-    "static/media/bg.jpg": "/ghantasalaCreations/static/media/bg.0cb27639a4bdb5962330.jpg",
-    "static/media/1.mp4": "/ghantasalaCreations/static/media/1.0f5868ab6a9b54c5be83.mp4",
-    "static/media/5.mp4": "/ghantasalaCreations/static/media/5.37c3a0f8a59c51bb8a62.mp4",
-    "static/media/3.mp4": "/ghantasalaCreations/static/media/3.2072110297b9ca4786dc.mp4",
-    "static/media/7.mp4": "/ghantasalaCreations/static/media/7.f1af0cc463a6c416aaee.mp4",
-    "static/media/2.mp4": "/ghantasalaCreations/static/media/2.8be1f3cb219afbd15837.mp4",
-    "static/media/6.mp4": "/ghantasalaCreations/static/media/6.7b08170d4081b74063ef.mp4",
-    "static/media/4.mp4": "/ghantasalaCreations/static/media/4.64b6202e8a3db74cca90.mp4",
+    "static/media/bg.webp": "/ghantasalaCreations/static/media/bg.e8f3b55f99f8b843b39c.webp",
+    "static/media/1.mp3": "/ghantasalaCreations/static/media/1.66ecd3eb21825f09cac7.mp3",
+    "static/media/5.mp3": "/ghantasalaCreations/static/media/5.95b7e4dd8af4bde8daa0.mp3",
+    "static/media/3.mp3": "/ghantasalaCreations/static/media/3.4d5ef956232c075524f3.mp3",
+    "static/media/7.mp3": "/ghantasalaCreations/static/media/7.89b3aa074f58d4b6b03a.mp3",
+    "static/media/2.mp3": "/ghantasalaCreations/static/media/2.66a9cdcb878bc1d0f343.mp3",
+    "static/media/6.mp3": "/ghantasalaCreations/static/media/6.6a87959dd092d25371f0.mp3",
+    "static/media/4.mp3": "/ghantasalaCreations/static/media/4.9f317e649a0a9fd38935.mp3",
     "static/media/dp.png": "/ghantasalaCreations/static/media/dp.a5ca6368dae98482128c.png",
     "static/media/bell.mp3": "/ghantasalaCreations/static/media/bell.ab6e4e70b6523f009bd9.mp3",
     "index.html": "/ghantasalaCreations/index.html",
-    "main.bee5fc37.css.map": "/ghantasalaCreations/static/css/main.bee5fc37.css.map",
-    "main.4fafd2d3.js.map": "/ghantasalaCreations/static/js/main.4fafd2d3.js.map",
+    "main.ef3ddb20.css.map": "/ghantasalaCreations/static/css/main.ef3ddb20.css.map",
+    "main.f07f92cc.js.map": "/ghantasalaCreations/static/js/main.f07f92cc.js.map",
     "845.6b08ed0e.chunk.js.map": "/ghantasalaCreations/static/js/845.6b08ed0e.chunk.js.map",
     "787.05276c2a.chunk.js.map": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bee5fc37.css",
-    "static/js/main.4fafd2d3.js"
+    "static/css/main.ef3ddb20.css",
+    "static/js/main.f07f92cc.js"
   ]
 }
