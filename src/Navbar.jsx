@@ -8,8 +8,8 @@ export default function Navrbar(){
 
             <nav className="navbar navbar-expand-lg navbar-dark" id="navBar">
 
-                <a className="navbar-brand" href="#" style={{fontWeight:'700',display:'flex'}}>
-                    <img src={DP} width="50" height="50" className="d-inline-block align-middle icon" alt="" />
+                <a className="navbar-brand" href="/" style={{fontWeight:'700',display:'flex'}}>
+                    <img src={DP} width="50" height="50" className="d-inline-block align-middle icon" href="/" alt="" />
                     <span className="floating" style={{fontSize:'21px',fontWeight:'900',textAlign:'left'}}>Ghantasala arts</span>
                     </a>
 
@@ -19,26 +19,38 @@ export default function Navrbar(){
                 </button>
                 <div className="collapse navbar-collapse"  id="navbarNav" style={{margin: '1rem  0 1rem 5rem'}}>
                     <ul className="navbar-nav ms-auto" style={{marginRight:'1rem'}}>
-                    <li className="nav-item active">
-                        <a className="nav-link " href="#" >వాస్తు</a>
+                    <li className="nav-item active ">
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} >వాస్తు</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link " href="#" >జ్యోతిష్యం</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} >జ్యోతిష్యం</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link " href="#">పూజలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>పూజలు</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link " href="#">వ్రతాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>వ్రతాలు</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link " href="#">హోమాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>హోమాలు</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link " href="#">జపాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>జపాలు</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#">జాతకం</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>జాతకం</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/gallery" >ఫొటో గ్యాలరీ</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>ఘంటసాల గీత</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>చిట్టి తంత్రాలు</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>ధనాకర్షణ రెమిడీలు</a>
                     </li>
                     </ul>
                 </div>

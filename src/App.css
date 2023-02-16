@@ -40,11 +40,7 @@
 
 
 .Home{
-  background-image: url(/public/bg.jpg);
-  
-  /* background: black; */
-  /* opacity: 1; */
-  /* background-image: url(/public/bluBg.jpeg); */
+  background-image: url(/public/bg.webp);
   background-size: cover;
   height: 100%;
   width: 100%;
@@ -54,7 +50,7 @@
 
 .lm90{
   margin: 0 7%;
-justify-content: center;
+  justify-content: center;
 }
 
 .card-main{
@@ -223,4 +219,25 @@ h1:hover span {
 		-ms-transform:     translateY(-15px);
 		transform:         translateY(-15px)
 	}
+}
+
+/* outlined-multiline-flexible:hover{
+  border: none;
+  border-radius: 0%;
+} */
+
+.hide{
+  visibility: hidden;
+}
+
+
+
+.socialIcon:hover{
+background: #16FF00 !important;
+color: whitesmoke !important;
+}
+
+
+.footerTitle:hover{
+  color: red !important;
 }
