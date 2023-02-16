@@ -1,21 +1,28 @@
 {
   "files": {
-    "main.css": "/ghantasalaCreations/static/css/main.69a0b0b3.css",
-    "main.js": "/ghantasalaCreations/static/js/main.da812677.js",
+    "main.css": "/ghantasalaCreations/static/css/main.bee5fc37.css",
+    "main.js": "/ghantasalaCreations/static/js/main.98ceb90a.js",
     "static/js/845.6b08ed0e.chunk.js": "/ghantasalaCreations/static/js/845.6b08ed0e.chunk.js",
     "static/js/787.05276c2a.chunk.js": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js",
     "static/media/bgMusic.mp3": "/ghantasalaCreations/static/media/bgMusic.36e86beaa9f7f294d474.mp3",
     "static/media/bg.jpg": "/ghantasalaCreations/static/media/bg.0cb27639a4bdb5962330.jpg",
+    "static/media/1.mp4": "/ghantasalaCreations/static/media/1.0f5868ab6a9b54c5be83.mp4",
+    "static/media/5.mp4": "/ghantasalaCreations/static/media/5.37c3a0f8a59c51bb8a62.mp4",
+    "static/media/3.mp4": "/ghantasalaCreations/static/media/3.2072110297b9ca4786dc.mp4",
+    "static/media/7.mp4": "/ghantasalaCreations/static/media/7.f1af0cc463a6c416aaee.mp4",
+    "static/media/2.mp4": "/ghantasalaCreations/static/media/2.8be1f3cb219afbd15837.mp4",
+    "static/media/6.mp4": "/ghantasalaCreations/static/media/6.7b08170d4081b74063ef.mp4",
+    "static/media/4.mp4": "/ghantasalaCreations/static/media/4.64b6202e8a3db74cca90.mp4",
     "static/media/dp.png": "/ghantasalaCreations/static/media/dp.a5ca6368dae98482128c.png",
     "static/media/bell.mp3": "/ghantasalaCreations/static/media/bell.ab6e4e70b6523f009bd9.mp3",
     "index.html": "/ghantasalaCreations/index.html",
-    "main.69a0b0b3.css.map": "/ghantasalaCreations/static/css/main.69a0b0b3.css.map",
-    "main.da812677.js.map": "/ghantasalaCreations/static/js/main.da812677.js.map",
+    "main.bee5fc37.css.map": "/ghantasalaCreations/static/css/main.bee5fc37.css.map",
+    "main.98ceb90a.js.map": "/ghantasalaCreations/static/js/main.98ceb90a.js.map",
     "845.6b08ed0e.chunk.js.map": "/ghantasalaCreations/static/js/845.6b08ed0e.chunk.js.map",
     "787.05276c2a.chunk.js.map": "/ghantasalaCreations/static/js/787.05276c2a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.69a0b0b3.css",
-    "static/js/main.da812677.js"
+    "static/css/main.bee5fc37.css",
+    "static/js/main.98ceb90a.js"
   ]
 }
