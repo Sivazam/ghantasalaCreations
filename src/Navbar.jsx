@@ -20,7 +20,7 @@ export default function Navrbar(){
                 <div className="collapse navbar-collapse"  id="navbarNav" style={{margin: '1rem  0 1rem 5rem'}}>
                     <ul className="navbar-nav ms-auto" style={{marginRight:'1rem'}}>
                     <li className="nav-item active ">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}  > <button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>వాస్తు</button></a>
+                        <a className="nav-link disabled" href="#"> <button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>వాస్తు</button></a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} ><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>జ్యోతిష్యం</button></a>
