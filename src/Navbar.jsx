@@ -20,37 +20,37 @@ export default function Navrbar(){
                 <div className="collapse navbar-collapse"  id="navbarNav" style={{margin: '1rem  0 1rem 5rem'}}>
                     <ul className="navbar-nav ms-auto" style={{marginRight:'1rem'}}>
                     <li className="nav-item active ">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} >వాస్తు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}  > <button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>వాస్తు</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} >జ్యోతిష్యం</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")} ><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>జ్యోతిష్యం</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>పూజలు</a>
+                        {/* <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-danger" style={{color:'yellow', border:'1px solid grey'}}>పూజలు</button></a> */}
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>వ్రతాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>వ్రతాలు</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>హోమాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>హోమాలు</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>జపాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>జపాలు</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>జాతకం</a>
+                        {/* <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-danger" style={{color:'yellow', border:'1px solid yellow'}}>జాతకం</button></a> */}
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/gallery" >ఫొటో గ్యాలరీ</a>
+                        <a className="nav-link " href="/gallery" ><button className="btn btn-outline-warning" style={{color:'', border:'1px solid yellow'}}>ఫొటో గ్యాలరీ</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>ఘంటసాల గీత</a>
+                        {/* <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-danger" style={{color:'yellow', border:'1px solid yellow'}}>ఘంటసాల గీత</button></a> */}
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>చిట్టి తంత్రాలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>చిట్టి తంత్రాలు</button></a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}>ధనాకర్షణ రెమిడీలు</a>
+                        <a className="nav-link disabled" href="#" onClick={() => alert("Coming soon")}><button className="btn btn-ouline-danger" style={{color:'yellow', border:'1px solid yellow'}}>ధనాకర్షణ రెమిడీలు</button></a>
                     </li>
                     </ul>
                 </div>

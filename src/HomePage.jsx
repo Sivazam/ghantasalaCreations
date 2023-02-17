@@ -24,7 +24,7 @@ export default function HomePage()
                     <Routes>
                     {/* <Route path="/" element={<HomePage />}> */}
                         <Route path="/" >
-                        <Route path="ghantasalaCreations" element={<HomeMain />} />
+                        {/* <Route path="" element={<HomeMain />} /> */}
                         <Route index element={<HomeMain />} />
                         <Route path="gallery" element={<Gallery />} />
                         </Route>
