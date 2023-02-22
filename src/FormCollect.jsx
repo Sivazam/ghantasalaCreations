@@ -2,7 +2,9 @@ import React, {  useState } from "react";
 import * as $ from 'jquery';
 import useSound from 'use-sound';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 import FinalAudio1 from "../src/images/sounds/1.mp3"
 import FinalAudio2 from "../src/images/sounds/2.mp3"
 import FinalAudio3 from "../src/images/sounds/3.mp3"
@@ -29,7 +31,7 @@ export default function FormCollect(prop){
   const aud =  soundsList[RN];
   
 
-  const  [sub] = useSound(aud,{volume:0.25})
+  const  [sub] = useSound(aud,{volume:1})
 
   const [details,setDetails] = useState(
     {
@@ -44,12 +46,18 @@ export default function FormCollect(prop){
   )
 
   function handleChange(e){
-    e.preventDefault();
+    // e.preventDefault();
 
     const data = {...details};
+    // if(e.target.id == "contact"){
+    //   data[e.target.id] = e;
+    //   console.log(e)
 
+    // }else{
     data[e.target.id] = e.target.value;
+  // }
     setDetails(data);
+    console.log("formdata :", details)
     
 
     
@@ -58,7 +66,7 @@ export default function FormCollect(prop){
 
   }
 
-var Name, Gotram,Place,Date,Time,Contact,Email,Message,Question;
+var Name, Gotram,Place,Date,Time,number,Contact,Email,Message,Question;
 
 var ready = function () {
   Name = document.getElementById("name").value;
@@ -67,9 +75,11 @@ var ready = function () {
   Date = document.getElementById("date").value;
   Time = document.getElementById("time").value;
   Email = document.getElementById("email").value;
-  Contact = document.getElementById("contact").value;
+  number = document.getElementById("contact").value;
+  Contact = `https://api.whatsapp.com/send?phone=+91${number}&text=%20`;
   Question = prop.question;
   Message = "Name: " + Name + "\nGotram: " + Gotram + "\nPlace:" + Place +"\nDate:" + Date + "\nTime:" + Time + "\nEmail:" + Email + "\nContact Number:" + Contact + "\nQuestion:" + Question;
+console.log("sending data:",Message)
 };
 var sender = function () {
     ready();
@@ -135,9 +145,9 @@ var sender = function () {
         <div id="IDModal" className="mainForm" style={{ color:'white', padding:'30px 0px'}}>
            <form onSubmit={handleSubmit} style={{padding:'30px'}}>
            <div className="modal-header">
-                                  <h5 className="modal-title" id="exampleModalLabel">{prop.question}</h5>
-                                <button  style={{border:"none", background:'none'}} type="button" className="closeBtn" data-bs-dismiss="modal" aria-label="Close"><CloseOutlinedIcon style={{color:'red',background:"none"}}/></button>
-                            </div>
+              <h5 className="modal-title mainText" style={{fontSize:'1.5rem'}} id="exampleModalLabel">{prop.question}</h5>
+                  <button  style={{border:"none", background:'none'}} type="button" className="closeBtn" data-bs-dismiss="modal" aria-label="Close"><CloseOutlinedIcon style={{color:'red',background:"none"}}/></button>
+            </div>
 
             <div className="form-group">
               <label for="exampleInputPassword1">Full Name *</label>
@@ -147,6 +157,8 @@ var sender = function () {
               <label for="exampleInputPassword1">Gotram *</label>
               <input id="gotram" name="gotram" type="text" className="form-control"  placeholder="Gotram" onChange={handleChange} value={details.gotram} required/>
             </div>
+        
+
             <div className="form-group">
               <label for="exampleInputPassword1">Birth Place</label>
               <input id="place" name="place" type="text" className="form-control"  placeholder="Birth Place" onChange={handleChange} value={details.place} required/>
@@ -166,7 +178,16 @@ var sender = function () {
   </div> */}
   <div className="form-group">
     <label for="exampleInputPassword1">Contact Number *</label>
-    <input id="contact" name="contact" type="number" className="form-control"  placeholder="Mobile Number" onChange={handleChange} value={details.contact} required/>
+    {/* <PhoneInput
+          // className="form-control"
+          id="contact"
+          name="contact"
+          country={'in'}
+          value={details.contact}
+          // onChange={handleChange}
+          onChange={handleChange}         
+    /> */}
+    <input id="contact" name="contact" type="number" className="form-control"  placeholder="Mobile Number (+91 already added)" onChange={handleChange} value={details.contact} required/>
     <small id="emailHelp" className="form-text " style={{color:'yellow'}}>    దయచేసి వాట్సాప్ నంబర్‌ను అందించండి, తద్వారా. మేము మీకు సమాధానం పంపగలము
 </small>
 

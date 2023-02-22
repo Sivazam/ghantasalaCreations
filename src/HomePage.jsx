@@ -16,22 +16,20 @@ export default function HomePage()
     
    
     return(
-        <div className="Home " style={{paddingBottom:'0px'}} >
-        
-            <Navrbar/>
+        // <div className="Home " style={{paddingBottom:'0px'}} >
+        <>
 
                 <BrowserRouter>
                     <Routes>
                     {/* <Route path="/" element={<HomePage />}> */}
                         <Route path="/" >
                         {/* <Route path="" element={<HomeMain />} /> */}
-                        <Route index element={<HomeMain />} />
-                        <Route path="gallery" element={<Gallery />} />
+                        <Route index element={<HomeMain  cName="Home"/>} />
+                        <Route path="gallery" element={<Gallery cName="galHero" bg = "Home"/>} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
-            <Footer />
-
-        </div>
+            </>
+        // </div>
     )
 }

@@ -81,7 +81,7 @@ export default function TestCards(){
                         
                         <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                         <div className="modal-dialog modal-dialog-centered" >
-                            <div className="modal-content" style={{background: "rgba(41, 40, 40, 0.6)"}} >
+                            <div className="modal-content" style={{background: "rgba(41, 40, 40, 0.9)"}} >
                       {click ? <FormCollect question={select}/> : <FormCollect question={select}/>
                       
                             // <><div className="modal-header">
