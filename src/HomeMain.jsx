@@ -134,6 +134,10 @@ useEffect(()=>{
     <p class="lead mainText"style={{color:'white'}}><FormatQuoteIcon className="mainText"/> మీరు బలంగా సంకల్పిస్తే ఏదైనా సాధించగలరు సమస్యే లేదు <FormatQuoteIcon className="mainText"/></p>
   </div>
 </div> */}
+
+
+
+
                 <TestCards/>
                 <Footer/>
 
