@@ -293,3 +293,18 @@ background-size: cover;
   /* background-color: red; */
 }
 
+.titleFont{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem !important;
+}
+
+.pText{
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 0.9rem;
+}
+
+
+/* .accordion-button{
+  color:white !important;
+  background-color: white !important;
+} */

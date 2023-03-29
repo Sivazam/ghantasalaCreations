@@ -53,7 +53,7 @@ export default function HomeMain(prop){
 
     function Notifiy(){
 
-        alert("లేటెస్ట్ అప్‌డేట్‌లు\n\nగ్యాలరీ జోడించబడింది\n\nఇప్పుడు మీరు శ్రీ వెంకట రామ లింగేశ్వర స్వామి దేవాలయం, రాజమండ్ర్‌లో జరిగిన మహాశివరాత్రికి సంబంధించిన లేటెస్ట్ అప్‌డేట్‌లను యాక్సెస్ చేయవచ్చు" )
+        alert(`*** లేటెస్ట్ అప్‌డేట్‌లు - 30/3/2023 ***\n\n * ప్రాజెక్టులు మరియు వివాహానికి సరిపడ నక్షత్రములు, వెబ్‌పేజీలను వెబ్‌సైట్‌కి జోడించారు\n\n * ఇప్పుడు మీరు టాప్ మెనుని ఉపయోగించి వాటిని సందర్శించవచ్చు` )
     }
 
 useEffect(()=>{
@@ -86,27 +86,17 @@ useEffect(()=>{
                     <div style={{margin:'20px 0'}}>
                         {/* <marquee loop="infinite" behavior="scroll" direction="left" onMouseOver="this.stop()" onMouseOut="this.start()"><a href="/gallery"  style={{textDecoration:'none'}}><h3 className="mainText add"> <img src={shiva} alt="" height={'100px'} />  మహా శివ రాత్రి మహోత్సవం అప్‌డేట్ - 2023  <img src={shiva} alt="" height={'100px'} /> </h3></a></marquee> */}
                    
-                   
-                        <div style={{ height: "100px" }}>
+{/*                    
+<div style={{ height: "100px" }}>
   <Marquee velocity={12} minScale={0.7} resetAfterTries={200} >
      {times(5, Number).map((id) => (
-      /* <Motion  */
-        /* key={`child-${id}`}
-        // initDeg={randomIntFromInterval(0, 360)}
-        // direction={Math.random() > 0.5 ? "clockwise" : "counterclockwise"}
-        velocity={10}
-        // radius={50}
-      > */
-
-        <div
-       
-        >
-<a href="/gallery"  style={{textDecoration:'none'}}><h3 className="mainText add"> <img src={shiva} alt="" height={'100px'} /> శ్రీ మహా శివ రాత్రి మహోత్సవం అప్‌డేట్ - 2023 </h3></a>      
-  </div>
-      /* </Motion> */
+      
+      <div>
+          <a href="/gallery"  style={{textDecoration:'none'}}><h3 className="mainText add"> <img src={shiva} alt="" height={'100px'} /> శ్రీ మహా శివ రాత్రి మహోత్సవం అప్‌డేట్ - 2023 </h3></a>      
+      </div>
     ))}
   </Marquee>
-</div>
+</div> */}
 
 
                     </div>
