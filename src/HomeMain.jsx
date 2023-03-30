@@ -58,7 +58,7 @@ export default function HomeMain(prop){
 
 useEffect(()=>{
     setTimeout(()=>{Notifiy()},7000)
- },[])
+ }, [])
     
 
 
