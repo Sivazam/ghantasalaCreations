@@ -12,7 +12,6 @@ import { Propane } from '@mui/icons-material';
 import Footer from './Footer';
 import Navrbar from './Navbar';
 import shiva from "../src/images/gallery/lingam.png";
-import Marquee, { Motion, randomIntFromInterval } from "react-marquee-slider";
 import times from "lodash/times";
 import { update } from 'lodash';
 import Tables from './Tables';
@@ -53,7 +52,7 @@ export default function HomeMain(prop){
 
     function Notifiy(){
 
-        alert(`*** లేటెస్ట్ అప్‌డేట్‌లు - 30/3/2023 ***\n\n * ప్రాజెక్టులు మరియు వివాహానికి సరిపడ నక్షత్రములు, వెబ్‌పేజీలను వెబ్‌సైట్‌కి జోడించారు\n\n * ఇప్పుడు మీరు టాప్ మెనుని ఉపయోగించి వాటిని సందర్శించవచ్చు` )
+        alert(`*** లేటెస్ట్ అప్‌డేట్‌లు - 29/4/2023 ***\n\n * ప్ఘంటసాల ఆర్ట్స్ ప్రాజెక్టులు వెబ్‌పేజీకి కొత్త ప్రాజెక్ట్‌లను జోడించారు\n\n * ఇప్పుడు మీరు టాప్ మెనుని ఉపయోగించి వాటిని సందర్శించవచ్చు` )
     }
 
 useEffect(()=>{
@@ -79,6 +78,7 @@ useEffect(()=>{
                 {/* {click ? <VolumeUpIcon style={{cursor:"pointer",color:'green', background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => {tog();}}/> : <VolumeOffIcon style={{cursor:"pointer",color:'red',background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => { tog();}}/>} */}
                 <a  href="https://api.whatsapp.com/send?phone=+919490478707&text=%20నమస్తే పంతులుగారు , నా సమస్య ఏమిటి అంటే " style={{textDecoration:'none'}}><WhatsAppIcon className="socialIcon" style={{color:'green',margin:'0 10px',cursor:"pointer", background:'white',borderRadius:'50%',fontSize:'2rem',padding:'5px'}}/></a>
                 <a  href="tel:+919490478707" style={{textDecoration:'none'}}><CallIcon className="socialIcon" style={{color:'#537FE7',cursor:"pointer", background:'white',borderRadius:'50%',fontSize:'2rem',padding:'5px'}}/></a>
+
                 </span>
 
 
@@ -98,13 +98,13 @@ useEffect(()=>{
   </Marquee>
 </div> */}
 
-
                     </div>
 
 
 
 
                 </div>
+              
                 {/* <div className="row"> */}
                 {/* <div className="col-3"></div> */}
                 {/* <div className="col"> */}

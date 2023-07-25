@@ -1,11 +1,11 @@
 import { textAlign } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import gal from '../src/images/gal.jpg'
 import Footer from "./Footer";
 import Navrbar from "./Navbar";
 // import sh from '../src/images/gallery/1.jpg'
 import { gallery } from "./galleryData";
-
+import PlaceholderLoading from 'react-placeholder-loading'
 export default function Gallery(prop){
 
   
@@ -17,6 +17,14 @@ export default function Gallery(prop){
       ];
 
 gallery.map(x => console.log(x));
+
+      const [loadStatus,setLoadStatus] = useState(false);
+
+      // function loaded(){
+      //   setLoadStatus(true);
+      //   console.log(loadStatus);
+        
+      // }
       
     return(
 
@@ -34,7 +42,23 @@ gallery.map(x => console.log(x));
             {gallery.map((x,i)=> 
             {return(
                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 image-box" style={{margin:'10px 0'}}>
-                <img className="zoom" style={{width:'100%',height:'100%',borderRadius:'5px'}} key={i}   src={x} alt="" />
+               
+                {/* {loadStatus?  */}
+                {/* {load ? loaded : ""} */}
+              <img className="zoom" style={{width:'100%',height:'100%',borderRadius:'5px'}} key={i}   src={x} alt="" />
+                  {
+                   window.addEventListener("load", event => {
+                    var image = document.querySelector('img');
+                    var load = image.complete;
+
+                    setLoadStatus(load);
+                    console.log(loadStatus);
+                    })
+                }
+                  {/* :<PlaceholderLoading shape="rect" width={'250px'} height={'300px'} /> */}
+                {/* } */}
+
+                
                </div>)
           })}
            

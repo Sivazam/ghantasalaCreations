@@ -3,9 +3,20 @@ import Footer from './Footer';
 import Navrbar from './Navbar';
 import data from './data/nakshatra'
 
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+
 
 
 export default function Nakshatras(prop){
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (e) => {
+        setValue(e);
+    };
     return(
         <>
                 <div className={prop.bg}>
@@ -23,8 +34,26 @@ export default function Nakshatras(prop){
                                 {x.name}
                                 </button>
                             </h2>
+
                             <div key={i} id={`flush-collapse${x.id}`} className="accordion-collapse collapse" aria-labelledby={`flush-heading${x.id}`} data-bs-parent="#accordionFlushExample">
+                                
+                            <Box sx={{ width: '100%', bgcolor: 'background.paper' ,m:'2'}}>
+                                        <Tabs value={value} onChange={handleChange} centered>
+                                            <Tab label="ఒకటోవ పాదం"  />
+                                            <Tab label="రెండవ పాదం" />
+                                            <Tab label="మూడవ పాదం" />
+                                            <Tab label="నాల్గవ పాదం" />
+                                        </Tabs>
+                                        </Box>
                                 <div style={{}} className="accordion-body">{x.desc}</div>
+                                <div> </div>
+
+                                   
+
+                                 
+                                    
+
+
                             </div>
                         </div>
                         )

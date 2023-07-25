@@ -6,6 +6,8 @@ import Gallery from "./Gallery";
 import HomeMain from "./HomeMain";
 import Nakshatras from "./Nakshatras";
 import Projects from "./Projects";
+import MainHomePage from "./MainHomePage";
+import NakshatraDetail from "./NakshatraDetail";
 
 
 
@@ -26,9 +28,11 @@ export default function HomePage()
                     {/* <Route path="/" element={<HomePage />}> unused*/} 
                         <Route path="/" >
                         {/* <Route path="" element={<HomeMain />} /> unused */} 
-                        <Route index element={<HomeMain  cName="Home"/>} />
+                        <Route index element={<MainHomePage cName="Home" />} />
                         <Route path="gallery" element={<Gallery cName="galHero" bg = "Home"/>} />
+                        <Route path="questions" element={<HomeMain cName="Home"/>} />
                         <Route path="nakshatras" element={<Nakshatras cName="galHero" bg = "Home"/>} />
+                        <Route path="nakshatra_detail" element={<NakshatraDetail cName="galHero" bg = "Home"/>} />
                         <Route path="projects" element={<Projects cName="galHero" bg = "Home"/>} />
                         </Route>
                     </Routes>

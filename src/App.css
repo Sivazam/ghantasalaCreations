@@ -40,8 +40,13 @@
 
 
 .Home{
-  background-image: url(/public/bg.webp);
-  background-size: cover;
+  /* background-image: url(/public/bg.webp); - removed - version change*/
+  /* background: linear-gradient(to bottom, #6699ff 0%, #0033cc 100%); -- change on request*/
+  /* background:linear-gradient(to bottom, #66ffff 0%, #0066ff 100%);
+  background-size: cover; */
+
+  background: rgb(2,0,36);
+background: linear-gradient(7deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
   /* height: 100%; */
   /* width: 100%; */
   /* padding: 0px 0px 50px 0px; */
@@ -65,7 +70,8 @@
   background: rgba(41, 40, 40, 0.6);
   /* background: rgba(13, 13, 13, 0.861); */
   border-radius: 20px;
-  border: 3px solid yellow;
+  /* border: 3px solid yellow !important; */
+  border: 3px solid #fff !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 
 }
@@ -78,15 +84,16 @@
 
 
 .mainText{
-  /* -webkit-text-stroke: 0.1px red; */
-  -webkit-text-fill-color: yellow;
-  /* font-weight: 900; */
+  /* -webkit-text-fill-color: yellow; - old change */ 
+
+  /* -webkit-text-fill-color: #e1e106; */
+  -webkit-text-fill-color: #fff;
+  text-shadow: 1px 1px black;
   font-size: 2rem;
   text-align: center;
   justify-content: center;
   font-family: 'Noto Serif Telugu', serif;
-  /* font-family: 'Tiro Telugu', serif; */
-  text-shadow: 3px 3px red;
+  /* text-shadow: 3px 3px red;  --  removed - version change*/
 
 }
 
@@ -114,7 +121,7 @@ background-size:auto;
 
 
 #navBar{
-  background: rgba(41, 40, 40, 0.4) !important; 
+  background: rgba(41, 40, 40, 0.8) !important; 
   /* color: white; */
   /* -webkit-text-fill-color: white !important; */
 }
@@ -175,14 +182,20 @@ h1:hover span {
   animation-timing-function: ease-in-out;
   /* margin-left: 30px; */
   margin-top: 5px;
-  -webkit-text-fill-color: yellow;
+  /* -webkit-text-fill-color: yellow;
+    text-shadow: 3px 3px red;  - removed - version change*/
+
+
+  
+  -webkit-text-fill-color: #e1e106;
+  text-shadow: 1px 1px black;
+
   /* font-weight: 900; */
   font-size: 2rem;
   text-align: center;
   justify-content: center;
   font-family: 'Noto Serif Telugu', serif;
   /* font-family: 'Tiro Telugu', serif; */
-  text-shadow: 3px 3px red;
 }
 
 
@@ -343,6 +356,7 @@ background-size: cover;
 
 .cardHovers{
   margin-bottom: 10px !important;
+  border: 2px solid rgba(255, 255, 255, 0.879);
 }
 .cardHovers:hover {
   color:red !important;
@@ -357,3 +371,29 @@ background-size: cover;
   color:white !important;
   background-color: white !important;
 } */
+
+
+/* #homeBg{
+  position: relative;
+  top: -150px;
+  z-index: -100;
+  background-image: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Astrology-Desktop-Wallpaper.jpg');
+  object-fit: fill;
+  height: 300vh;
+}*/
+
+#homeBg{
+background: rgb(2,0,36);
+background: linear-gradient(7deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+min-height: 150vh;
+}
+
+.heroSec{
+  background-image: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Astrology-Desktop-Wallpaper.jpg');
+
+}
+
+#sliderImage{
+  height: 250px !important;
+  object-fit: cover;
+}
