@@ -25,6 +25,8 @@ gallery.map(x => console.log(x));
       //   console.log(loadStatus);
         
       // }
+
+      console.log("GL>>>>>",gallery.length)
       
     return(
 
@@ -35,11 +37,18 @@ gallery.map(x => console.log(x));
 
 
         {/* </div> */}
+
+
+       
+
         <div className="container ">
           <h1 className="mainText " style={{margin:'2rem 0',fontSize:'3rem'}}>ఫొటో గ్యాలరీ</h1>
-          <div className="row" style={{marginRight:'0px',marginLeft:'0px', textAlign:'center'}}>
-            <h1 className="mainText" style={{textAlign:'left', margin:'5px', fontSize:'1.8rem',textDecoration:'underline'}}>Shiva rathri - 2023</h1>
-            {gallery.map((x,i)=> 
+{/* 
+Kamadenu Aaradhana */}
+
+          <div className="row" style={{margin:'3rem 0', textAlign:'center'}}>
+            <h1 className="mainText" style={{textAlign:'left', margin:'5px', fontSize:'1.8rem',textDecoration:'underline'}}>కామదేను ఆరాధన  - 2023</h1>
+            {gallery.slice(20,50).map((x,i)=> 
             {return(
                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 image-box" style={{margin:'10px 0'}}>
                
@@ -64,9 +73,43 @@ gallery.map(x => console.log(x));
            
 
             
+              
+            </div>
+
+{/* 
+          Shiva rahtri */}
+          <div className="row" style={{marginRight:'0px',marginLeft:'0px', textAlign:'center'}}>
+            <h1 className="mainText" style={{textAlign:'left', margin:'5px', fontSize:'1.8rem',textDecoration:'underline'}}>శివరాత్రి - 2023</h1>
+            {gallery.slice(0,20).map((x,i)=> 
+            {return(
+               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 image-box" style={{margin:'10px 0'}}>
+               
+                {/* {loadStatus?  */}
+                {/* {load ? loaded : ""} */}
+              <img className="zoom" style={{width:'100%',height:'100%',borderRadius:'5px'}} key={i}   src={x} alt="" />
+                  {
+                   window.addEventListener("load", event => {
+                    var image = document.querySelector('img');
+                    var load = image.complete;
+
+                    setLoadStatus(load);
+                    console.log(loadStatus);
+                    })
+                }
+                  {/* :<PlaceholderLoading shape="rect" width={'250px'} height={'300px'} /> */}
+                {/* } */}
+
+                
+               </div>)
+          })}
+           
+
             
+              
+            </div>
           </div>
-        </div>
+
+
         
         <Footer/>   
 

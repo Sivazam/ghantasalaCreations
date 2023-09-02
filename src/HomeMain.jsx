@@ -50,14 +50,14 @@ export default function HomeMain(prop){
         }
     }
 
-    function Notifiy(){
+    // function Notifiy(){
 
-        alert(`*** లేటెస్ట్ అప్‌డేట్‌లు - 29/4/2023 ***\n\n * ప్ఘంటసాల ఆర్ట్స్ ప్రాజెక్టులు వెబ్‌పేజీకి కొత్త ప్రాజెక్ట్‌లను జోడించారు\n\n * ఇప్పుడు మీరు టాప్ మెనుని ఉపయోగించి వాటిని సందర్శించవచ్చు` )
-    }
+    //     alert(`*** లేటెస్ట్ అప్‌డేట్‌లు - 29/4/2023 ***\n\n * ప్ఘంటసాల ఆర్ట్స్ ప్రాజెక్టులు వెబ్‌పేజీకి కొత్త ప్రాజెక్ట్‌లను జోడించారు\n\n * ఇప్పుడు మీరు టాప్ మెనుని ఉపయోగించి వాటిని సందర్శించవచ్చు` )
+    // }
 
-useEffect(()=>{
-    setTimeout(()=>{Notifiy()},7000)
- }, [])
+// useEffect(()=>{
+//     setTimeout(()=>{Notifiy()},7000)
+//  }, [])
     
 
 
@@ -83,22 +83,7 @@ useEffect(()=>{
 
 
 
-                    <div style={{margin:'20px 0'}}>
-                        {/* <marquee loop="infinite" behavior="scroll" direction="left" onMouseOver="this.stop()" onMouseOut="this.start()"><a href="/gallery"  style={{textDecoration:'none'}}><h3 className="mainText add"> <img src={shiva} alt="" height={'100px'} />  మహా శివ రాత్రి మహోత్సవం అప్‌డేట్ - 2023  <img src={shiva} alt="" height={'100px'} /> </h3></a></marquee> */}
-                   
-{/*                    
-<div style={{ height: "100px" }}>
-  <Marquee velocity={12} minScale={0.7} resetAfterTries={200} >
-     {times(5, Number).map((id) => (
-      
-      <div>
-          <a href="/gallery"  style={{textDecoration:'none'}}><h3 className="mainText add"> <img src={shiva} alt="" height={'100px'} /> శ్రీ మహా శివ రాత్రి మహోత్సవం అప్‌డేట్ - 2023 </h3></a>      
-      </div>
-    ))}
-  </Marquee>
-</div> */}
-
-                    </div>
+                 
 
 
 

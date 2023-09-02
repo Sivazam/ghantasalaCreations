@@ -397,3 +397,57 @@ min-height: 150vh;
   height: 250px !important;
   object-fit: cover;
 }
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-container {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  position: relative;
+  border-radius: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.popup-content {
+  margin-top: 40px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+
+#hovBtn:hover{
+  color: black !important;
+  background: white !important;
+  font-size: 200px !important;
+}

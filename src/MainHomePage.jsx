@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -168,7 +168,12 @@ export default function MainHomePage(prop){
     };
 
     const cat = [
-        
+      
+        {
+            image:'https://cdn.shopify.com/s/files/1/0232/1317/8957/files/doshas.jpg?v=1661752899?ip=x480',
+            title:'వాత తత్వం లక్షణాలు',
+            link:'/vaata_qna'
+        },
         {
             image:'https://itbix.com/Content/prashnakundali_img/rect2.png',
             title:'ప్రశ్న || సమాధానము',
@@ -198,8 +203,10 @@ export default function MainHomePage(prop){
             title:'జ్యోతిషం',
             link:''
         }
-    ]
 
+         
+    ]
+    // మీ శరీర తత్వం ఏదో సులువుగా తెలుసుకోవాలనుకుంటున్నారా
 
     //for zodiac sign images\
 
@@ -235,6 +242,25 @@ export default function MainHomePage(prop){
 
     var img1 = "https://starlust.org/wp-content/uploads/2021/05/astronomy-vs-astrology.jpg"
 
+
+
+
+    const updates = [ ];
+
+      const [showPopup, setShowPopup] = useState(true);
+
+      useEffect(() => {
+        // Check if the popup has been shown before using local storage
+        const popupShownBefore = localStorage.getItem('popupShown');
+        if (!popupShownBefore) {
+          setShowPopup(true);
+          localStorage.setItem('popupShown', 'true');
+        }
+      }, []);
+    
+      const handleClosePopup = () => {
+        setShowPopup(false);
+      };
     return(
     <div className={prop.cName}  style={{marginBottom:'0px'}} >
                     <Navrbar/>
@@ -260,7 +286,28 @@ export default function MainHomePage(prop){
 
 </div>
 
-            
+                        {showPopup ? (
+                            <div className="popup-overlay">
+                            <div className="popup-container">
+                                <button className="close-button" onClick={handleClosePopup}>
+                                <h6 style={{padding:'10px',background:'red',color:'white'}}>X</h6>
+                                </button>
+                                <div className="popup-content" style={{textAlign:'center',padding:"5px",marginTop:'30px'}}>
+                                <h4 style={{fontWeight:'700'}}>
+                                  108 శుక్రవారములు వేంకటేశ్వరుని దివ్య పాద పద్మములకు అభిషేక వైభవం
+                                  </h4>
+                                {/* <p>గ్యాలరీకి కామదేను ఆరాధన చిత్రాలు జోడించబడ్డాయి</p> */}
+                                <a href='/venkateswara'><button style={{margin:'20px 0'}}  className="btn btn-success" >మరిన్ని వివరాలు</button></a>
+                                {/* <ul>
+                                    {updates.map((update, index) => (
+                                    <li key={index}>{update}</li>
+                                    ))}
+                                </ul> */}
+                                </div>
+                            </div>
+                            </div>
+                        ) : '' };
+
                     </div>
                     <div className='container-fluid ' style={{margin:'15px 0'}}  >
                     <Grid  className='row' container spacing={2}>
@@ -382,8 +429,8 @@ export default function MainHomePage(prop){
                                     image={x.image}
                                     alt="green iguana"
                                     />
-                                    <CardContent>
-                                    <Typography gutterBottom variant="h6" component="div">
+                                    <CardContent >
+                                    <Typography gutterBottom variant="h6" component="div" style={{fontWeight:'700'}} >
                                         {x.title}
                                     </Typography>
                                     </CardContent>
