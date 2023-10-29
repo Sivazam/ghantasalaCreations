@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Footer from './Footer';
 import Navrbar from './Navbar';
-import { Grid } from '@mui/material';
+import { Chip, Grid } from '@mui/material';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -24,6 +24,9 @@ import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom';
 
 import ButtonBase from '@mui/material/ButtonBase';
+import Shiva from './Shiva';
+import ShivaImg from './images/shiva.jpeg'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function MainHomePage(prop){
@@ -242,7 +245,7 @@ export default function MainHomePage(prop){
 
     var img1 = "https://starlust.org/wp-content/uploads/2021/05/astronomy-vs-astrology.jpg"
 
-
+    var popUpImgSrc = "https://p1.hiclipart.com/preview/867/10/359/india-hinduism-sri-venkateswara-swamy-vaari-temple-krishna-vishnu-mantra-narayana-mahadeva-god-png-clipart.jpg"
 
 
     const updates = [ ];
@@ -261,7 +264,35 @@ export default function MainHomePage(prop){
       const handleClosePopup = () => {
         setShowPopup(false);
       };
-    return(
+
+
+
+      const videoData = [
+        {
+          videoURL: 'ubdxrOxLhh8',
+          title: 'SriSailam',
+          name:''
+        },
+        {
+          videoURL: '4Auc0h-3Wb0',
+          title: 'Kashi',
+          name:''
+        },
+        // {
+        //   videoURL: 'BDyxpL7JQ0k',
+        //   title: 'Bha',
+        //   name:'Maa Vaishno Devi'
+        // },
+      ];
+
+
+      const navigate = useNavigate(); // Get the navigate function
+
+      const handleButtonClick = () => {
+        navigate('/shiva'); // Navigate to '/shivaParvathi'
+      };
+
+      return(
     <div className={prop.cName}  style={{marginBottom:'0px'}} >
                     <Navrbar/>
 
@@ -286,29 +317,61 @@ export default function MainHomePage(prop){
 
 </div>
 
-                        {showPopup ? (
-                            <div className="popup-overlay">
-                            <div className="popup-container">
+                         {showPopup ? (
+                            <div className="popup-overlay " >
+                            <div className="popup-container " style={{background:'white'}}>
+                            <center>
+                                  <Chip  size='small' color='info' label=" కార్తీక మాసం special"/>
+                                </center>
                                 <button className="close-button" onClick={handleClosePopup}>
+                                
                                 <h6 style={{padding:'10px',background:'red',color:'white'}}>X</h6>
                                 </button>
                                 <div className="popup-content" style={{textAlign:'center',padding:"5px",marginTop:'30px'}}>
-                                <h4 style={{fontWeight:'700'}}>
-                                  108 శుక్రవారములు వేంకటేశ్వరుని దివ్య పాద పద్మములకు అభిషేక వైభవం
-                                  </h4>
-                                {/* <p>గ్యాలరీకి కామదేను ఆరాధన చిత్రాలు జోడించబడ్డాయి</p> */}
-                                <a href='/venkateswara'><button style={{margin:'20px 0'}}  className="btn btn-success" >మరిన్ని వివరాలు</button></a>
-                                {/* <ul>
-                                    {updates.map((update, index) => (
-                                    <li key={index}>{update}</li>
-                                    ))}
-                                </ul> */}
+                                <h5 style={{fontWeight:'900',color:'yellow',WebkitTextStroke:'1px red',margin:'10px 0'}}>
+                               పార్వతీ పరమేశ్వరుల కళ్యాణంలో మీరు మగ పెళ్ళి వారా ఆడ పెళ్లి వారా ఇక్కడ తెలుసుకోండి
+                                  </h5>     
+                                  <div>
+                                  <img height={150} width={150} style={{borderRadius:'50%', objectFit:'cover',marginTop:'15px'}} src={ShivaImg} alt="" />
+                               </div>
+                                                          
+
+
+                                <button onClick={handleButtonClick}  style={{margin:'20px 0'}}  className="btn btn-warning" > తెలుసుకొండి
+                          </button>
+                              
                                 </div>
+                               
                             </div>
                             </div>
                         ) : '' };
 
                     </div>
+
+                    <div>
+                      {/* <Shiva/> */}
+                    </div>
+                  <div className="container">
+                    <div className="row">
+                    {videoData.map((item, index) => (
+                      <div key={index} className="col-sm-12 col-md-6 col-lg-6">
+                        <div className="video-card" style={{marginBottom:'15px'}}>
+                          <iframe
+                            width="100%"
+                            height="315"
+                            style={{borderRadius:'10px',border:'2px solid white',boxShadow:'4px 4px 5px black'}}
+                            src={`https://www.youtube.com/embed/${item.videoURL}`}
+                            title="YouTube Video"
+                            frameBorder="0"
+                            allowFullScreen
+                          ></iframe>
+                          <h3 className="mainText text-center" style={{marginTop:'3px'}}>{item.title}</h3>
+                        </div>
+                      </div>
+                    ))}
+                    </div>
+                  </div>
+
                     <div className='container-fluid ' style={{margin:'15px 0'}}  >
                     <Grid  className='row' container spacing={2}>
                         <Grid className='col-8' item lg={8} md={12} xs={12} sm={12} >

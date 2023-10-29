@@ -11,6 +11,10 @@ import NakshatraDetail from "./NakshatraDetail";
 import VataQna from "./VataQna";
 import House from "./House";
 import Venkateswara from "./Venkateswara";
+import Sample from "./Sample";
+import Namam from "./Namam";
+import Shiva from "./Shiva";
+import ShivaParvathi from "./ShivaParvathi";
 
 
 
@@ -40,6 +44,9 @@ export default function HomePage()
                         <Route path="projects" element={<Projects cName="galHero" bg = "Home"/>} />
                         <Route path="vaata_qna" element={<VataQna cName="galHero" bg = "Home"/>} />
                         <Route path="venkateswara" element={<Venkateswara cName="galHero" bg = "Home"/>} />
+                        <Route path="annaprasana" element={<Sample cName="galHero" bg = "Home"/>} />
+                        <Route path="Namalu" element={<Namam cName="galHero" bg = "Home"/>} />
+                        <Route path="Shiva" element={<ShivaParvathi  cName="galHero" bg = "Home"/>} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

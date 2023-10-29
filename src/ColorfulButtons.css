@@ -1,0 +1,149 @@
+/* Mobile styles */
+@media (max-width: 767px) {
+    .bodyBg {
+      background-image: url('./images/gallery/Ganta_Plain.png');
+      background-size: cover;
+      background-position: center center; /* Center the background image on mobile */
+      background-repeat: no-repeat;
+      min-height: 100vh;
+
+    }
+
+    .HeadText{
+        visibility: visible;
+        font-weight:900;
+        color:yellow;
+        -webkit-text-stroke:1px red;
+        filter: drop-shadow(5px 5px 3px black);
+        font-size:1.8rem;
+        line-height: 1.5;
+    }
+  }
+  
+  /* Desktop styles */
+  @media (min-width: 768px) {
+    .bodyBg {
+      background-image: url('./images/gallery/Ganta_Plain.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+
+    }
+
+    .HeadText{
+        visibility: hidden;
+    }
+  }
+
+  
+  .HeadTextVisible{
+    font-weight:900;
+    color:yellow;
+    -webkit-text-stroke:1px red;
+    filter: drop-shadow(5px 5px 3px black);
+    font-size:2rem;
+    line-height: 1.5;
+}
+
+  
+  
+  
+  
+  
+  
+  h3 {
+    font-size: 24px;
+    color: #ffffff;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    transform: scale(1);
+  }
+  
+  .button:hover {
+    background: linear-gradient(to bottom, #ff99cc 0%, #33ccff 100%);
+    transform: scale(1.05);
+    border-color: #fff;
+  }
+  
+  .button.active {
+    background: linear-gradient(to bottom, #27ae60 0%, #2ecc71 100%);
+    border: 2px solid #27ae60;
+  }
+  
+  .button.active:hover {
+    background: linear-gradient(to bottom, #219a52 0%, #27ae60 100%);
+  }
+  
+  .button:nth-child(odd) {
+    background: linear-gradient(to bottom, #e74c3c 0%, #c0392b 100%);
+  }
+  
+  .button:nth-child(odd):hover {
+    background: linear-gradient(to bottom, #c0392b 0%, #e74c3c 100%);
+  }
+  
+  .button:nth-child(even) {
+    background: linear-gradient(to bottom, #f1c40f 0%, #d4ac0d 100%);
+  }
+  
+  .button:nth-child(even):hover {
+    background: linear-gradient(to bottom, #d4ac0d 0%, #f1c40f 100%);
+  }
+  
+  .button:nth-child(4n + 1) {
+    background: linear-gradient(to bottom, #9b59b6 0%, #8e44ad 100%);
+  }
+  
+  .button:nth-child(4n + 1):hover {
+    background: linear-gradient(to bottom, #8e44ad 0%, #9b59b6 100%);
+  }
+  
+  .button:nth-child(4n + 2) {
+    background: linear-gradient(to bottom, #2ecc71 0%, #27ae60 100%);
+  }
+  
+  .button:nth-child(4n + 2):hover {
+    background: linear-gradient(to bottom, #27ae60 0%, #2ecc71 100%);
+  }
+  
+  .button:nth-child(4n + 3) {
+    background: linear-gradient(to bottom, #e67e22 0%, #d35400 100%);
+  }
+  
+  .button:nth-child(4n + 3):hover {
+    background: linear-gradient(to bottom, #d35400 0%, #e67e22 100%);
+  }
+  
+  .button:nth-child(4n + 4) {
+    background: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
+  }
+  
+  .button:nth-child(4n + 4):hover {
+    background: linear-gradient(to bottom, #2980b9 0%, #3498db 100%);
+  }
+  
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  

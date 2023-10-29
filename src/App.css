@@ -97,6 +97,19 @@ background: linear-gradient(7deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0
 
 }
 
+.mainTitleText{
+  /* -webkit-text-fill-color: yellow;  */
+
+  -webkit-text-fill-color: #e1e106;
+  text-shadow: 1px 1px black;
+  font-size: 2rem;
+  text-align: center;
+  justify-content: center;
+  font-family: 'Noto Serif Telugu', serif;
+  text-shadow: 3px 3px red; 
+
+}
+
 
 .logoIcon{
   border-radius: 50%;
@@ -412,8 +425,9 @@ min-height: 150vh;
   z-index: 9999;
 }
 
+
 .popup-container {
-  background-color: #fff;
+  /* background-color: #fff; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 500px;
@@ -451,3 +465,71 @@ li {
   background: white !important;
   font-size: 200px !important;
 }
+/* 
+.popupBgImage{
+  background-image:url(./images/gallery/Ganta_Plain.png);
+  filter: brightness(70%);
+  background-position: center center;
+  background-size: cover;
+  
+}
+ */
+
+ /* Define styles for the overlay pseudo-element */
+.popupBgImage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(./images/gallery/Ganta_Plain.png);
+  filter: brightness(60%); /* Apply the brightness filter to the overlay */
+  z-index: -1; /* Place the overlay behind other content */
+  background-position: center center;
+  background-size: cover;
+  background-repeat: none;
+}
+
+/* Define styles for the element with the background image */
+.popupBgImage {
+  /* Your existing styles for the element */
+  background-color: transparent; /* Make the background color transparent if needed */
+  position: relative; /* Ensure the overlay is positioned relative to this element */
+  background-repeat: none;
+
+}
+
+
+/* Petals.css */
+@keyframes falling-petals {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(110vh);
+    opacity: 1;
+  }
+}
+
+.petal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1; /* Place petals behind content */
+}
+
+.petal {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: pink; /* Change this to the color you want for petals */
+  border-radius: 50%;
+  animation: falling-petals 5s linear infinite;
+  animation-delay: calc(var(--delay) * 1s);
+}
+

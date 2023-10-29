@@ -15,6 +15,7 @@ import shiva from "../src/images/gallery/lingam.png";
 import times from "lodash/times";
 import { update } from 'lodash';
 import Tables from './Tables';
+import Sample from './Sample';
 
 
 export default function HomeMain(prop){
