@@ -1,0 +1,95 @@
+/* Shiva Smarana Temple Page Styles */
+.temple-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0d0d0d;
+    overflow: hidden;
+}
+
+/* 3D Canvas container */
+.temple-canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Session count overlay */
+.session-count-overlay {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.session-count-overlay .count-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.session-count-overlay .count-number {
+    font-family: 'Cinzel', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* Bottom button bar */
+.bottom-button-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .session-count-overlay {
+        top: 70px;
+        padding: 10px 20px;
+    }
+
+    .session-count-overlay .count-number {
+        font-size: 1.4rem;
+    }
+
+    .bottom-button-bar {
+        padding: 16px;
+    }
+}
+
+/* Fullscreen adjustments */
+.temple-page:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+}
+
+.temple-page:fullscreen {
+    width: 100vw;
+    height: 100vh;
+}

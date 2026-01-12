@@ -16,43 +16,49 @@ import Namam from "./Namam";
 import Shiva from "./Shiva";
 import ShivaParvathi from "./ShivaParvathi";
 
+// Shiva Smarana Feature
+import { ShivaSmaranaHomePage, ShivaSmaranaTemplePage } from "./features/shiva-smarana";
 
 
 
 
-export default function HomePage()
-{
+
+export default function HomePage() {
 
 
-    
-   
-    return(
+
+
+    return (
         // <div className="Home " style={{paddingBottom:'0px'}} >
         <>
 
-                <BrowserRouter>
-                    <Routes>
-                    {/* <Route path="/" element={<HomePage />}> unused*/} 
-                        <Route path="/" >
-                        {/* <Route path="" element={<HomeMain />} /> unused */} 
+            <BrowserRouter>
+                <Routes>
+                    {/* <Route path="/" element={<HomePage />}> unused*/}
+                    <Route path="/" >
+                        {/* <Route path="" element={<HomeMain />} /> unused */}
                         <Route index element={<MainHomePage cName="Home" />} />
-                        <Route path="gallery" element={<Gallery cName="galHero" bg = "Home"/>} />
-                        <Route path="house" element={<House cName="galHero" bg = "Home"/>} />
-                        <Route path="questions" element={<HomeMain cName="Home"/>} />
-                        <Route path="nakshatras" element={<Nakshatras cName="galHero" bg = "Home"/>} />
-                        <Route path="nakshatra_detail" element={<NakshatraDetail cName="galHero" bg = "Home"/>} />
-                        <Route path="projects" element={<Projects cName="galHero" bg = "Home"/>} />
-                        <Route path="vaata_qna" element={<VataQna cName="galHero" bg = "Home"/>} />
-                        <Route path="venkateswara" element={<Venkateswara cName="galHero" bg = "Home"/>} />
-                        <Route path="annaprasana" element={<Sample cName="galHero" bg = "Home"/>} />
-                        <Route path="Namalu" element={<Namam cName="galHero" bg = "Home"/>} />
-                        <Route path="Shiva" element={<ShivaParvathi  cName="galHero" bg = "Home"/>} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                        <Route path="gallery" element={<Gallery cName="galHero" bg="Home" />} />
+                        <Route path="house" element={<House cName="galHero" bg="Home" />} />
+                        <Route path="questions" element={<HomeMain cName="Home" />} />
+                        <Route path="nakshatras" element={<Nakshatras cName="galHero" bg="Home" />} />
+                        <Route path="nakshatra_detail" element={<NakshatraDetail cName="galHero" bg="Home" />} />
+                        <Route path="projects" element={<Projects cName="galHero" bg="Home" />} />
+                        <Route path="vaata_qna" element={<VataQna cName="galHero" bg="Home" />} />
+                        <Route path="venkateswara" element={<Venkateswara cName="galHero" bg="Home" />} />
+                        <Route path="annaprasana" element={<Sample cName="galHero" bg="Home" />} />
+                        <Route path="Namalu" element={<Namam cName="galHero" bg="Home" />} />
+                        <Route path="Shiva" element={<ShivaParvathi cName="galHero" bg="Home" />} />
+                    </Route>
 
-                
-            </>
+                    {/* Shiva Smarana Feature Routes */}
+                    <Route path="shiva-smarana" element={<ShivaSmaranaHomePage />} />
+                    <Route path="shiva-smarana/temple" element={<ShivaSmaranaTemplePage />} />
+                </Routes>
+            </BrowserRouter>
+
+
+        </>
         // </div>
     )
 }

@@ -1,0 +1,718 @@
+/* Temple 2D Scene Styles - Curved snake, precise droplet */
+.temple-2d-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(180deg, #1a0a0a 0%, #2d1810 50%, #3d2517 100%);
+}
+
+/* Temple Background */
+.temple-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.divine-rays {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(255, 165, 0, 0.1) 0%, transparent 70%);
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* ============================================ */
+/* DAARA PATRA (Vessel) */
+/* ============================================ */
+.daara-patra {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    animation: sway 4s ease-in-out infinite;
+}
+
+@keyframes sway {
+
+    0%,
+    100% {
+        transform: translateX(-50%) rotate(-1deg);
+    }
+
+    50% {
+        transform: translateX(-50%) rotate(1deg);
+    }
+}
+
+.vessel-handle {
+    width: 6px;
+    height: 60px;
+    background: linear-gradient(90deg, #8b4513, #cd7f32, #8b4513);
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+}
+
+.vessel-handle::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border: 4px solid #cd7f32;
+    border-radius: 50%;
+}
+
+.vessel-body {
+    width: 90px;
+    height: 50px;
+    background: linear-gradient(180deg, #da8a67, #cd7f32, #b87333, #cd7f32);
+    border-radius: 15px 15px 50% 50%;
+    position: relative;
+    box-shadow:
+        inset -8px -5px 15px rgba(0, 0, 0, 0.4),
+        inset 8px 5px 15px rgba(255, 200, 150, 0.3);
+    border: 2px solid #da8a67;
+    margin-top: -5px;
+}
+
+.vessel-water {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    right: 10px;
+    height: 25px;
+    background: linear-gradient(180deg, rgba(79, 195, 247, 0.7), rgba(2, 136, 209, 0.5));
+    border-radius: 0 0 40px 40px;
+}
+
+.vessel-bulge {
+    width: 100px;
+    height: 60px;
+    background: linear-gradient(180deg, #b87333, #cd7f32, #da8a67, #cd7f32, #b87333);
+    border-radius: 50%;
+    margin-top: -10px;
+    box-shadow:
+        inset -10px -5px 20px rgba(0, 0, 0, 0.4),
+        inset 10px 5px 20px rgba(255, 200, 150, 0.3);
+}
+
+.vessel-spout {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #b87333;
+    margin: -5px auto 0;
+    position: relative;
+}
+
+/* ============================================ */
+/* WATER DROPLET PATH - Global positioning */
+/* ============================================ */
+.droplet-path {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 100%;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.water-droplet {
+    position: absolute;
+    left: 50%;
+    width: 12px;
+    height: 16px;
+    background: radial-gradient(ellipse at 30% 30%,
+            rgba(180, 230, 255, 0.95),
+            rgba(79, 195, 247, 0.85),
+            rgba(2, 136, 209, 0.75));
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow:
+        0 0 10px rgba(79, 195, 247, 0.8),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.6);
+    /* Start from vessel bottom (around 28%), end at lingam top (around 62%) */
+    animation: droplet-fall-to-lingam 1s ease-in forwards;
+    transform: translateX(-50%);
+}
+
+@keyframes droplet-fall-to-lingam {
+    0% {
+        top: 28%;
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 66%;
+        opacity: 0;
+    }
+}
+
+/* ============================================ */
+/* SHIVA LINGAM */
+/* ============================================ */
+.shiva-lingam-container {
+    position: absolute;
+    bottom: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+.lingam-halo {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, #ff8c00 0%, #ff6600 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    animation: halo-pulse 3s ease-in-out infinite;
+}
+
+@keyframes halo-pulse {
+
+    0%,
+    100% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.crescent-moon {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    font-size: 1.4rem;
+    filter: drop-shadow(0 0 8px rgba(255, 250, 205, 0.9));
+    z-index: 10;
+    transform: rotate(-20deg);
+}
+
+/* ============================================ */
+/* SNAKE - Inside lingam-top, just below tripundra */
+/* ============================================ */
+
+/* Front coil - visible in front of lingam */
+.snake-coil-front {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 7;
+    pointer-events: none;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
+    overflow: visible;
+}
+
+/* Animated snake tail TIP - only the very end moves, every 30 seconds */
+.snake-tail-tip {
+    animation: tail-tip-wag 30s ease-in-out infinite;
+    transform-origin: left center;
+}
+
+@keyframes tail-tip-wag {
+
+    0%,
+    93%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    94% {
+        transform: rotate(10deg) translateY(-2px);
+    }
+
+    95% {
+        transform: rotate(-8deg) translateY(2px);
+    }
+
+    96% {
+        transform: rotate(6deg);
+    }
+
+    97% {
+        transform: rotate(-4deg);
+    }
+
+    98% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Snake head wrapper - positioned to connect with body */
+.snake-head-wrap {
+    position: absolute;
+    bottom: 15px;
+    left: -40px;
+    z-index: 8;
+    animation: head-move 8s ease-in-out infinite;
+}
+
+@keyframes head-move {
+
+    0%,
+    80%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    85% {
+        transform: rotate(-6deg) translateX(-2px);
+    }
+
+    90% {
+        transform: rotate(4deg) translateX(2px);
+    }
+
+    95% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Snake head */
+.snake-head {
+    width: 28px;
+    height: 35px;
+    background: linear-gradient(180deg, #c4a97a 0%, #a08060 40%, #8b7355 100%);
+    border-radius: 40% 40% 50% 50%;
+    position: relative;
+    box-shadow:
+        inset -3px -3px 6px rgba(0, 0, 0, 0.4),
+        inset 2px 2px 4px rgba(200, 180, 140, 0.3),
+        2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Snake hood */
+.snake-hood {
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    width: 52px;
+    height: 35px;
+    background: linear-gradient(180deg, #a08060 0%, #c4a97a 30%, #a08060 60%, #8b7355 100%);
+    border-radius: 50% 50% 35% 35%;
+    z-index: -1;
+    box-shadow:
+        inset 0 6px 10px rgba(200, 180, 140, 0.3),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Hood pattern */
+.snake-hood::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 12px;
+    border: 2px solid rgba(80, 60, 40, 0.4);
+    border-radius: 50%;
+}
+
+/* Snake eyes */
+.snake-eye {
+    position: absolute;
+    top: 12px;
+    width: 6px;
+    height: 7px;
+    background: radial-gradient(ellipse, #1a1a00 40%, #333300 100%);
+    border-radius: 50%;
+    animation: blink 5s ease-in-out infinite;
+}
+
+.snake-eye.left {
+    left: 6px;
+}
+
+.snake-eye.right {
+    right: 6px;
+}
+
+@keyframes blink {
+
+    0%,
+    45%,
+    55%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    48%,
+    52% {
+        transform: scaleY(0.1);
+    }
+}
+
+.snake-eye::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 255, 200, 0.6);
+    border-radius: 50%;
+}
+
+/* Snake tongue - forked */
+.snake-tongue {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 12px;
+    background: #cc3333;
+    animation: tongue-flick 4s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+.snake-tongue::before,
+.snake-tongue::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    width: 2px;
+    height: 5px;
+    background: #cc3333;
+}
+
+.snake-tongue::before {
+    left: -2px;
+    transform: rotate(-30deg);
+}
+
+.snake-tongue::after {
+    right: -2px;
+    transform: rotate(30deg);
+}
+
+@keyframes tongue-flick {
+
+    0%,
+    85%,
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+    }
+
+    88%,
+    92% {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1.2);
+    }
+}
+
+/* ============================================ */
+/* LINGAM */
+/* ============================================ */
+.shiva-lingam {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lingam-top {
+    width: 70px;
+    height: 100px;
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d, #000000);
+    border-radius: 50% 50% 40% 40%;
+    position: relative;
+    box-shadow:
+        inset -10px -10px 20px rgba(50, 50, 50, 0.3),
+        inset 5px 5px 10px rgba(100, 100, 100, 0.1);
+    z-index: 5;
+}
+
+.tripundra {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.tripundra-line {
+    width: 32px;
+    height: 5px;
+    background: #f5f5dc;
+    border-radius: 2px;
+    position: relative;
+}
+
+.tripundra-line.middle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #ff0000, #dc143c);
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(220, 20, 60, 0.8);
+}
+
+.yoni-base {
+    width: 120px;
+    height: 40px;
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+    border-radius: 10px 10px 50% 50%;
+    margin-top: -15px;
+    position: relative;
+    z-index: 4;
+}
+
+.yoni-spout {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 15px;
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+    border-radius: 0 20px 20px 0;
+}
+
+.lingam-pedestal {
+    width: 100px;
+    height: 50px;
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d, #000000);
+    border-radius: 50%;
+    margin-top: -5px;
+    z-index: 3;
+}
+
+/* ============================================ */
+/* SPLASH - at top of lingam */
+/* ============================================ */
+.splashes-container {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 12;
+    width: 60px;
+    height: 40px;
+}
+
+.splash-effect {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.splash-drop {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, rgba(180, 230, 255, 0.95), rgba(79, 195, 247, 0.8));
+    border-radius: 50%;
+    animation: splash-particle 0.4s ease-out forwards;
+}
+
+.splash-1 {
+    left: 0;
+}
+
+.splash-2 {
+    left: -12px;
+    animation-delay: 30ms;
+}
+
+.splash-3 {
+    left: 12px;
+    animation-delay: 30ms;
+}
+
+.splash-4 {
+    left: -20px;
+    animation-delay: 60ms;
+}
+
+.splash-5 {
+    left: 20px;
+    animation-delay: 60ms;
+}
+
+@keyframes splash-particle {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-25px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* ============================================ */
+/* DIYAS */
+/* ============================================ */
+.diya {
+    position: absolute;
+    bottom: 15%;
+    z-index: 8;
+}
+
+.left-diya {
+    left: 12%;
+}
+
+.right-diya {
+    right: 12%;
+}
+
+.diya-base {
+    width: 50px;
+    height: 20px;
+    background: linear-gradient(180deg, #cd7f32, #b8860b);
+    border-radius: 50%;
+}
+
+.flame {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    animation: flicker 0.3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.9));
+}
+
+@keyframes flicker {
+    0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateX(-50%) scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* ============================================ */
+/* OM */
+/* ============================================ */
+.floating-om {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    color: #ffd700;
+    animation: float-om 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+    z-index: 20;
+}
+
+@keyframes float-om {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .daara-patra {
+        top: 10%;
+    }
+
+    .vessel-body {
+        width: 70px;
+        height: 40px;
+    }
+
+    .vessel-bulge {
+        width: 80px;
+        height: 50px;
+    }
+
+    .shiva-lingam-container {
+        bottom: 22%;
+    }
+
+    .lingam-top {
+        width: 55px;
+        height: 80px;
+    }
+
+    .left-diya {
+        left: 8%;
+    }
+
+    .right-diya {
+        right: 8%;
+    }
+
+    @keyframes droplet-fall-to-lingam {
+        0% {
+            top: 30%;
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            top: 58%;
+            opacity: 0;
+        }
+    }
+}
