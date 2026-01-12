@@ -93,3 +93,92 @@
     width: 100vw;
     height: 100vh;
 }
+
+/* ================== */
+/* CHANT BUTTON STYLES */
+/* ================== */
+.chant-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 50px;
+    background: linear-gradient(145deg, #b8860b, #daa520, #ffd700);
+    border: 3px solid #ffd700;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    min-width: 280px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    /* Needed for progress bar */
+}
+
+/* Hover effect only when NOT in cooldown */
+.chant-button:not(.cooldown):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+}
+
+.chant-button:not(.cooldown):active {
+    transform: scale(0.98);
+}
+
+/* COOLDOWN STATE */
+.chant-button.cooldown {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.7;
+    filter: grayscale(0.5);
+    /* Dim the gold */
+}
+
+/* PROGRESS ANIMATION (Left to Right Fill) */
+.chant-button.cooldown::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    /* Start empty */
+    background: rgba(255, 255, 255, 0.3);
+    /* Light overlay */
+    border-right: 2px solid rgba(255, 255, 255, 0.8);
+    animation: cooldown-fill 3s linear forwards;
+}
+
+@keyframes cooldown-fill {
+    0% {
+        width: 0%;
+        opacity: 0.3;
+    }
+
+    100% {
+        width: 100%;
+        opacity: 0;
+        /* Fade out when done */
+    }
+}
+
+/* Button Text Styles */
+.btn-main-text {
+    font-family: 'Noto Serif Telugu', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a0a00;
+}
+
+.btn-sub-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a2800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.btn-hint-text {
+    font-size: 0.75rem;
+    color: #5c3d00;
+    margin-top: 8px;
+}

@@ -11,6 +11,9 @@ function ShivaSmaranaTemplePage() {
     const [count, setCount] = useState(0);
     const [dropletTrigger, setDropletTrigger] = useState(0);
 
+    // COOLDOWN STATE
+    const [isCooldown, setIsCooldown] = useState(false);
+
     // --- AUDIO SYSTEM (Lifted State) ---
     const [isMuted, setIsMuted] = useState(false); // Default Unmuted
     const bgMusicRef = React.useRef(null);
@@ -50,9 +53,17 @@ function ShivaSmaranaTemplePage() {
 
 
     const handleOmClick = useCallback(() => {
+        if (isCooldown) return; // Prevent spam
+
         setCount(prev => prev + 1);
         setDropletTrigger(prev => prev + 1);
-    }, []);
+
+        // Start Cooldown (2 Seconds)
+        setIsCooldown(true);
+        setTimeout(() => {
+            setIsCooldown(false);
+        }, 2000);
+    }, [isCooldown]);
 
     const handleExit = useCallback(() => {
         navigate('/shiva-smarana');
@@ -236,52 +247,17 @@ function ShivaSmaranaTemplePage() {
                 }}>{count.toLocaleString('en-IN')}</span>
             </div>
 
-            {/* Bottom button bar */}
-            <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 100,
-                display: 'flex',
-                justifyContent: 'center',
-                padding: '24px',
-                background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%)'
-            }}>
+            <div className="bottom-button-bar">
                 <button
                     onClick={handleOmClick}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        padding: '20px 50px',
-                        background: 'linear-gradient(145deg, #b8860b, #daa520, #ffd700)',
-                        border: '3px solid #ffd700',
-                        borderRadius: '16px',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 15px rgba(255, 215, 0, 0.4)',
-                        minWidth: '280px',
-                        transition: 'all 0.2s ease'
-                    }}
+                    disabled={isCooldown}
+                    className={`chant-button ${isCooldown ? 'cooldown' : ''}`}
                 >
-                    <span style={{
-                        fontFamily: "'Noto Serif Telugu', serif",
-                        fontSize: '1.8rem',
-                        fontWeight: '700',
-                        color: '#1a0a00'
-                    }}>ఓం నమః శివాయ</span>
-                    <span style={{
-                        fontSize: '0.9rem',
-                        fontWeight: '600',
-                        color: '#4a2800',
-                        letterSpacing: '2px',
-                        textTransform: 'uppercase'
-                    }}>Om Namah Shivaya</span>
-                    <span style={{
-                        fontSize: '0.75rem',
-                        color: '#5c3d00',
-                        marginTop: '8px'
-                    }}>Click to offer sacred water</span>
+                    <span className="btn-main-text">ఓం నమః శివాయ</span>
+                    <span className="btn-sub-text">Om Namah Shivaya</span>
+                    <span className="btn-hint-text">
+                        {isCooldown ? "Offering..." : "Click to offer sacred water"}
+                    </span>
                 </button>
             </div>
         </div>

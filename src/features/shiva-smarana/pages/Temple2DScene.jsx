@@ -80,9 +80,9 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
     const dropletSoundRef = useRef(null);
 
     // BILVA LEAF BLAST TRIGGER LOGIC
-    // Triggers on 11, 21, 31...
+    // Triggers on 11, 21, 31... (Skipping 1)
     useEffect(() => {
-        if (count > 0 && count % 10 === 1) {
+        if (count > 1 && count % 10 === 1) {
             const newLeaves = [];
             const timestamp = Date.now();
 

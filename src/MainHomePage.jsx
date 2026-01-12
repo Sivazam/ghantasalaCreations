@@ -348,101 +348,45 @@ export default function MainHomePage(prop) {
 
         </div>
 
-        {/* ========== SHIVA SMARANA ENTRY SECTION ========== */}
-        <div className="shiva-smarana-entry-section" style={{
-          background: 'linear-gradient(135deg, rgba(139, 69, 19, 0.3) 0%, rgba(255, 165, 0, 0.1) 50%, rgba(139, 69, 19, 0.3) 100%)',
-          borderRadius: '20px',
-          margin: '20px 15px',
-          padding: '30px 20px',
-          border: '2px solid rgba(255, 215, 0, 0.4)',
-          boxShadow: '0 8px 32px rgba(255, 165, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          {/* Decorative glow */}
-          <div style={{
-            position: 'absolute',
-            top: '-50%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '200px',
-            height: '200px',
-            background: 'radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%)',
-            pointerEvents: 'none'
-          }}></div>
+        {/* ========== SHIVA SMARANA ENTRY SECTION (IMAGE BASED) ========== */}
+        <div
+          onClick={() => navigate('/shiva-smarana')}
+          style={{
+            margin: '20px 15px',
+            borderRadius: '20px',
+            overflow: 'hidden',
+            cursor: 'pointer',
+            border: '2px solid rgba(255, 215, 0, 0.4)',
+            boxShadow: '0 8px 32px rgba(255, 165, 0, 0.2)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            position: 'relative'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(255, 215, 0, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(255, 165, 0, 0.2)';
+          }}
+        >
+          {/* RESPONSIVE POSTER IMAGE */}
+          <picture>
+            {/* Desktop Image (Landscape) */}
+            <source media="(min-width: 768px)" srcSet="/shiva_entry_poster_desktop.jpg" />
 
-          {/* Om Symbol */}
-          <div style={{ fontSize: '3.5rem', marginBottom: '10px', filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.5))' }}>
-            🕉️
-          </div>
-
-          {/* Title */}
-          <h2 style={{
-            fontFamily: "'Noto Serif Telugu', serif",
-            fontSize: '1.8rem',
-            fontWeight: '700',
-            color: '#ffd700',
-            margin: '0 0 5px 0',
-            textShadow: '0 2px 10px rgba(255, 215, 0, 0.4)'
-          }}>
-            శివ నామ స్మరణ
-          </h2>
-
-          {/* Subtitle */}
-          <p style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: '0.95rem',
-            color: 'rgba(255, 255, 255, 0.8)',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            margin: '0 0 15px 0'
-          }}>
-            Virtual Abhishekam Experience
-          </p>
-
-          {/* Description */}
-          <p style={{
-            fontSize: '0.9rem',
-            color: 'rgba(255, 255, 255, 0.7)',
-            maxWidth: '400px',
-            margin: '0 auto 20px',
-            lineHeight: '1.5'
-          }}>
-            Perform sacred water offerings on Lord Shiva's Lingam in an immersive 3D temple experience
-          </p>
-
-          {/* Enter Button */}
-          <button
-            onClick={() => navigate('/shiva-smarana')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '14px 32px',
-              background: 'linear-gradient(145deg, #b8860b, #daa520, #ffd700)',
-              border: '2px solid #ffd700',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              fontSize: '1rem',
-              fontWeight: '600',
-              color: '#1a0a00',
-              boxShadow: '0 4px 15px rgba(255, 215, 0, 0.4)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 25px rgba(255, 215, 0, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.4)';
-            }}
-          >
-            <span>🙏</span>
-            <span>Enter Divine Temple</span>
-            <span>🙏</span>
-          </button>
+            {/* Mobile Image (Portrait) - Default */}
+            <img
+              src="/shiva_entry_poster.jpg"
+              alt="Shiva Smarana Entry"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                objectFit: 'cover'
+              }}
+            />
+          </picture>
         </div>
         {/* ========== END SHIVA SMARANA ENTRY SECTION ========== */}
 
@@ -453,7 +397,7 @@ export default function MainHomePage(prop) {
                 <div style={{ marginBottom: '20px' }}>
                   <Carousel responsive={zodiacRes} >
                     {arr.map((x, i) =>
-                      <a href={x.link} style={{ textDecoration: 'none' }}>
+                      <a key={i} href={x.link} style={{ textDecoration: 'none' }}>
                         <img alt="img" src={x.img} height={'100px'} width={'auto'} style={{ borderRadius: '50%', filter: 'drop-shadow(5px 5px 5px #222)' }} />
                         <p style={{ marginTop: '5px', color: 'white', fontWeight: 600, filter: 'drop-shadow(5px 5px 5px #222)' }}>{x.name}</p>
                       </a>
@@ -498,8 +442,8 @@ export default function MainHomePage(prop) {
 
             <Grid className='col-4 col-md-12 col-sm-12' item lg={4} md={12} xs={12} sm={12}>
               <Item>
-                {news.map(x =>
-                  <List sx={style} component="nav" aria-label="mailbox folders">
+                {news.map((x, i) =>
+                  <List key={i} sx={style} component="nav" aria-label="mailbox folders">
 
                     <ListItem button divider>
                       <ListItemText primary={x} />

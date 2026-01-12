@@ -5,8 +5,25 @@ import './ShivaSmaranaHomePage.css';
 
 const ShivaSmaranaHomePage = () => {
     const navigate = useNavigate();
+    const [showFullscreenPrompt, setShowFullscreenPrompt] = React.useState(false);
 
     const handleStartTemple = () => {
+        setShowFullscreenPrompt(true);
+    };
+
+    const confirmFullscreen = () => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => console.warn("Fullscreen error:", err));
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+        navigate('/shiva-smarana/temple');
+    };
+
+    const skipFullscreen = () => {
         navigate('/shiva-smarana/temple');
     };
 
@@ -57,6 +74,24 @@ const ShivaSmaranaHomePage = () => {
                     </button>
                 </div>
             </main>
+
+            {/* Fullscreen Confirmation Modal */}
+            {showFullscreenPrompt && (
+                <div className="fullscreen-modal-overlay">
+                    <div className="fullscreen-modal">
+                        <h3>Enter Divine Experience?</h3>
+                        <p>For the best immersion, we recommend enabling Fullscreen mode.</p>
+                        <div className="modal-actions">
+                            <button className="modal-btn secondary" onClick={skipFullscreen}>
+                                Normal Mode
+                            </button>
+                            <button className="modal-btn primary" onClick={confirmFullscreen}>
+                                Go Fullscreen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Footer */}
             <footer className="shiva-home-footer">
