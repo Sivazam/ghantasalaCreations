@@ -35,12 +35,111 @@ function SplashEffect({ id, onComplete }) {
 }
 
 // Main 2D Temple Scene
-function Temple2DScene({ dropletTrigger }) {
+function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMuted and count props
     const [droplets, setDroplets] = useState([]);
     const [splashes, setSplashes] = useState([]);
+
+    // CUSTOM BILVA LEAF STATE
+    const [leaves, setLeaves] = useState([]);
+    const [leafImage, setLeafImage] = useState(null);
+
+    // PROCESS IMAGE TO REMOVE WHITE BACKGROUND
+    useEffect(() => {
+        const img = new Image();
+        img.src = '/bilva-leaf-real.png';
+        img.crossOrigin = "Anonymous";
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imgData.data;
+
+            // Iterating loops to clear white pixels
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                // If pixel is near white (>200), make it transparent
+                if (r > 200 && g > 200 && b > 200) {
+                    data[i + 3] = 0;
+                }
+            }
+
+            ctx.putImageData(imgData, 0, 0);
+            setLeafImage(canvas.toDataURL());
+        };
+    }, []);
+
     const lastTriggerRef = useRef(0);
     const dropletIdRef = useRef(0);
 
+    const dropletSoundRef = useRef(null);
+
+    // BILVA LEAF BLAST TRIGGER LOGIC
+    // Triggers on 11, 21, 31...
+    useEffect(() => {
+        if (count > 0 && count % 10 === 1) {
+            const newLeaves = [];
+            const timestamp = Date.now();
+
+            // Responsive Blast Config
+            const isMobile = window.innerWidth < 768;
+            const particleCount = isMobile ? 250 : 600; // MASSIVE COUNT
+            const spreadX = isMobile ? 350 : 1200;      // FULL WIDTH
+            const sizeBase = isMobile ? 40 : 80;
+            const sizeVar = isMobile ? 30 : 40;
+
+            // Landing Zone (Base of Lingam)
+            const landBase = isMobile ? 65 : 80;
+
+            // Spawn Bilva Leaves
+            for (let i = 0; i < particleCount; i++) {
+                // SHOWER LOGIC: Start from top, drift down
+                const startWidth = isMobile ? 350 : 1200;
+                const startXOffset = Math.random() * startWidth - (startWidth / 2); // Full width start
+                const endXOffset = Math.random() * 100 - 50;
+
+                newLeaves.push({
+                    id: timestamp + i,
+                    style: {
+                        left: `calc(50% + ${startXOffset}px)`,
+                        '--end-x': `${endXOffset}px`,
+                        '--land-y': `${landBase + Math.random() * 15}%`,
+                        '--rot-start': `${Math.random() * 360}deg`,
+                        '--rot-end': `${Math.random() * 720 - 360}deg`,
+                        width: `${Math.random() * sizeVar + sizeBase}px`,
+                        animationDelay: `${Math.random() * 2.5}s`,
+                    }
+                });
+            }
+
+            setLeaves(prev => [...prev, ...newLeaves]);
+
+            // Cleanup - Stay for 30s + 5s fall = 35s (Set to 37s safety)
+            setTimeout(() => {
+                setLeaves(prev => {
+                    const ids = newLeaves.map(l => l.id);
+                    return prev.filter(l => !ids.includes(l.id));
+                });
+            }, 37000);
+        }
+    }, [count]);
+
+    // 1. Initialize Audio (Droplets Only)
+    useEffect(() => {
+        dropletSoundRef.current = new Audio('/water_Droplet.webm');
+        dropletSoundRef.current.volume = 0.8;
+
+        return () => {
+            if (dropletSoundRef.current) dropletSoundRef.current = null;
+        };
+    }, []);
+
+    // 2. Handle Droplets
     useEffect(() => {
         if (dropletTrigger > lastTriggerRef.current) {
             dropletIdRef.current += 1;
@@ -51,9 +150,20 @@ function Temple2DScene({ dropletTrigger }) {
 
             setTimeout(() => {
                 setSplashes(prev => [...prev, { id: newId }]);
+
+                // Play Sound if Unmuted
+                if (!isMuted && dropletSoundRef.current) {
+                    try {
+                        const sound = dropletSoundRef.current.cloneNode();
+                        sound.volume = 0.8;
+                        sound.play().catch(e => console.error("SFX error", e));
+                    } catch (e) {
+                        console.error("Audio error", e);
+                    }
+                }
             }, 950);
         }
-    }, [dropletTrigger]);
+    }, [dropletTrigger, isMuted]);
 
     const handleDropletComplete = (id) => {
         setDroplets(prev => prev.filter(d => d.id !== id));
@@ -68,6 +178,19 @@ function Temple2DScene({ dropletTrigger }) {
             {/* Temple Background */}
             <div className="temple-background">
                 <div className="divine-rays"></div>
+            </div>
+
+            {/* CONFETTI LAYER (Used for Bilva Blast) */}
+            <div className="confetti-layer">
+                {leaves.map(item => (
+                    <img
+                        key={item.id}
+                        src={leafImage}
+                        alt="bilva"
+                        className="confetti-particle"
+                        style={item.style}
+                    />
+                ))}
             </div>
 
             {/* Water Vessel (Daara Patra) */}
@@ -104,71 +227,6 @@ function Temple2DScene({ dropletTrigger }) {
                             <div className="tripundra-line middle"></div>
                             <div className="tripundra-line"></div>
                         </div>
-
-                        {/* Snake coils - just below tripundra on lingam sphere */}
-                        <svg className="snake-coil-front" viewBox="0 0 130 45" width="130" height="45">
-                            <defs>
-                                {/* Clean gradient for snake */}
-                                <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#8b7355" />
-                                    <stop offset="50%" stopColor="#c4a97a" />
-                                    <stop offset="100%" stopColor="#8b7355" />
-                                </linearGradient>
-                            </defs>
-                            {/* First coil (upper) - connected to head */}
-                            <path
-                                d="M 5 15 Q 30 25, 55 18 Q 80 11, 105 20"
-                                fill="none"
-                                stroke="url(#snakeGrad)"
-                                strokeWidth="7"
-                                strokeLinecap="round"
-                            />
-                            {/* Shadow/separation line below first coil */}
-                            <path
-                                d="M 7 19 Q 32 28, 56 22 Q 80 16, 104 23"
-                                fill="none"
-                                stroke="rgba(50,35,20,0.5)"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
-                            {/* Second coil (lower) with tail attached */}
-                            <path
-                                d="M 8 23 Q 35 32, 58 26 Q 82 20, 115 28"
-                                fill="none"
-                                stroke="url(#snakeGrad)"
-                                strokeWidth="7"
-                                strokeLinecap="round"
-                            />
-                            {/* Tail tip - only this animates */}
-                            <path
-                                className="snake-tail-tip"
-                                d="M 115 28 Q 120 29, 128 25"
-                                fill="none"
-                                stroke="url(#snakeGrad)"
-                                strokeWidth="3"
-                                strokeLinecap="round"
-                            />
-                            {/* Body going up-left to head */}
-                            <path
-                                d="M 5 15 C -5 10, -12 5, -18 0"
-                                fill="none"
-                                stroke="url(#snakeGrad)"
-                                strokeWidth="6"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-
-                        {/* No back coil SVG - it's hidden behind the lingam */}
-
-                        {/* Snake head - on the left of lingam */}
-                        <div className="snake-head-wrap">
-                            <div className="snake-head">
-                                <div className="snake-hood"></div>
-                                <div className="snake-eye left"></div>
-                                <div className="snake-eye right"></div>
-                                <div className="snake-tongue"></div>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Yoni base */}
@@ -188,18 +246,37 @@ function Temple2DScene({ dropletTrigger }) {
                 </div>
             </div>
 
-            {/* Diyas */}
+            {/* Kuthuvilakku (Traditional Standing Lamps) */}
             <div className="diya left-diya">
-                <div className="diya-base"></div>
-                <div className="flame">🔥</div>
+                <div className="lamp-structure">
+                    <div className="lamp-top"></div>
+                    <div className="lamp-bowl">
+                        <div className="lamp-flame flame-left"></div>
+                        <div className="lamp-flame flame-center"></div>
+                        <div className="lamp-flame flame-right"></div>
+                    </div>
+                    <div className="lamp-stem"></div>
+                    <div className="lamp-base"></div>
+                </div>
             </div>
+
             <div className="diya right-diya">
-                <div className="diya-base"></div>
-                <div className="flame">🔥</div>
+                <div className="lamp-structure">
+                    <div className="lamp-top"></div>
+                    <div className="lamp-bowl">
+                        <div className="lamp-flame flame-left"></div>
+                        <div className="lamp-flame flame-center"></div>
+                        <div className="lamp-flame flame-right"></div>
+                    </div>
+                    <div className="lamp-stem"></div>
+                    <div className="lamp-base"></div>
+                </div>
             </div>
 
             {/* Om Symbol */}
             <div className="floating-om">🕉️</div>
+
+
         </div>
     );
 }

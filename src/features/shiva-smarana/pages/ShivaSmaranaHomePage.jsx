@@ -28,7 +28,7 @@ const ShivaSmaranaHomePage = () => {
                     ← Back to Home
                 </button>
                 <div className="header-title">
-                    <span className="om-symbol">🕉️</span>
+
                     <h1>శివ నామ స్మరణ</h1>
                     <p>Shiva Nama Smarana</p>
                 </div>
@@ -39,36 +39,19 @@ const ShivaSmaranaHomePage = () => {
                 {/* User stats card */}
                 <div className="user-stats-card">
                     <div className="stat-item">
-                        <span className="stat-label">Your Total Abhishekams</span>
+                        <span className="stat-label">Total Chant Count</span>
                         <span className="stat-value">0</span>
-                    </div>
-                </div>
-
-                {/* Leaderboard placeholder */}
-                <div className="leaderboard-section">
-                    <div style={{
-                        background: 'rgba(30, 20, 15, 0.9)',
-                        border: '1px solid rgba(255, 215, 0, 0.3)',
-                        borderRadius: '16px',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#ffd700'
-                    }}>
-                        <h2>🏆 Global Leaderboard</h2>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }}>Coming Soon...</p>
                     </div>
                 </div>
 
                 {/* Start button */}
                 <div className="start-section">
                     <div className="start-decoration">
-                        <div className="om-circle">🕉️</div>
                     </div>
                     <button className="start-temple-btn" onClick={handleStartTemple}>
                         <span className="btn-icon">🙏</span>
                         <span className="btn-text">
-                            <span className="btn-title">Enter Divine Temple</span>
-                            <span className="btn-subtitle">Start Shiva Nama Smarana</span>
+                            <span className="btn-title">Start Chanting</span>
                         </span>
                         <span className="btn-icon">🙏</span>
                     </button>

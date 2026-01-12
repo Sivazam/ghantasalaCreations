@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Temple2DScene from './Temple2DScene';
+import Leaderboard from '../components/leaderboard/Leaderboard'; // Import Leaderboard logic
 import './ShivaSmaranaTemplePage.css';
 
 // Main Component
@@ -9,6 +10,44 @@ function ShivaSmaranaTemplePage() {
     const navigate = useNavigate();
     const [count, setCount] = useState(0);
     const [dropletTrigger, setDropletTrigger] = useState(0);
+
+    // --- AUDIO SYSTEM (Lifted State) ---
+    const [isMuted, setIsMuted] = useState(false); // Default Unmuted
+    const bgMusicRef = React.useRef(null);
+
+    // Leaderboard Modal State
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+    // Initialize BG Music
+    React.useEffect(() => {
+        bgMusicRef.current = new Audio('/bgMusic.mp3');
+        bgMusicRef.current.loop = true;
+        bgMusicRef.current.volume = 0.5;
+
+        return () => {
+            if (bgMusicRef.current) {
+                bgMusicRef.current.pause();
+                bgMusicRef.current = null;
+            }
+        };
+    }, []);
+
+    // Handle Playback
+    React.useEffect(() => {
+        if (!bgMusicRef.current) return;
+        if (isMuted) {
+            bgMusicRef.current.pause();
+        } else {
+            bgMusicRef.current.play().catch(e => {
+                console.warn("Autoplay prevented", e);
+                setIsMuted(true);
+            });
+        }
+    }, [isMuted]);
+
+    const toggleMute = () => setIsMuted(prev => !prev);
+    const toggleLeaderboard = () => setShowLeaderboard(prev => !prev);
+
 
     const handleOmClick = useCallback(() => {
         setCount(prev => prev + 1);
@@ -29,32 +68,142 @@ function ShivaSmaranaTemplePage() {
                 right: 0,
                 zIndex: 100,
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'space-between',
+                alignItems: 'center', // Align center vertical
                 padding: '16px 20px',
-                background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)'
+                background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)',
+                pointerEvents: 'none' // Let clicks pass through empty space
             }}>
+                {/* Left Side: Leaderboard Trigger */}
                 <button
-                    onClick={handleExit}
+                    onClick={toggleLeaderboard}
                     style={{
+                        pointerEvents: 'auto', // Re-enable clicks
                         width: '44px',
                         height: '44px',
                         borderRadius: '50%',
-                        border: '1px solid rgba(244, 67, 54, 0.3)',
-                        background: 'rgba(244, 67, 54, 0.2)',
-                        color: 'white',
+                        border: '1px solid rgba(255, 215, 0, 0.6)',
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        color: '#ffd700',
                         cursor: 'pointer',
                         fontSize: '20px',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: '0 0 15px rgba(255, 215, 0, 0.3)'
                     }}
+                    title="View Leaderboard"
                 >
-                    ✕
+                    🏆
                 </button>
+
+                {/* Right Side: Controls */}
+                <div style={{
+                    display: 'flex',
+                    gap: '15px',
+                    pointerEvents: 'auto' // Re-enable clicks
+                }}>
+                    {/* Mute Button */}
+                    <button
+                        onClick={toggleMute}
+                        style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            border: '1px solid rgba(255, 215, 0, 0.5)',
+                            background: 'rgba(0, 0, 0, 0.4)',
+                            color: '#ffd700',
+                            cursor: 'pointer',
+                            fontSize: '20px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backdropFilter: 'blur(4px)'
+                        }}
+                        title={isMuted ? "Unmute" : "Mute"}
+                    >
+                        {isMuted ? "🔇" : "🔊"}
+                    </button>
+
+                    {/* Close Button */}
+                    <button
+                        onClick={handleExit}
+                        style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            border: '1px solid rgba(244, 67, 54, 0.3)',
+                            background: 'rgba(244, 67, 54, 0.2)',
+                            color: 'white',
+                            cursor: 'pointer',
+                            fontSize: '20px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        title="Exit"
+                    >
+                        ✕
+                    </button>
+                </div>
             </div>
 
             {/* 2D Temple Scene */}
-            <Temple2DScene dropletTrigger={dropletTrigger} />
+            <Temple2DScene dropletTrigger={dropletTrigger} isMuted={isMuted} count={count} />
+
+            {/* Leaderboard Modal Overlay */}
+            {showLeaderboard && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    zIndex: 200, // Topmost
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px'
+                }}>
+                    <div style={{
+                        position: 'relative',
+                        width: '100%',
+                        maxWidth: '500px',
+                        background: 'linear-gradient(135deg, #1a0a0a 0%, #2d1810 100%)',
+                        border: '2px solid rgba(255, 215, 0, 0.4)',
+                        borderRadius: '20px',
+                        boxShadow: '0 0 30px rgba(255, 165, 0, 0.3)',
+                        maxHeight: '90vh',
+                        overflowY: 'auto'
+                    }}>
+                        {/* Close Modal Button */}
+                        <button
+                            onClick={toggleLeaderboard}
+                            style={{
+                                position: 'absolute',
+                                top: '15px',
+                                right: '15px',
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                zIndex: 10
+                            }}
+                        >
+                            ✕
+                        </button>
+
+                        {/* Leaderboard Component */}
+                        <div style={{ padding: '20px 0' }}>
+                            <Leaderboard />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Session count overlay */}
             <div style={{

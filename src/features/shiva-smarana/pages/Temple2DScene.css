@@ -42,7 +42,7 @@
 }
 
 /* ============================================ */
-/* DAARA PATRA (Vessel) */
+/* DAARA PATRA (Vessel) - Realistic Bronze Form */
 /* ============================================ */
 .daara-patra {
     position: absolute;
@@ -51,6 +51,7 @@
     transform: translateX(-50%);
     z-index: 10;
     animation: sway 4s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6));
 }
 
 @keyframes sway {
@@ -68,35 +69,60 @@
 .vessel-handle {
     width: 6px;
     height: 60px;
-    background: linear-gradient(90deg, #8b4513, #cd7f32, #8b4513);
+    /* Metallic Chain/Rope Look */
+    background: repeating-linear-gradient(0deg,
+            #3e2723 0px,
+            #5d4037 2px,
+            #3e2723 4px);
     margin: 0 auto;
-    border-radius: 3px;
     position: relative;
+    box-shadow: inset 1px 0 2px rgba(0, 0, 0, 0.5);
 }
 
 .vessel-handle::before {
     content: '';
     position: absolute;
-    top: -15px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
-    border: 4px solid #cd7f32;
+    width: 16px;
+    height: 16px;
+    /* Bronze Ring */
+    background: linear-gradient(135deg, #8d6e63 0%, #4e342e 100%);
+    border: 3px solid #bcaaa4;
     border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Upper Body (Neck area) */
 .vessel-body {
-    width: 90px;
-    height: 50px;
-    background: linear-gradient(180deg, #da8a67, #cd7f32, #b87333, #cd7f32);
-    border-radius: 15px 15px 50% 50%;
+    width: 80px;
+    height: 45px;
+    /* Cylindrical Metallic Gradient */
+    background: linear-gradient(90deg,
+            #3e2723 0%,
+            /* Shadow L */
+            #6d4c41 20%,
+            /* Mid */
+            #d7ccc8 35%,
+            /* Highlight! */
+            #8d6e63 50%,
+            /* Mid */
+            #4e342e 80%,
+            /* Shadow R */
+            #271c19 100%);
+    border-radius: 10px 10px 40% 40%;
     position: relative;
+    margin-top: -2px;
+    /* Rim highlight & depth */
+    border-top: 3px solid #8d6e63;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
     box-shadow:
-        inset -8px -5px 15px rgba(0, 0, 0, 0.4),
-        inset 8px 5px 15px rgba(255, 200, 150, 0.3);
-    border: 2px solid #da8a67;
-    margin-top: -5px;
+        inset 0 5px 10px rgba(0, 0, 0, 0.5),
+        /* Inner shadow */
+        0 5px 10px rgba(0, 0, 0, 0.3);
+    /* Drop shadow on bulge */
+    z-index: 2;
 }
 
 .vessel-water {
@@ -105,29 +131,59 @@
     left: 10px;
     right: 10px;
     height: 25px;
-    background: linear-gradient(180deg, rgba(79, 195, 247, 0.7), rgba(2, 136, 209, 0.5));
+    background: linear-gradient(180deg, rgba(79, 195, 247, 0.4), rgba(2, 136, 209, 0.2));
     border-radius: 0 0 40px 40px;
+    overflow: hidden;
+    filter: blur(1px);
 }
 
+/* Main Bulge (Pot belly) */
 .vessel-bulge {
     width: 100px;
-    height: 60px;
-    background: linear-gradient(180deg, #b87333, #cd7f32, #da8a67, #cd7f32, #b87333);
-    border-radius: 50%;
-    margin-top: -10px;
+    height: 65px;
+    /* Spherical Bronze Gradient */
+    background: radial-gradient(circle at 35% 35%,
+            #d7ccc8 0%,
+            /* Specular Shine */
+            #a1887f 20%,
+            /* Light Bronze */
+            #5d4037 50%,
+            /* Mid Bronze */
+            #3e2723 85%,
+            /* Dark Bronze */
+            #1b1210 100%
+            /* Deep Shadow */
+        );
+    border-radius: 50% 50% 50% 50%;
+    margin-top: -15px;
+    position: relative;
+    z-index: 1;
+    /* Texture/Noise simulation via subtle border/shadow */
     box-shadow:
-        inset -10px -5px 20px rgba(0, 0, 0, 0.4),
-        inset 10px 5px 20px rgba(255, 200, 150, 0.3);
+        inset -5px -5px 15px rgba(0, 0, 0, 0.6),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.2);
 }
 
+/* Spout (Tip) */
 .vessel-spout {
     width: 0;
     height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 30px solid #b87333;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 25px solid #3e2723;
+    /* Dark bronze tip */
+    /* Add a pseudo-element for realistic metallic rounding if needed, 
+       but simple border triangle is hard to gradient. 
+       Let's stick to flat dark color for the very tip or use filter */
     margin: -5px auto 0;
     position: relative;
+    z-index: 0;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Overwrite border color to match bulge bottom roughly */
+.vessel-spout {
+    border-top-color: #2e1e18;
 }
 
 /* ============================================ */
@@ -164,7 +220,7 @@
 
 @keyframes droplet-fall-to-lingam {
     0% {
-        top: 28%;
+        top: 35%;
         opacity: 1;
     }
 
@@ -173,7 +229,7 @@
     }
 
     100% {
-        top: 66%;
+        top: calc(100% - 18% - 155px);
         opacity: 0;
     }
 }
@@ -225,226 +281,6 @@
 }
 
 /* ============================================ */
-/* SNAKE - Inside lingam-top, just below tripundra */
-/* ============================================ */
-
-/* Front coil - visible in front of lingam */
-.snake-coil-front {
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 7;
-    pointer-events: none;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
-    overflow: visible;
-}
-
-/* Animated snake tail TIP - only the very end moves, every 30 seconds */
-.snake-tail-tip {
-    animation: tail-tip-wag 30s ease-in-out infinite;
-    transform-origin: left center;
-}
-
-@keyframes tail-tip-wag {
-
-    0%,
-    93%,
-    100% {
-        transform: rotate(0deg);
-    }
-
-    94% {
-        transform: rotate(10deg) translateY(-2px);
-    }
-
-    95% {
-        transform: rotate(-8deg) translateY(2px);
-    }
-
-    96% {
-        transform: rotate(6deg);
-    }
-
-    97% {
-        transform: rotate(-4deg);
-    }
-
-    98% {
-        transform: rotate(0deg);
-    }
-}
-
-/* Snake head wrapper - positioned to connect with body */
-.snake-head-wrap {
-    position: absolute;
-    bottom: 15px;
-    left: -40px;
-    z-index: 8;
-    animation: head-move 8s ease-in-out infinite;
-}
-
-@keyframes head-move {
-
-    0%,
-    80%,
-    100% {
-        transform: rotate(0deg);
-    }
-
-    85% {
-        transform: rotate(-6deg) translateX(-2px);
-    }
-
-    90% {
-        transform: rotate(4deg) translateX(2px);
-    }
-
-    95% {
-        transform: rotate(0deg);
-    }
-}
-
-/* Snake head */
-.snake-head {
-    width: 28px;
-    height: 35px;
-    background: linear-gradient(180deg, #c4a97a 0%, #a08060 40%, #8b7355 100%);
-    border-radius: 40% 40% 50% 50%;
-    position: relative;
-    box-shadow:
-        inset -3px -3px 6px rgba(0, 0, 0, 0.4),
-        inset 2px 2px 4px rgba(200, 180, 140, 0.3),
-        2px 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Snake hood */
-.snake-hood {
-    position: absolute;
-    top: -8px;
-    left: -12px;
-    width: 52px;
-    height: 35px;
-    background: linear-gradient(180deg, #a08060 0%, #c4a97a 30%, #a08060 60%, #8b7355 100%);
-    border-radius: 50% 50% 35% 35%;
-    z-index: -1;
-    box-shadow:
-        inset 0 6px 10px rgba(200, 180, 140, 0.3),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Hood pattern */
-.snake-hood::after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 12px;
-    border: 2px solid rgba(80, 60, 40, 0.4);
-    border-radius: 50%;
-}
-
-/* Snake eyes */
-.snake-eye {
-    position: absolute;
-    top: 12px;
-    width: 6px;
-    height: 7px;
-    background: radial-gradient(ellipse, #1a1a00 40%, #333300 100%);
-    border-radius: 50%;
-    animation: blink 5s ease-in-out infinite;
-}
-
-.snake-eye.left {
-    left: 6px;
-}
-
-.snake-eye.right {
-    right: 6px;
-}
-
-@keyframes blink {
-
-    0%,
-    45%,
-    55%,
-    100% {
-        transform: scaleY(1);
-    }
-
-    48%,
-    52% {
-        transform: scaleY(0.1);
-    }
-}
-
-.snake-eye::after {
-    content: '';
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    width: 2px;
-    height: 2px;
-    background: rgba(255, 255, 200, 0.6);
-    border-radius: 50%;
-}
-
-/* Snake tongue - forked */
-.snake-tongue {
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 12px;
-    background: #cc3333;
-    animation: tongue-flick 4s ease-in-out infinite;
-    transform-origin: top center;
-}
-
-.snake-tongue::before,
-.snake-tongue::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    width: 2px;
-    height: 5px;
-    background: #cc3333;
-}
-
-.snake-tongue::before {
-    left: -2px;
-    transform: rotate(-30deg);
-}
-
-.snake-tongue::after {
-    right: -2px;
-    transform: rotate(30deg);
-}
-
-@keyframes tongue-flick {
-
-    0%,
-    85%,
-    100% {
-        opacity: 0;
-        transform: translateX(-50%) scaleY(0);
-    }
-
-    88%,
-    92% {
-        opacity: 1;
-        transform: translateX(-50%) scaleY(1);
-    }
-
-    90% {
-        opacity: 1;
-        transform: translateX(-50%) scaleY(1.2);
-    }
-}
-
 /* ============================================ */
 /* LINGAM */
 /* ============================================ */
@@ -532,64 +368,207 @@
 /* ============================================ */
 /* SPLASH - at top of lingam */
 /* ============================================ */
+/* ============================================ */
+/* SPLASH - REALISTIC PHYSICS */
+/* ============================================ */
+/* ============================================ */
+/* SPLASH - HARDCODED PHYSICS */
+/* ============================================ */
 .splashes-container {
     position: absolute;
-    top: -10px;
+    top: -20px;
+    /* Moved up to clear tip completely */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 12;
+    z-index: 20;
+    /* Very High Z */
     width: 60px;
     height: 40px;
+    pointer-events: none;
 }
 
+/* Base Splash Container */
 .splash-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    /* No delay here, just render immediately */
+}
+
+/* 1. IMPACT RIPPLE */
+.splash-effect::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translateX(-50%);
-}
-
-.splash-drop {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: radial-gradient(circle, rgba(180, 230, 255, 0.95), rgba(79, 195, 247, 0.8));
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 8px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    animation: splash-particle 0.4s ease-out forwards;
+    opacity: 0;
+    animation: impact-ripple 1.5s ease-out infinite;
+
 }
 
-.splash-1 {
-    left: 0;
-}
-
-.splash-2 {
-    left: -12px;
-    animation-delay: 30ms;
-}
-
-.splash-3 {
-    left: 12px;
-    animation-delay: 30ms;
-}
-
-.splash-4 {
-    left: -20px;
-    animation-delay: 60ms;
-}
-
-.splash-5 {
-    left: 20px;
-    animation-delay: 60ms;
-}
-
-@keyframes splash-particle {
+@keyframes impact-ripple {
     0% {
-        transform: translateY(0) scale(1);
+        transform: translate(-50%, -50%) scale(0.2);
         opacity: 1;
+        border-width: 3px;
+    }
+
+    40% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        border-width: 0px;
     }
 
     100% {
-        transform: translateY(-25px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* 2. PARTICLES - Individual Keyframes */
+.splash-drop {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+}
+
+.splash-1 {
+    animation: splash-move-1 1.5s ease-out infinite;
+}
+
+.splash-2 {
+    animation: splash-move-2 1.5s ease-out infinite;
+}
+
+.splash-3 {
+    animation: splash-move-3 1.5s ease-out infinite;
+}
+
+.splash-4 {
+    animation: splash-move-4 1.5s ease-out infinite;
+}
+
+.splash-5 {
+    animation: splash-move-5 1.5s ease-out infinite;
+}
+
+/* Left Low */
+@keyframes splash-move-1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(-15px, -15px) scale(0.8);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(-20px, 10px) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Left High */
+@keyframes splash-move-2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(-10px, -25px) scale(0.8);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(-15px, 0px) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Right Low */
+@keyframes splash-move-3 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(15px, -15px) scale(0.8);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(20px, 10px) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Right High */
+@keyframes splash-move-4 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(10px, -25px) scale(0.8);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(15px, 0px) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Center High */
+@keyframes splash-move-5 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(0px, -30px) scale(0.8);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(0px, -10px) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
         opacity: 0;
     }
 }
@@ -597,46 +576,217 @@
 /* ============================================ */
 /* DIYAS */
 /* ============================================ */
+/* ============================================ */
+/* KUTHUVILAKKU (Brass Standing Lamps) */
+/* ============================================ */
 .diya {
     position: absolute;
-    bottom: 15%;
-    z-index: 8;
+    bottom: 5%;
+    /* Standing on floor */
+    z-index: 12;
+    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.2));
 }
 
 .left-diya {
-    left: 12%;
+    left: 15%;
 }
 
 .right-diya {
-    right: 12%;
+    right: 15%;
 }
 
-.diya-base {
-    width: 50px;
-    height: 20px;
-    background: linear-gradient(180deg, #cd7f32, #b8860b);
+.lamp-structure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* 1. Finial (Top Spike) */
+.lamp-top {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 30px solid #daa520;
+    /* Gold */
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.lamp-top::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: -6px;
+    width: 12px;
+    height: 10px;
+    background: linear-gradient(90deg, #8b4513, #ffd700, #8b4513);
     border-radius: 50%;
 }
 
-.flame {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.8rem;
-    animation: flicker 0.3s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.9));
+/* 2. Oil Bowl */
+.lamp-bowl {
+    width: 60px;
+    /* Reduced from 80 */
+    height: 22px;
+    background: radial-gradient(ellipse at center, #ffd700 30%, #b8860b 80%, #5d4037 100%);
+    border-radius: 0 0 30px 30px;
+    position: relative;
+    z-index: 3;
+    margin-top: 5px;
+    box-shadow:
+        inset 0 2px 5px rgba(255, 255, 255, 0.4),
+        0 4px 5px rgba(0, 0, 0, 0.4);
+    border-top: 2px solid #ffecb3;
 }
 
-@keyframes flicker {
+/* Wick holders (rim details) */
+.lamp-bowl::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 68px;
+    /* Reduced from 90 */
+    height: 8px;
+    background: linear-gradient(90deg, #8b4513, #ffd700, #8b4513);
+    border-radius: 4px;
+    z-index: -1;
+}
+
+/* 3. Segmented Stem */
+.lamp-stem {
+    width: 8px;
+    /* Reduced from 12 */
+    height: 120px;
+    /* Turned wood/metal look with ridges */
+    background: repeating-linear-gradient(180deg,
+            #b8860b 0px,
+            #ffd700 5px,
+            #8b4513 10px,
+            #b8860b 15px);
+    box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 2;
+}
+
+/* Bulge in middle of stem */
+.lamp-stem::after {
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    /* Reduced from 24 */
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffd700, #8b4513);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. Base (Tiered) */
+.lamp-base {
+    width: 50px;
+    /* Reduced from 70 */
+    height: 20px;
+    background: linear-gradient(90deg, #5d4037, #ffd700, #5d4037);
+    border-radius: 50% 50% 5px 5px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+    margin-top: -2px;
+}
+
+.lamp-base::before {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: -5px;
+    width: 60px;
+    /* Reduced from 80 */
+    height: 8px;
+    background: #3e2723;
+    border-radius: 5px;
+}
+
+/* ================== */
+/* REALISTIC FLAMES */
+/* ================== */
+.lamp-flame {
+    position: absolute;
+    bottom: 90%;
+    width: 10px;
+    /* Reduced from 12 */
+    height: 22px;
+    background: radial-gradient(ellipse at bottom, #ffff00 0%, #ff8c00 60%, transparent 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    filter: blur(1px);
+    opacity: 0.9;
+    animation: flame-flicker 0.15s ease-in-out infinite alternate;
+    box-shadow: 0 0 8px #ff6600, 0 -4px 12px #ff4500;
+}
+
+.flame-center {
+    left: 50%;
+    transform: translateX(-50%);
+    height: 30px;
+    /* Slightly shorter */
+    width: 14px;
+    bottom: 85%;
+}
+
+.flame-left {
+    left: 2px;
+    transform: rotate(-15deg);
+}
+
+.flame-right {
+    right: 2px;
+    transform: rotate(15deg);
+}
+
+@keyframes flame-flicker {
     0% {
-        transform: translateX(-50%) scale(1);
-        opacity: 0.9;
+        transform: translateX(-50%) skewX(-2deg) scale(1);
+        opacity: 0.8;
     }
 
     100% {
-        transform: translateX(-50%) scale(1.1);
+        transform: translateX(-50%) skewX(2deg) scale(1.05);
         opacity: 1;
+    }
+}
+
+/* Specific rotate fixes for side flames within animation is tricky, 
+   so we simplify side flame animation */
+.flame-left {
+    animation: flame-left-anim 0.2s infinite alternate;
+}
+
+.flame-right {
+    animation: flame-right-anim 0.2s infinite alternate;
+}
+
+@keyframes flame-left-anim {
+    0% {
+        transform: rotate(-15deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(-12deg) scale(1.1);
+    }
+}
+
+@keyframes flame-right-anim {
+    0% {
+        transform: rotate(15deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(12deg) scale(1.1);
     }
 }
 
@@ -667,6 +817,48 @@
     }
 }
 
+/* ============================================ */
+/* WATER DROPLET PATH - Global positioning */
+/* ============================================ */
+.droplet-path {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 100%;
+    z-index: 9;
+    /* Behind Vessel (10), In front of Lingam (5) */
+    pointer-events: none;
+}
+
+@keyframes droplet-fall-to-lingam {
+    0% {
+        top: calc(8% + 170px);
+        transform: translateX(-50%) scale(0);
+        opacity: 0.8;
+    }
+
+    20% {
+        top: calc(8% + 175px);
+        transform: translateX(-50%) scale(1.2);
+        /* Heavy drop forming */
+        opacity: 1;
+    }
+
+    25% {
+        top: calc(8% + 180px);
+        /* Begins to detach */
+        transform: translateX(-50%) scale(1);
+    }
+
+    100% {
+        top: calc(100% - 18% - 155px);
+        transform: translateX(-50%) scale(0.6);
+        opacity: 0;
+    }
+}
+
 /* Mobile */
 @media (max-width: 480px) {
     .daara-patra {
@@ -685,11 +877,26 @@
 
     .shiva-lingam-container {
         bottom: 22%;
+        /* Adjusted for bigger size */
     }
 
     .lingam-top {
-        width: 55px;
-        height: 80px;
+        width: 65px;
+        /* Increased from 55px */
+        height: 95px;
+        /* Increased from 80px */
+    }
+
+    /* Add proportional sizing for other parts to match thicker lingam */
+    .yoni-base {
+        width: 110px;
+        height: 38px;
+        margin-top: -12px;
+    }
+
+    .lingam-pedestal {
+        width: 90px;
+        height: 45px;
     }
 
     .left-diya {
@@ -702,16 +909,138 @@
 
     @keyframes droplet-fall-to-lingam {
         0% {
-            top: 30%;
+            top: calc(10% + 150px);
+            transform: translateX(-50%) scale(0);
+            opacity: 0.8;
+        }
+
+        20% {
+            top: calc(10% + 155px);
+            transform: translateX(-50%) scale(1.2);
             opacity: 1;
         }
 
-        90% {
-            opacity: 1;
+        25% {
+            top: calc(10% + 160px);
+            transform: translateX(-50%) scale(1);
         }
 
         100% {
-            top: 58%;
+            top: calc(100% - 18% - 155px);
+            transform: translateX(-50%) scale(0.6);
+            opacity: 0;
+        }
+    }
+}
+
+
+
+/* ============================================ */
+/* ============================================ */
+/* ============================================ */
+/* ============================================ */
+/* BILVA LEAF BLAST (Pure CSS Trifoliate) */
+/* ============================================ */
+.confetti-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    /* Lower than Diya (12) */
+    pointer-events: none;
+    perspective: 1000px;
+}
+
+/* 1. Container - Handles Movement & Physics */
+/* In this case, the IMG itself is the particle */
+.confetti-particle {
+    position: absolute;
+    top: -20%;
+    /* Start strictly above screen */
+    /* Default size */
+    width: 60px;
+    height: auto;
+    /* Blast animation - Slow Free Fall (5s) */
+    animation: leaf-shoot 35s ease-out forwards;
+    will-change: transform, top, opacity;
+    z-index: 10;
+}
+
+
+
+/* 2. Remove old shape classes */
+.bilva-leaf-container,
+.bilva-trifoliate,
+.bilva-trifoliate::before,
+.bilva-trifoliate::after {
+    display: none;
+}
+
+
+@keyframes leaf-shoot {
+    0% {
+        top: -15%;
+        /* Start above screen */
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, var(--rot-start));
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    15% {
+        /* Land fast (5.25s) */
+        top: var(--land-y);
+        opacity: 1;
+        transform: translate3d(var(--end-x), 0, 0) rotate3d(1, 1, 1, var(--rot-end));
+    }
+
+    95% {
+        /* STAY (until 33s) */
+        /* Land */
+        top: var(--land-y);
+        opacity: 1;
+        transform: translate3d(var(--end-x), 0, 0) rotate3d(1, 1, 1, var(--rot-end));
+    }
+
+    100% {
+        /* Fade out after landing */
+        top: calc(var(--land-y) + 20px);
+        opacity: 0;
+        transform: translate3d(var(--end-x), 20px, 0) rotate3d(1, 1, 1, var(--rot-end));
+    }
+}
+
+/* Mobile Adjustments - Consistent Fall */
+@media (max-width: 480px) {
+    @keyframes leaf-shoot {
+        0% {
+            top: -15%;
+            opacity: 0;
+            transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, var(--rot-start));
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        15% {
+            top: var(--land-y);
+            opacity: 1;
+            transform: translate3d(var(--end-x), 0, 0) rotate3d(0, 0, 1, var(--rot-end));
+        }
+
+        95% {
+            top: var(--land-y);
+            opacity: 1;
+            transform: translate3d(var(--end-x), 0, 0) rotate3d(0, 0, 1, var(--rot-end));
+        }
+
+        100% {
+            top: calc(var(--land-y) + 20px);
             opacity: 0;
         }
     }
