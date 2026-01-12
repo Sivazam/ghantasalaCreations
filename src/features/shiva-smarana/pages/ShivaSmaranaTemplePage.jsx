@@ -5,6 +5,10 @@ import Temple2DScene from './Temple2DScene';
 import Leaderboard from '../components/leaderboard/Leaderboard'; // Import Leaderboard logic
 import './ShivaSmaranaTemplePage.css';
 
+// Firebase Imports (Standard ES6)
+import { auth, db } from '../../../firebase';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+
 // Main Component
 function ShivaSmaranaTemplePage() {
     const navigate = useNavigate();
@@ -12,7 +16,75 @@ function ShivaSmaranaTemplePage() {
     const [dropletTrigger, setDropletTrigger] = useState(0);
 
     // COOLDOWN STATE
+    // COOLDOWN STATE
     const [isCooldown, setIsCooldown] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // --- FIREBASE SYNC ---
+    const queuedChantsRef = React.useRef(0);
+    // We still need a forceUpdate or state to trigger re-renders if needed, 
+    // but for background sync ref is better. 
+    // We'll use a local counter just for the 50-check if we want, or just check ref.
+
+    // Initialize Count from Firestore
+    React.useEffect(() => {
+        const fetchCount = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    const docRef = doc(db, "users", user.uid);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const cloudCount = snap.data().chant_count || 0;
+                        setCount(cloudCount);
+                        // Force LocalStorage to match Cloud (Source of Truth)
+                        localStorage.setItem('totalChants', cloudCount.toString());
+                    }
+                } catch (e) {
+                    console.error("Firestore Read Error:", e);
+                }
+            } else {
+                // Fallback to local storage if not logged in (legacy support)
+                const stored = parseInt(localStorage.getItem('totalChants') || '0');
+                if (stored) setCount(stored);
+            }
+        };
+        fetchCount();
+    }, []);
+
+    // Sync Logic (Periodic + Unmount)
+    const syncToCloud = useCallback(async () => {
+        const amountToSync = queuedChantsRef.current;
+        if (amountToSync === 0) return;
+
+        // RESET IMMEDIATELY to prevent double syncs
+        queuedChantsRef.current = 0;
+        console.log("Syncing...", amountToSync);
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const lbRef = doc(db, "leaderboard", user.uid);
+
+            await updateDoc(userRef, { chant_count: increment(amountToSync) });
+            await updateDoc(lbRef, { chant_count: increment(amountToSync) });
+
+            console.log("Synced successfully:", amountToSync);
+        } catch (e) {
+            console.error("Sync Error Detailed:", e);
+            // Verify if we should restore the count on failure? 
+            // For now, simpler to log. Safety first.
+        }
+    }, []);
+
+    // Sync on Unmount
+    React.useEffect(() => {
+        return () => {
+            if (queuedChantsRef.current > 0) syncToCloud();
+        }
+    }, [syncToCloud]);
 
     // --- AUDIO SYSTEM (Lifted State) ---
     const [isMuted, setIsMuted] = useState(false); // Default Unmuted
@@ -58,16 +130,40 @@ function ShivaSmaranaTemplePage() {
         setCount(prev => prev + 1);
         setDropletTrigger(prev => prev + 1);
 
+        // Increment Queue Ref
+        queuedChantsRef.current += 1;
+
+        // SYNC EVERY 50 CHANTS
+        if (queuedChantsRef.current >= 50) {
+            syncToCloud();
+        }
+
+
         // Start Cooldown (2 Seconds)
         setIsCooldown(true);
         setTimeout(() => {
             setIsCooldown(false);
         }, 2000);
-    }, [isCooldown]);
 
-    const handleExit = useCallback(() => {
+        // Legacy Local Storage (ALWAYS update this for instant home page display)
+        const currentTotal = parseInt(localStorage.getItem('totalChants') || '0');
+        localStorage.setItem('totalChants', (currentTotal + 1).toString());
+    }, [isCooldown, syncToCloud]);
+
+    const handleExit = useCallback(async () => {
+        // Force Sync before exit
+        if (queuedChantsRef.current > 0) {
+            setIsSaving(true);
+            await syncToCloud();
+            setIsSaving(false);
+        }
+
+        // Exit Fullscreen if active
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(err => console.warn("Exit Fullscreen error:", err));
+        }
         navigate('/shiva-smarana');
-    }, [navigate]);
+    }, [navigate, syncToCloud]);
 
     return (
         <div className="temple-page">
@@ -140,22 +236,23 @@ function ShivaSmaranaTemplePage() {
                     {/* Close Button */}
                     <button
                         onClick={handleExit}
+                        disabled={isSaving}
                         style={{
                             width: '44px',
                             height: '44px',
                             borderRadius: '50%',
                             border: '1px solid rgba(244, 67, 54, 0.3)',
-                            background: 'rgba(244, 67, 54, 0.2)',
+                            background: isSaving ? 'rgba(255, 165, 0, 0.5)' : 'rgba(244, 67, 54, 0.2)',
                             color: 'white',
                             cursor: 'pointer',
-                            fontSize: '20px',
+                            fontSize: isSaving ? '10px' : '20px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
                         title="Exit"
                     >
-                        ✕
+                        {isSaving ? "⏳" : "✕"}
                     </button>
                 </div>
             </div>

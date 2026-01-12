@@ -285,7 +285,8 @@
 /* ============================================ */
 .shiva-lingam-container {
     position: absolute;
-    bottom: 18%;
+    bottom: 25%;
+    /* Lifted up from 18% */
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -631,7 +632,8 @@
 /* ============================================ */
 .diya {
     position: absolute;
-    bottom: 5%;
+    bottom: 15%;
+    /* Lifted up from 5% */
     /* Standing on floor */
     z-index: 12;
     filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.2));

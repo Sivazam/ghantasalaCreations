@@ -131,7 +131,7 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
 
     // 1. Initialize Audio (Droplets Only)
     useEffect(() => {
-        dropletSoundRef.current = new Audio('/water_Droplet.webm');
+        dropletSoundRef.current = new Audio('/New_water_Droplet.mp3');
         dropletSoundRef.current.volume = 0.8;
 
         return () => {

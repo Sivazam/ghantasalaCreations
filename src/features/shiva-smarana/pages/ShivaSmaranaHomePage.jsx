@@ -1,11 +1,45 @@
 // Simplified Shiva Smarana Home Page - for testing
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { signOut } from 'firebase/auth'; // Import signOut
 import './ShivaSmaranaHomePage.css';
 
 const ShivaSmaranaHomePage = () => {
     const navigate = useNavigate();
     const [showFullscreenPrompt, setShowFullscreenPrompt] = React.useState(false);
+
+    // User Data State
+    const [userData, setUserData] = React.useState({ name: '', count: 0 });
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const docRef = doc(db, "users", user.uid);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        setUserData({
+                            name: data.name || 'Devotee',
+                            count: data.chant_count || 0
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error fetching user data:", e);
+                }
+            } else {
+                // Fallback to local storage if not logged in
+                const stored = localStorage.getItem('totalChants');
+                if (stored) setUserData(prev => ({ ...prev, count: parseInt(stored) }));
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
+
 
     const handleStartTemple = () => {
         setShowFullscreenPrompt(true);
@@ -31,6 +65,15 @@ const ShivaSmaranaHomePage = () => {
         navigate('/');
     };
 
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate('/');
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+    };
+
     return (
         <div className="shiva-home-page">
             {/* Background effects */}
@@ -42,7 +85,7 @@ const ShivaSmaranaHomePage = () => {
             {/* Header */}
             <header className="shiva-home-header">
                 <button className="back-btn" onClick={handleBackToHome}>
-                    ← Back to Home
+                    ← Back
                 </button>
                 <div className="header-title">
 
@@ -55,9 +98,22 @@ const ShivaSmaranaHomePage = () => {
             <main className="shiva-home-content">
                 {/* User stats card */}
                 <div className="user-stats-card">
+                    {userData.name && (
+                        <div style={{
+                            color: '#ffd700',
+                            fontSize: '1.2rem',
+                            marginBottom: '10px',
+                            fontFamily: 'serif',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                        }}>
+                            Welcome back, {userData.name} 🙏
+                        </div>
+                    )}
                     <div className="stat-item">
                         <span className="stat-label">Total Chant Count</span>
-                        <span className="stat-value">0</span>
+                        <span className="stat-value">
+                            {loading ? '...' : userData.count.toLocaleString('en-IN')}
+                        </span>
                     </div>
                 </div>
 
@@ -96,6 +152,23 @@ const ShivaSmaranaHomePage = () => {
             {/* Footer */}
             <footer className="shiva-home-footer">
                 <p>🙏 ఓం నమః శివాయ 🙏</p>
+                {userData.name && (
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            background: 'rgba(255, 0, 0, 0.2)',
+                            color: 'white',
+                            border: '1px solid rgba(255, 0, 0, 0.4)',
+                            padding: '5px 15px',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            marginTop: '15px'
+                        }}
+                    >
+                        Sign Out
+                    </button>
+                )}
             </footer>
         </div>
     );

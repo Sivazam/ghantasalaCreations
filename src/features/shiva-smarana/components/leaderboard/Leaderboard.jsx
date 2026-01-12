@@ -1,21 +1,47 @@
 // Leaderboard component with real-time updates
 import React, { useEffect, useState } from 'react';
-import { subscribeToLeaderboard, getVisitorId } from '../../firebase/shivaFirestore';
+import { db, auth } from '../../../../firebase';
+import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import './Leaderboard.css';
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
-    const currentVisitorId = getVisitorId();
+    const [currentUserUid, setCurrentUserUid] = useState(null);
 
     useEffect(() => {
-        // Subscribe to real-time leaderboard updates
-        const unsubscribe = subscribeToLeaderboard((data) => {
+        // Get current user UID for highlighting
+        const unsubscribeAuth = auth.onAuthStateChanged(user => {
+            if (user) setCurrentUserUid(user.uid);
+            else setCurrentUserUid(null);
+        });
+
+        // Query the 'leaderboard' collection
+        // Order by 'chant_count' descending
+        const q = query(
+            collection(db, "leaderboard"),
+            orderBy("chant_count", "desc"),
+            limit(10)
+        );
+
+        // Subscribe to real-time updates
+        const unsubscribeFirestore = onSnapshot(q, (snapshot) => {
+            const data = snapshot.docs.map((doc, index) => ({
+                id: doc.id,
+                rank: index + 1,
+                ...doc.data()
+            }));
             setLeaderboard(data);
             setLoading(false);
-        }, 10);
+        }, (error) => {
+            console.error("Leaderboard Error:", error);
+            setLoading(false);
+        });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribeAuth();
+            unsubscribeFirestore();
+        };
     }, []);
 
     const getRankIcon = (rank) => {
@@ -46,7 +72,7 @@ const Leaderboard = () => {
     return (
         <div className="leaderboard">
             <h2 className="leaderboard-title">🏆 Global Leaderboard</h2>
-            <div className="leaderboard-subtitle">Top Devotees by Abhishekam Count</div>
+            <div className="leaderboard-subtitle">Top Devotees by Chant Count</div>
 
             {leaderboard.length === 0 ? (
                 <div className="leaderboard-empty">
@@ -57,20 +83,21 @@ const Leaderboard = () => {
                 <div className="leaderboard-list">
                     {leaderboard.map((entry) => (
                         <div
-                            key={entry.visitorId}
-                            className={`leaderboard-item ${entry.visitorId === currentVisitorId ? 'current-user' : ''} ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}
+                            key={entry.id}
+                            className={`leaderboard-item ${entry.id === currentUserUid ? 'current-user' : ''} ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}
                         >
                             <div className="rank-badge">
                                 {getRankIcon(entry.rank)}
                             </div>
                             <div className="devotee-info">
                                 <span className="devotee-name">
-                                    {entry.visitorId === currentVisitorId ? 'You ✨' : `Devotee ${entry.rank}`}
+                                    {entry.id === currentUserUid ? `${entry.name || 'Devotee'} (You) ✨` : (entry.name || 'Devotee')}
                                 </span>
+                                {entry.city && <span className="devotee-city" style={{ fontSize: '0.8rem', color: 'white', opacity: 0.8, display: 'block' }}>📍 {entry.city}</span>}
                             </div>
                             <div className="count-display">
-                                <span className="count-value">{formatCount(entry.totalCount)}</span>
-                                <span className="count-label">Abhishekams</span>
+                                <span className="count-value">{formatCount(entry.chant_count)}</span>
+                                <span className="count-label">Chants</span>
                             </div>
                         </div>
                     ))}

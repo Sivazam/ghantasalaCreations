@@ -28,6 +28,11 @@ import Shiva from './Shiva';
 import ShivaImg from './images/shiva.jpeg'
 import { useNavigate } from 'react-router-dom';
 
+// Import Firebase (Standard ES6)
+import { auth, db } from './firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+
 
 export default function MainHomePage(prop) {
 
@@ -261,6 +266,132 @@ export default function MainHomePage(prop) {
     }
   }, []);
 
+  // Fetch Total Chant Count (Firestore + Local Fallback)
+  // Fetch Total Chant Count (Firestore + Local Fallback)
+  const [totalChants, setTotalChants] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  useEffect(() => {
+    // 1. Listen for Auth Changes to fetch Cloud Data
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const snap = await getDoc(docRef);
+          if (snap.exists()) {
+            setTotalChants(snap.data().chant_count || 0);
+            // Update local storage to match cloud
+            localStorage.setItem('totalChants', (snap.data().chant_count || 0).toString());
+          }
+        } catch (e) {
+          console.error("Home Fetch Error:", e);
+        }
+      } else {
+        setIsLoggedIn(false);
+        // 2. Fallback to Local Storage if no user
+        const stored = localStorage.getItem('totalChants');
+        if (stored) {
+          setTotalChants(parseInt(stored));
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // --- FIREBASE AUTH & ONBOARDING ---
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [userForm, setUserForm] = useState({ name: '', city: '', phone: '' });
+  const [loadingText, setLoadingText] = useState('');
+
+  // Listen for Auth State
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        console.log("User is signed in:", user.uid);
+        // Optionally fetch latest count here to prep UI
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleBannerClick = async () => {
+    // 1. Check if user is ALREADY signed in
+    if (auth.currentUser) {
+      navigate('/shiva-smarana');
+      return;
+    }
+
+    setLoadingText("Checking spiritual identity...");
+    const provider = new GoogleAuthProvider();
+
+    try {
+      // 2. Trigger Google Sign In (Only if not logged in)
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // 2. Check if user already exists in Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        // User exists - Navigate to Temple
+        navigate('/shiva-smarana');
+      } else {
+        // New User - Show Onboarding Modal
+        setShowOnboarding(true);
+      }
+    } catch (error) {
+      console.error("Auth Error:", error);
+      alert("Sign in failed. Please try again.");
+    } finally {
+      setLoadingText('');
+    }
+  };
+
+  const handleOnboardingSubmit = async () => {
+    if (!userForm.name || !userForm.city || !userForm.phone) {
+      alert("Please fill in all details to proceed.");
+      return;
+    }
+
+    setLoadingText("Creating your updated profile...");
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      const userData = {
+        uid: user.uid,
+        name: userForm.name,
+        city: userForm.city,
+        phone: userForm.phone,
+        email: user.email,
+        chant_count: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      // 3. Save to 'users' collection
+      await setDoc(doc(db, "users", user.uid), userData);
+
+      // 4. Save to 'leaderboard' collection (Optimized)
+      await setDoc(doc(db, "leaderboard", user.uid), {
+        name: userForm.name,
+        city: userForm.city,
+        chant_count: 0
+      });
+
+      // 5. Navigate
+      setShowOnboarding(false);
+      navigate('/shiva-smarana');
+    } catch (error) {
+      console.error("Profile Creation Error:", error);
+      alert("Failed to create profile. Please check your connection.");
+    } finally {
+      setLoadingText('');
+    }
+  };
+
   const handleClosePopup = () => {
     setShowPopup(false);
   };
@@ -299,22 +430,33 @@ export default function MainHomePage(prop) {
 
 
       <div className='MainCont'>
-        <div className="row" style={{ marginRight: '0px', paddingRight: '0px' }}>
-          {/* <div className="col-11"></div> */}
-          <div className="col" style={{ margin: '10px', color: 'whitesmoke' }}>
+        <div className="row" style={{ marginRight: '0px', paddingRight: '0px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-            {/* <div className="custom-control custom-switch">
-                <input type="checkbox" className="custom-control-input" id="customSwitch1" checked />
-                <label className="custom-control-label" for="customSwitch1"></label>
-                </div> */}
+          {/* LEFT: Total Chant Count (Only if Logged In) */}
+          <div className="col-auto" style={{ margin: '10px 20px', color: 'whitesmoke' }}>
+            {isLoggedIn && (
+              <div style={{
+                background: 'rgba(0,0,0,0.5)',
+                padding: '5px 15px',
+                borderRadius: '20px',
+                border: '1px solid #ffd700',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>🕉️</span>
+                <span style={{ fontWeight: 'bold', color: '#ffd700' }}>Count:</span>
+                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{totalChants.toLocaleString('en-IN')}</span>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT: Social Icons */}
+          <div className="col-auto" style={{ margin: '10px', color: 'whitesmoke' }}>
             <span style={{ display: 'flex', margin: '5px' }}>
-              {/* {click ? <VolumeUpIcon style={{cursor:"pointer",color:'green', background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => {tog();}}/> : <VolumeOffIcon style={{cursor:"pointer",color:'red',background:'white',borderRadius:'50%',fontSize:'2rem'}} onClick={() => { tog();}}/>} */}
               <a href="https://api.whatsapp.com/send?phone=+919490478707&text=%20నమస్తే పంతులుగారు , నా సమస్య ఏమిటి అంటే " style={{ textDecoration: 'none' }}><WhatsAppIcon className="socialIcon" style={{ color: 'green', margin: '0 10px', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2rem', padding: '5px' }} /></a>
               <a href="tel:+919490478707" style={{ textDecoration: 'none' }}><CallIcon className="socialIcon" style={{ color: '#537FE7', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2rem', padding: '5px' }} /></a>
-
             </span>
-
-
           </div>
 
           {/* {showPopup ? (
@@ -348,9 +490,101 @@ export default function MainHomePage(prop) {
 
         </div>
 
+        {/* ONBOARDING MODAL */}
+        {showOnboarding && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)',
+            zIndex: 1000,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backdropFilter: 'blur(5px)'
+          }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #2d1810 0%, #1a0a0a 100%)',
+              padding: '30px',
+              borderRadius: '20px',
+              border: '2px solid #ffd700',
+              width: '90%',
+              maxWidth: '400px',
+              color: '#fff',
+              textAlign: 'center',
+              boxShadow: '0 0 30px rgba(255, 215, 0, 0.3)'
+            }}>
+              <h3 style={{ color: '#ffd700', fontFamily: 'serif', marginBottom: '20px' }}>Join the Divine Path</h3>
+              <p style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: '25px' }}>
+                Please provide your details to track your spiritual journey.
+              </p>
+
+              <input
+                type="text"
+                placeholder="Your Name (ex: Ravi Kumar)"
+                value={userForm.name}
+                onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+                style={{ width: '100%', padding: '12px', margin: '10px 0', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+              />
+              <input
+                type="text"
+                placeholder="City (ex: Hyderabad)"
+                value={userForm.city}
+                onChange={(e) => setUserForm({ ...userForm, city: e.target.value })}
+                style={{ width: '100%', padding: '12px', margin: '10px 0', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+              />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                value={userForm.phone}
+                onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })}
+                style={{ width: '100%', padding: '12px', margin: '10px 0', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+              />
+
+              <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '10px' }}>
+                Email: {auth.currentUser?.email}
+              </p>
+
+              <button
+                onClick={handleOnboardingSubmit}
+                style={{
+                  marginTop: '20px',
+                  padding: '12px 30px',
+                  background: 'linear-gradient(90deg, #ffd700, #ff8c00)',
+                  border: 'none',
+                  borderRadius: '30px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  color: '#000',
+                  width: '100%'
+                }}
+              >
+                Start Abhishekam 🙏
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* LOADING OVERLAY */}
+        {loadingText && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.9)',
+            zIndex: 2000,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#ffd700'
+          }}>
+            <div className="spinner-border text-warning" role="status"></div>
+            <h4 style={{ marginTop: '20px' }}>{loadingText}</h4>
+          </div>
+        )}
+
         {/* ========== SHIVA SMARANA ENTRY SECTION (IMAGE BASED) ========== */}
         <div
-          onClick={() => navigate('/shiva-smarana')}
+          onClick={handleBannerClick}
           style={{
             margin: '20px 15px',
             borderRadius: '20px',
@@ -432,10 +666,12 @@ export default function MainHomePage(prop) {
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="sr-only">Previous</span>
                   </a>
-                  <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Next</span>
-                  </a>
+                  {/* <div className="user-stats-card">
+                    <div className="stat-item">
+                      <span className="stat-label">Total Chant Count</span>
+                      <span className="stat-value">{totalChants.toLocaleString('en-IN')}</span>
+                    </div>
+                  </div> */}
                 </div>
               </Item>
             </Grid>
