@@ -302,6 +302,7 @@ export default function MainHomePage(prop) {
 
   // --- FIREBASE AUTH & ONBOARDING ---
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showEntryModal, setShowEntryModal] = useState(false); // NEW: Entry modal state
   const [userForm, setUserForm] = useState({ name: '', city: '', phone: '' });
   const [loadingText, setLoadingText] = useState('');
 
@@ -322,16 +323,28 @@ export default function MainHomePage(prop) {
       navigate('/shiva-smarana');
       return;
     }
+    // 2. Show entry modal for Login/Guest choice
+    setShowEntryModal(true);
+  };
 
-    setLoadingText("Checking spiritual identity...");
+  // NEW: Guest Mode Handler
+  const handleGuestMode = () => {
+    localStorage.setItem('isGuestMode', 'true');
+    setShowEntryModal(false);
+    navigate('/shiva-smarana');
+  };
+
+  // NEW: Login Mode Handler
+  const handleLoginMode = async () => {
+    setShowEntryModal(false);
+    setLoadingText("Connecting to divine path...");
     const provider = new GoogleAuthProvider();
 
     try {
-      // 2. Trigger Google Sign In (Only if not logged in)
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // 2. Check if user already exists in Firestore
+      // Check if user already exists in Firestore
       const userDocRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userDocRef);
 
@@ -361,13 +374,16 @@ export default function MainHomePage(prop) {
     if (!user) return;
 
     try {
+      // Get local chant count for merge
+      const localChants = parseInt(localStorage.getItem('totalChants') || '0');
+
       const userData = {
         uid: user.uid,
         name: userForm.name,
         city: userForm.city,
         phone: userForm.phone,
         email: user.email,
-        chant_count: 0,
+        chant_count: localChants, // MERGE: Start with local count
         createdAt: new Date().toISOString()
       };
 
@@ -378,8 +394,11 @@ export default function MainHomePage(prop) {
       await setDoc(doc(db, "leaderboard", user.uid), {
         name: userForm.name,
         city: userForm.city,
-        chant_count: 0
+        chant_count: localChants // MERGE: Include local count in leaderboard
       });
+
+      // 5. Clear guest mode flag after successful login
+      localStorage.removeItem('isGuestMode');
 
       // 5. Navigate
       setShowOnboarding(false);
@@ -432,9 +451,9 @@ export default function MainHomePage(prop) {
       <div className='MainCont'>
         <div className="row" style={{ marginRight: '0px', paddingRight: '0px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-          {/* LEFT: Total Chant Count (Only if Logged In) */}
+          {/* LEFT: Total Chant Count (For ALL users - logged in or guest) */}
           <div className="col-auto" style={{ margin: '10px 20px', color: 'whitesmoke' }}>
-            {isLoggedIn && (
+            {totalChants > 0 && (
               <div style={{
                 background: 'rgba(0,0,0,0.5)',
                 padding: '5px 15px',
@@ -793,6 +812,134 @@ export default function MainHomePage(prop) {
 
 
       </div>
+
+      {/* NEW: Entry Choice Modal (Login/Guest) */}
+      {showEntryModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.85)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          backdropFilter: 'blur(5px)'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
+            borderRadius: '20px',
+            padding: '40px 30px',
+            maxWidth: '400px',
+            width: '90%',
+            textAlign: 'center',
+            border: '2px solid #ffd700',
+            boxShadow: '0 0 40px rgba(255, 215, 0, 0.3)'
+          }}>
+            {/* Header */}
+            <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🙏🕉️🙏</div>
+            <h2 style={{
+              color: '#ffd700',
+              fontFamily: 'serif',
+              fontSize: '1.5rem',
+              marginBottom: '10px',
+              textShadow: '0 2px 10px rgba(255, 215, 0, 0.5)'
+            }}>
+              శివ నామ స్మరణ
+            </h2>
+            <p style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: '0.95rem',
+              marginBottom: '30px'
+            }}>
+              Begin your divine journey
+            </p>
+
+            {/* Buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <button
+                onClick={handleLoginMode}
+                style={{
+                  background: 'linear-gradient(135deg, #4285f4 0%, #357ae8 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '15px 25px',
+                  borderRadius: '10px',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  transition: 'transform 0.2s, box-shadow 0.2s'
+                }}
+                onMouseOver={(e) => e.target.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+              >
+                <img
+                  src="https://www.google.com/favicon.ico"
+                  alt="Google"
+                  style={{ width: '20px', height: '20px', borderRadius: '3px', background: 'white', padding: '2px' }}
+                />
+                Login with Google
+              </button>
+
+              <button
+                onClick={handleGuestMode}
+                style={{
+                  background: 'transparent',
+                  color: '#ffd700',
+                  border: '2px solid #ffd700',
+                  padding: '15px 25px',
+                  borderRadius: '10px',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  transition: 'transform 0.2s, background 0.2s'
+                }}
+                onMouseOver={(e) => { e.target.style.background = 'rgba(255, 215, 0, 0.1)'; e.target.style.transform = 'scale(1.02)'; }}
+                onMouseOut={(e) => { e.target.style.background = 'transparent'; e.target.style.transform = 'scale(1)'; }}
+              >
+                🕉️ Continue as Guest
+              </button>
+            </div>
+
+            {/* Footer note */}
+            <p style={{
+              color: 'rgba(255, 255, 255, 0.5)',
+              fontSize: '0.75rem',
+              marginTop: '25px'
+            }}>
+              Guest progress is saved locally. Login to sync across devices.
+            </p>
+
+            {/* Close button */}
+            <button
+              onClick={() => setShowEntryModal(false)}
+              style={{
+                position: 'absolute',
+                top: '15px',
+                right: '15px',
+                background: 'transparent',
+                border: 'none',
+                color: 'rgba(255, 255, 255, 0.6)',
+                fontSize: '1.5rem',
+                cursor: 'pointer'
+              }}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <Footer />
 
 

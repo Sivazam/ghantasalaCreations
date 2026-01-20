@@ -3,20 +3,21 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth'; // Import signOut
+import { signOut } from 'firebase/auth';
 import './ShivaSmaranaHomePage.css';
 
 const ShivaSmaranaHomePage = () => {
     const navigate = useNavigate();
     const [showFullscreenPrompt, setShowFullscreenPrompt] = React.useState(false);
 
-    // User Data State
-    const [userData, setUserData] = React.useState({ name: '', count: 0 });
+    // User Data State - now includes isGuest flag
+    const [userData, setUserData] = React.useState({ name: '', count: 0, isGuest: false });
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
+                // Logged-in user - fetch from Firestore
                 try {
                     const docRef = doc(db, "users", user.uid);
                     const snap = await getDoc(docRef);
@@ -24,16 +25,21 @@ const ShivaSmaranaHomePage = () => {
                         const data = snap.data();
                         setUserData({
                             name: data.name || 'Devotee',
-                            count: data.chant_count || 0
+                            count: data.chant_count || 0,
+                            isGuest: false
                         });
                     }
                 } catch (e) {
                     console.error("Error fetching user data:", e);
                 }
             } else {
-                // Fallback to local storage if not logged in
+                // Guest mode - use localStorage
                 const stored = localStorage.getItem('totalChants');
-                if (stored) setUserData(prev => ({ ...prev, count: parseInt(stored) }));
+                setUserData({
+                    name: 'Guest',
+                    count: stored ? parseInt(stored) : 0,
+                    isGuest: true
+                });
             }
             setLoading(false);
         });
@@ -68,6 +74,7 @@ const ShivaSmaranaHomePage = () => {
     const handleLogout = async () => {
         try {
             await signOut(auth);
+            localStorage.removeItem('isGuestMode');
             navigate('/');
         } catch (error) {
             console.error("Logout Error:", error);
@@ -98,17 +105,15 @@ const ShivaSmaranaHomePage = () => {
             <main className="shiva-home-content">
                 {/* User stats card */}
                 <div className="user-stats-card">
-                    {userData.name && (
-                        <div style={{
-                            color: '#ffd700',
-                            fontSize: '1.2rem',
-                            marginBottom: '10px',
-                            fontFamily: 'serif',
-                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-                        }}>
-                            Welcome back, {userData.name} 🙏
-                        </div>
-                    )}
+                    <div style={{
+                        color: '#ffd700',
+                        fontSize: '1.2rem',
+                        marginBottom: '10px',
+                        fontFamily: 'serif',
+                        textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                    }}>
+                        Welcome back, {userData.name} 🙏
+                    </div>
                     <div className="stat-item">
                         <span className="stat-label">Total Chant Count</span>
                         <span className="stat-value">
@@ -135,14 +140,11 @@ const ShivaSmaranaHomePage = () => {
             {showFullscreenPrompt && (
                 <div className="fullscreen-modal-overlay">
                     <div className="fullscreen-modal">
-                        <h3>Enter Divine Experience?</h3>
-                        <p>For the best immersion, we recommend enabling Fullscreen mode.</p>
+                        <h3>🕉️ Are you ready for an immersive experience?</h3>
+                        <p>Take a deep breath and enter the divine temple.</p>
                         <div className="modal-actions">
-                            <button className="modal-btn secondary" onClick={skipFullscreen}>
-                                Normal Mode
-                            </button>
                             <button className="modal-btn primary" onClick={confirmFullscreen}>
-                                Go Fullscreen
+                                🙏 Let's Start
                             </button>
                         </div>
                     </div>
@@ -152,7 +154,8 @@ const ShivaSmaranaHomePage = () => {
             {/* Footer */}
             <footer className="shiva-home-footer">
                 <p>🙏 ఓం నమః శివాయ 🙏</p>
-                {userData.name && (
+                {/* Show Sign Out for logged-in users, Login prompt for guests */}
+                {!userData.isGuest ? (
                     <button
                         onClick={handleLogout}
                         style={{
@@ -167,6 +170,22 @@ const ShivaSmaranaHomePage = () => {
                         }}
                     >
                         Sign Out
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => navigate('/')}
+                        style={{
+                            background: 'rgba(255, 215, 0, 0.2)',
+                            color: '#ffd700',
+                            border: '1px solid rgba(255, 215, 0, 0.4)',
+                            padding: '5px 15px',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            marginTop: '15px'
+                        }}
+                    >
+                        Login to Save Progress
                     </button>
                 )}
             </footer>

@@ -93,6 +93,10 @@ function ShivaSmaranaTemplePage() {
     // Leaderboard Modal State
     const [showLeaderboard, setShowLeaderboard] = useState(false);
 
+    // Login Prompt for Guests at Milestones
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const promptedMilestonesRef = React.useRef(new Set()); // Track which milestones we've prompted
+
     // Initialize BG Music
     React.useEffect(() => {
         bgMusicRef.current = new Audio('/bgMusic.mp3');
@@ -127,7 +131,8 @@ function ShivaSmaranaTemplePage() {
     const handleOmClick = useCallback(() => {
         if (isCooldown) return; // Prevent spam
 
-        setCount(prev => prev + 1);
+        const newCount = count + 1;
+        setCount(newCount);
         setDropletTrigger(prev => prev + 1);
 
         // Increment Queue Ref
@@ -138,6 +143,12 @@ function ShivaSmaranaTemplePage() {
             syncToCloud();
         }
 
+        // LOGIN PROMPT FOR GUESTS at milestones (21, 59, 109)
+        const milestones = [21, 59, 109];
+        if (!auth.currentUser && milestones.includes(newCount) && !promptedMilestonesRef.current.has(newCount)) {
+            promptedMilestonesRef.current.add(newCount);
+            setShowLoginPrompt(true);
+        }
 
         // Start Cooldown (2 Seconds)
         setIsCooldown(true);
@@ -148,7 +159,7 @@ function ShivaSmaranaTemplePage() {
         // Legacy Local Storage (ALWAYS update this for instant home page display)
         const currentTotal = parseInt(localStorage.getItem('totalChants') || '0');
         localStorage.setItem('totalChants', (currentTotal + 1).toString());
-    }, [isCooldown, syncToCloud]);
+    }, [isCooldown, syncToCloud, count]);
 
     const handleExit = useCallback(async () => {
         // Force Sync before exit
@@ -357,6 +368,90 @@ function ShivaSmaranaTemplePage() {
                     </span>
                 </button>
             </div>
+
+            {/* Login Prompt Modal for Guests at Milestones */}
+            {showLoginPrompt && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 9999,
+                    backdropFilter: 'blur(5px)'
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
+                        borderRadius: '20px',
+                        padding: '30px 25px',
+                        maxWidth: '380px',
+                        width: '90%',
+                        textAlign: 'center',
+                        border: '2px solid #ffd700',
+                        boxShadow: '0 0 40px rgba(255, 215, 0, 0.3)'
+                    }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🙏✨🙏</div>
+                        <h3 style={{
+                            color: '#ffd700',
+                            fontFamily: 'serif',
+                            fontSize: '1.3rem',
+                            marginBottom: '10px'
+                        }}>
+                            Amazing! {count} Chants Complete!
+                        </h3>
+                        <p style={{
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            fontSize: '0.9rem',
+                            marginBottom: '20px',
+                            lineHeight: '1.5'
+                        }}>
+                            Login to unlock the <strong style={{ color: '#ffd700' }}>Leaderboard</strong> and sync your progress across devices!
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <button
+                                onClick={() => {
+                                    setShowLoginPrompt(false);
+                                    handleExit();
+                                    // Navigate to home to trigger login
+                                    navigate('/');
+                                }}
+                                style={{
+                                    background: 'linear-gradient(135deg, #4285f4 0%, #357ae8 100%)',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 20px',
+                                    borderRadius: '10px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                🔐 Login Now
+                            </button>
+
+                            <button
+                                onClick={() => setShowLoginPrompt(false)}
+                                style={{
+                                    background: 'transparent',
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                    padding: '10px 20px',
+                                    borderRadius: '10px',
+                                    fontSize: '0.85rem',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Continue as Guest
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
