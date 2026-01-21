@@ -95,11 +95,43 @@ function ShivaSmaranaTemplePage() {
 
     // Login Prompt for Guests at Milestones
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+    // CHANT TEXT ROTATION STATE
+    const [chantTextIndex, setChantTextIndex] = useState(0);
+    const chantTexts = [
+        "ఓం నమః శివాయ",   // Telugu
+        "Om Namah Shivaya", // English
+        "ॐ नमः शिवाय"       // Hindi/Sanskrit
+    ];
+
+    // React.useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setChantTextIndex(prev => (prev + 1) % chantTexts.length);
+    //     }, 3000);
+    //     return () => clearInterval(interval);
+    // }, []);
+
+    // Re-enable safely
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setChantTextIndex(prev => (prev + 1) % chantTexts.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // DIYA LIFTED STATE
+    const [leftLit, setLeftLit] = useState(false);
+    const [rightLit, setRightLit] = useState(false);
     const promptedMilestonesRef = React.useRef(new Set()); // Track which milestones we've prompted
+
+    // LINGAM COLOR LOGIC STATE
+    const [isGoldMode, setIsGoldMode] = useState(false); // Default Black
+    const revertCountRef = React.useRef(null); // When to turn back to black
+    const nextRandomTriggerRef = React.useRef(null); // Next trigger after 108
 
     // Initialize BG Music
     React.useEffect(() => {
-        bgMusicRef.current = new Audio('/bgMusic.mp3');
+        bgMusicRef.current = new Audio('/shivaMain.webm');
         bgMusicRef.current.loop = true;
         bgMusicRef.current.volume = 0.5;
 
@@ -129,6 +161,30 @@ function ShivaSmaranaTemplePage() {
 
 
     const handleOmClick = useCallback(() => {
+        // 1. Restriction: Both Diyas must be lit
+        if (!leftLit || !rightLit) {
+            // Simple alert or toast replacement
+            const toast = document.createElement('div');
+            toast.textContent = "Please light the diyas before chanting ✨";
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 120px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: #ffd700;
+                padding: 12px 24px;
+                border: 1px solid #ffd700;
+                border-radius: 8px;
+                z-index: 1000;
+                font-family: serif;
+                animation: fade-in-out 3s forwards;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+            return;
+        }
+
         if (isCooldown) return; // Prevent spam
 
         const newCount = count + 1;
@@ -143,23 +199,58 @@ function ShivaSmaranaTemplePage() {
             syncToCloud();
         }
 
+        // LINGAM COLOR LOGIC
+        // 1. Check Revert (Turn back to Black)
+        if (revertCountRef.current && newCount >= revertCountRef.current) {
+            setIsGoldMode(false);
+            revertCountRef.current = null;
+        }
+
+        // 2. Check Triggers (Turn to Gold)
+        const milestones = [11, 21, 51, 71, 108];
+        let shouldTurnGold = false;
+
+        // A. Fixed Milestones
+        if (milestones.includes(newCount)) {
+            shouldTurnGold = true;
+        }
+        // B. Random Post-108 Triggers
+        else if (newCount > 108) {
+            // Initialize first random trigger if needed
+            if (!nextRandomTriggerRef.current) {
+                nextRandomTriggerRef.current = newCount + Math.floor(Math.random() * 11) + 20; // 20-30 counts later
+            }
+
+            if (newCount === nextRandomTriggerRef.current) {
+                shouldTurnGold = true;
+                nextRandomTriggerRef.current = null; // Reset for next cycle
+            }
+        }
+
+        // Apply Gold Logic
+        if (shouldTurnGold) {
+            setIsGoldMode(true);
+            const duration = Math.floor(Math.random() * 4) + 7; // 7 to 10 counts
+            revertCountRef.current = newCount + duration;
+        }
+
         // LOGIN PROMPT FOR GUESTS at milestones (21, 59, 109)
-        const milestones = [21, 59, 109];
-        if (!auth.currentUser && milestones.includes(newCount) && !promptedMilestonesRef.current.has(newCount)) {
+        const loginMilestones = [21, 59, 109];
+        if (!auth.currentUser && loginMilestones.includes(newCount) && !promptedMilestonesRef.current.has(newCount)) {
             promptedMilestonesRef.current.add(newCount);
             setShowLoginPrompt(true);
         }
 
-        // Start Cooldown (2 Seconds)
+        // Start Cooldown (1 Second)
         setIsCooldown(true);
         setTimeout(() => {
             setIsCooldown(false);
-        }, 2000);
+        }, 1000);
 
         // Legacy Local Storage (ALWAYS update this for instant home page display)
         const currentTotal = parseInt(localStorage.getItem('totalChants') || '0');
         localStorage.setItem('totalChants', (currentTotal + 1).toString());
-    }, [isCooldown, syncToCloud, count]);
+    }, [isCooldown, syncToCloud, count, leftLit, rightLit]);
 
     const handleExit = useCallback(async () => {
         // Force Sync before exit
@@ -268,8 +359,19 @@ function ShivaSmaranaTemplePage() {
                 </div>
             </div>
 
-            {/* 2D Temple Scene */}
-            <Temple2DScene dropletTrigger={dropletTrigger} isMuted={isMuted} count={count} />
+            {/* 2D Temple Scene Container */}
+            <div className="temple-canvas-container">
+                <Temple2DScene
+                    dropletTrigger={dropletTrigger}
+                    isMuted={isMuted}
+                    count={count}
+                    leftLit={leftLit}
+                    setLeftLit={setLeftLit}
+                    rightLit={rightLit}
+                    setRightLit={setRightLit}
+                    isGoldMode={isGoldMode}
+                />
+            </div>
 
             {/* Leaderboard Modal Overlay */}
             {showLeaderboard && (
@@ -361,10 +463,11 @@ function ShivaSmaranaTemplePage() {
                     disabled={isCooldown}
                     className={`chant-button ${isCooldown ? 'cooldown' : ''}`}
                 >
-                    <span className="btn-main-text">ఓం నమః శివాయ</span>
-                    <span className="btn-sub-text">Om Namah Shivaya</span>
+                    <span className="btn-main-text key-text">
+                        {isCooldown ? "Offering..." : chantTexts[chantTextIndex]}
+                    </span>
                     <span className="btn-hint-text">
-                        {isCooldown ? "Offering..." : "Click to offer sacred water"}
+                        {isCooldown ? "" : "Click to offer sacred water"}
                     </span>
                 </button>
             </div>

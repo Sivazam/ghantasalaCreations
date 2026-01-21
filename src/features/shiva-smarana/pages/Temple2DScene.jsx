@@ -35,9 +35,36 @@ function SplashEffect({ id, onComplete }) {
 }
 
 // Main 2D Temple Scene
-function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMuted and count props
+function Temple2DScene({ dropletTrigger, isMuted, count, leftLit, setLeftLit, rightLit, setRightLit, isGoldMode }) { // Accepting props
     const [droplets, setDroplets] = useState([]);
     const [splashes, setSplashes] = useState([]);
+
+    // DIYA STATE (Lifted to Parent)
+
+
+    const playMatchSound = () => {
+        if (!isMuted) {
+            const audio = new Audio('/match.mp3');
+            audio.volume = 0.6;
+            audio.play().catch(console.error);
+        }
+    };
+
+    const handleLeftDiyaClick = (e) => {
+        e.stopPropagation();
+        if (!leftLit) {
+            setLeftLit(true);
+            playMatchSound();
+        }
+    };
+
+    const handleRightDiyaClick = (e) => {
+        e.stopPropagation();
+        if (!rightLit) {
+            setRightLit(true);
+            playMatchSound();
+        }
+    };
 
     // CUSTOM BILVA LEAF STATE
     const [leaves, setLeaves] = useState([]);
@@ -80,10 +107,17 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
     const dropletSoundRef = useRef(null);
 
     // BILVA LEAF BLAST TRIGGER LOGIC
-    // Triggers on 11, 21, 31... (Skipping 1)
+    const isFirstRenderRef = useRef(true);
+
     useEffect(() => {
+        // Skip on initial mount/restore to prevent crashing
+        if (isFirstRenderRef.current) {
+            isFirstRenderRef.current = false;
+            return;
+        }
+
         if (count > 1 && count % 10 === 1) {
-            const newLeaves = [];
+            const newLeaves = []; // ... logic continues
             const timestamp = Date.now();
 
             // Responsive Blast Config
@@ -129,15 +163,7 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
         }
     }, [count]);
 
-    // 1. Initialize Audio (Droplets Only)
-    useEffect(() => {
-        dropletSoundRef.current = new Audio('/New_water_Droplet.mp3');
-        dropletSoundRef.current.volume = 0.8;
 
-        return () => {
-            if (dropletSoundRef.current) dropletSoundRef.current = null;
-        };
-    }, []);
 
     // 2. Handle Droplets
     useEffect(() => {
@@ -151,16 +177,7 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
             setTimeout(() => {
                 setSplashes(prev => [...prev, { id: newId }]);
 
-                // Play Sound if Unmuted
-                if (!isMuted && dropletSoundRef.current) {
-                    try {
-                        const sound = dropletSoundRef.current.cloneNode();
-                        sound.volume = 0.8;
-                        sound.play().catch(e => console.error("SFX error", e));
-                    } catch (e) {
-                        console.error("Audio error", e);
-                    }
-                }
+
             }, 950);
         }
     }, [dropletTrigger, isMuted]);
@@ -212,30 +229,42 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
 
             {/* Shiva Lingam */}
             <div className="shiva-lingam-container">
-                {/* Orange sun halo */}
-                <div className="lingam-halo"></div>
-
-                {/* Crescent moon */}
-                <div className="crescent-moon">🌙</div>
-
                 <div className="shiva-lingam">
-                    {/* Main lingam */}
-                    <div className="lingam-top">
-                        {/* Tripundra */}
-                        <div className="tripundra">
-                            <div className="tripundra-line"></div>
-                            <div className="tripundra-line middle"></div>
-                            <div className="tripundra-line"></div>
+                    {/* User Provided Lingam Structure (Scaled) */}
+                    <div className={`shiv-ling ${isGoldMode ? 'gold' : ''}`}>
+                        {/* Orange sun halo - Moved Inside for scaling */}
+                        <div className="lingam-halo"></div>
+
+                        {/* Crescent moon - Moved Inside */}
+                        <div className="crescent-moon">🌙</div>
+
+                        <div className="top">
+                            <div className="gold-overlay"></div>
+                            <div className="namas">
+                                <span className="line"></span>
+                                <span className="line"></span>
+                                <span className="line"></span>
+                            </div>
+                        </div>
+                        <div className="middle">
+                            <div className="gold-overlay"></div>
+                            {/* Spout Curve converted to div */}
+                            <div className="spout-curve">
+                                <div className="gold-overlay"></div>
+                            </div>
+                            {/* Spout Extension converted to div */}
+                            <div className="spout-extension">
+                                <div className="gold-overlay"></div>
+                            </div>
+                        </div>
+                        <div className="bottom">
+                            <div className="line-1"><div className="gold-overlay"></div></div>
+                            <div className="line-2"><div className="gold-overlay"></div></div>
+                            <div className="line-3"><div className="gold-overlay"></div></div>
+                            <div className="line-4"><div className="gold-overlay"></div></div>
+                            <div className="line-5"><div className="gold-overlay"></div></div>
                         </div>
                     </div>
-
-                    {/* Yoni base */}
-                    <div className="yoni-base">
-                        <div className="yoni-spout"></div>
-                    </div>
-
-                    {/* Pedestal */}
-                    <div className="lingam-pedestal"></div>
                 </div>
 
                 {/* Splash Effects */}
@@ -247,26 +276,38 @@ function Temple2DScene({ dropletTrigger, isMuted, count }) { // Accepting isMute
             </div>
 
             {/* Kuthuvilakku (Traditional Standing Lamps) */}
-            <div className="diya left-diya">
+            <div className="diya left-diya" onClick={handleLeftDiyaClick} style={{ cursor: leftLit ? 'default' : 'pointer' }}>
+                {!leftLit && (
+                    <div className="diya-instruction">
+                        <div className="hand-icon">👆</div>
+                        <span className="instruction-text">Tap to Light</span>
+                    </div>
+                )}
                 <div className="lamp-structure">
                     <div className="lamp-top"></div>
                     <div className="lamp-bowl">
-                        <div className="lamp-flame flame-left"></div>
-                        <div className="lamp-flame flame-center"></div>
-                        <div className="lamp-flame flame-right"></div>
+                        <div className={`lamp-flame flame-left ${leftLit ? 'lit' : ''}`}></div>
+                        <div className={`lamp-flame flame-center ${leftLit ? 'lit' : ''}`}></div>
+                        <div className={`lamp-flame flame-right ${leftLit ? 'lit' : ''}`}></div>
                     </div>
                     <div className="lamp-stem"></div>
                     <div className="lamp-base"></div>
                 </div>
             </div>
 
-            <div className="diya right-diya">
+            <div className="diya right-diya" onClick={handleRightDiyaClick} style={{ cursor: rightLit ? 'default' : 'pointer' }}>
+                {!rightLit && (
+                    <div className="diya-instruction">
+                        <div className="hand-icon">👆</div>
+                        <span className="instruction-text">Tap to Light</span>
+                    </div>
+                )}
                 <div className="lamp-structure">
                     <div className="lamp-top"></div>
                     <div className="lamp-bowl">
-                        <div className="lamp-flame flame-left"></div>
-                        <div className="lamp-flame flame-center"></div>
-                        <div className="lamp-flame flame-right"></div>
+                        <div className={`lamp-flame flame-left ${rightLit ? 'lit' : ''}`}></div>
+                        <div className={`lamp-flame flame-center ${rightLit ? 'lit' : ''}`}></div>
+                        <div className={`lamp-flame flame-right ${rightLit ? 'lit' : ''}`}></div>
                     </div>
                     <div className="lamp-stem"></div>
                     <div className="lamp-base"></div>

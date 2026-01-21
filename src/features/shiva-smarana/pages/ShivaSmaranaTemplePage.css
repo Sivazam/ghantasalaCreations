@@ -9,16 +9,22 @@
     height: 100vh;
     background: #0d0d0d;
     overflow: hidden;
+    /* Grid-like Layout: Flex Column */
+    display: flex;
+    flex-direction: column;
 }
 
 /* 3D Canvas container */
+/* 3D Canvas container / Scene Container */
 .temple-canvas-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    /* Changed from absolute to flow in flex */
+    flex: 1;
+    /* Takes remaining space */
+    width: 100%;
     z-index: 1;
+    overflow: hidden;
+    /* Clips elements */
 }
 
 /* Session count overlay */
@@ -55,16 +61,24 @@
 }
 
 /* Bottom button bar */
+/* Bottom button bar - Lean Row */
 .bottom-button-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    /* Not fixed anymore, sits in flow */
+    width: 100%;
     z-index: 100;
     display: flex;
     justify-content: center;
-    padding: 24px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    align-items: center;
+    padding: 10px 0;
+    /* Minimal padding */
+    background: #1a0a00;
+    /* Solid background to separating rows visually */
+    border-top: 1px solid #332200;
+    height: 80px;
+    /* Fixed height for the row */
+    flex-shrink: 0;
+    /* Don't shrink */
 }
 
 /* Responsive */
@@ -100,37 +114,65 @@
 .chant-button {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 20px 50px;
-    background: linear-gradient(145deg, #b8860b, #daa520, #ffd700);
-    border: 3px solid #ffd700;
-    border-radius: 16px;
+    padding: 12px 40px;
+    background: linear-gradient(135deg, #FF9933 0%, #FFCC00 50%, #FF8C00 100%);
+    border: 2px solid #FFF8DC;
+    border-radius: 50px;
+    /* Pill shape */
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-    min-width: 280px;
-    transition: all 0.2s ease;
+    box-shadow:
+        0 4px 15px rgba(255, 140, 0, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.4);
+    min-width: 300px;
+    min-height: 80px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
-    /* Needed for progress bar */
+    gap: 4px;
 }
 
-/* Hover effect only when NOT in cooldown */
+/* Glow Effect */
+.chant-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease-out;
+    opacity: 0;
+}
+
+.chant-button:hover::before {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Hover effect */
 .chant-button:not(.cooldown):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+        0 8px 25px rgba(255, 140, 0, 0.6),
+        0 0 15px rgba(255, 215, 0, 0.5);
+    border-color: #fff;
 }
 
 .chant-button:not(.cooldown):active {
-    transform: scale(0.98);
+    transform: scale(0.96);
 }
 
 /* COOLDOWN STATE */
 .chant-button.cooldown {
     cursor: not-allowed;
-    pointer-events: none;
-    opacity: 0.7;
-    filter: grayscale(0.5);
-    /* Dim the gold */
+    background: linear-gradient(135deg, #a0a0a0, #d3d3d3);
+    /* Greyed out */
+    border-color: #888;
+    box-shadow: none;
+    opacity: 0.9;
 }
 
 /* PROGRESS ANIMATION (Left to Right Fill) */
@@ -141,44 +183,44 @@
     left: 0;
     height: 100%;
     width: 0%;
-    /* Start empty */
-    background: rgba(255, 255, 255, 0.3);
-    /* Light overlay */
+    background: rgba(255, 165, 0, 0.3);
+    /* Saffron tint */
     border-right: 2px solid rgba(255, 255, 255, 0.8);
-    animation: cooldown-fill 3s linear forwards;
+    animation: cooldown-fill 1s linear forwards;
+    /* Matched to 1000ms timeout */
 }
 
 @keyframes cooldown-fill {
     0% {
         width: 0%;
-        opacity: 0.3;
+        opacity: 0.5;
     }
 
     100% {
         width: 100%;
         opacity: 0;
-        /* Fade out when done */
     }
 }
 
 /* Button Text Styles */
 .btn-main-text {
-    font-family: 'Noto Serif Telugu', serif;
     font-size: 1.8rem;
     font-weight: 700;
-    color: #1a0a00;
-}
-
-.btn-sub-text {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #4a2800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    color: #4a0e0e;
+    /* Deep maroon text */
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    font-family: 'Georgia', serif;
+    /* Use a serif font for spiritual feel */
+    transition: opacity 0.5s ease-in-out;
+    min-height: 2.2rem;
+    /* Reserve space for text */
 }
 
 .btn-hint-text {
-    font-size: 0.75rem;
-    color: #5c3d00;
-    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #4a0e0e;
+    opacity: 0.8;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
