@@ -131,7 +131,7 @@ function ShivaSmaranaTemplePage() {
 
     // Initialize BG Music
     React.useEffect(() => {
-        bgMusicRef.current = new Audio('/shivaMain.webm');
+        bgMusicRef.current = new Audio('/mainmantra.webm');
         bgMusicRef.current.loop = true;
         bgMusicRef.current.volume = 0.5;
 

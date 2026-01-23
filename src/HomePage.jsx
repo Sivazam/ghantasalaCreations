@@ -18,6 +18,7 @@ import ShivaParvathi from "./ShivaParvathi";
 
 // Shiva Smarana Feature
 import { ShivaSmaranaHomePage, ShivaSmaranaTemplePage } from "./features/shiva-smarana";
+import UserStatsPage from "./features/shiva-smarana/pages/UserStatsPage";
 
 
 
@@ -54,6 +55,9 @@ export default function HomePage() {
                     {/* Shiva Smarana Feature Routes */}
                     <Route path="shiva-smarana" element={<ShivaSmaranaHomePage />} />
                     <Route path="shiva-smarana/temple" element={<ShivaSmaranaTemplePage />} />
+
+                    {/* Admin Route */}
+                    <Route path="countx" element={<UserStatsPage />} />
                 </Routes>
             </BrowserRouter>
 

@@ -1,3 +1,7 @@
+#new feature
+
+can we add one more visual feature - where whenever the button is clicked - the button should release an "om" and it should start floating and rotating around the lingam , as user keep clicking the button the number of "om" rotating around the lingam in circialr way forming a baloon of om's around lingam, This om's we can use to vanish as lingam turns gold color
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
