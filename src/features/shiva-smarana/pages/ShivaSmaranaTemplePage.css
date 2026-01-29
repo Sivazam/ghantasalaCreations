@@ -232,3 +232,223 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+/* ================== */
+/* MODALS & OVERLAYS */
+/* ================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.spiritual-modal {
+    background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 100%);
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255, 165, 0, 0.2);
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #f1f1f1;
+}
+
+.spiritual-modal h3 {
+    color: #ffd700;
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.spiritual-modal p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+/* Mode Options */
+.mode-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.mode-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.mode-btn .icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.mode-btn .label {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.mode-btn .sub {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Close/Cancel Text Button */
+.close-text-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 5px;
+}
+
+.close-text-btn:hover {
+    color: #fff;
+}
+
+/* Slider Section */
+.slider-container {
+    margin: 20px 0 30px;
+}
+
+.timer-display {
+    margin-bottom: 15px;
+}
+
+.big-time {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ffd700;
+    display: block;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.small-text {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+.spiritual-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.spiritual-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: #ffd700;
+    border: 2px solid #1a0a0a;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transition: transform 0.2s;
+}
+
+.spiritual-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Start Button */
+.start-auto-btn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #FF9933 0%, #FFCC00 100%);
+    border: none;
+    color: #4a0e0e;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.start-auto-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 165, 0, 0.4);
+}
+
+/* End Session Button Variant */
+.end-session-btn {
+    border-color: #ff4d4d !important;
+    background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%) !important;
+}
+
+.end-session-btn .btn-main-text {
+    color: white !important;
+}
+
+.end-session-btn .btn-hint-text {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

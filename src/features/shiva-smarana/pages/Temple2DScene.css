@@ -86,6 +86,7 @@
 /* ============================================ */
 /* DAARA PATRA (Vessel) - Realistic Bronze Form */
 /* ============================================ */
+/* DAARA PATRA (Vessel) - Realistic Bronze Form */
 .daara-patra {
     position: absolute;
     top: 50px;
@@ -97,9 +98,41 @@
     z-index: 10;
 
     /* ENTRANCE: 3rd Item (Delay 2.5s) */
-    opacity: 0;
-    animation: appear-smooth 1.5s ease-out 2.5s forwards;
+    opacity: 1;
+    /* Fail-safe visibility */
+    animation: appear-smooth 1.5s ease-out 2.5s both;
+    /* 'Both' handles 0% opacity during delay */
     filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6));
+}
+
+/* SHIVA LINGAM */
+.shiva-lingam-container {
+    position: absolute;
+    bottom: 15%;
+    /* Lowered to 15% to clear vessel */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+
+    /* ENTRANCE: 1st Item (Delay 0.5s) */
+    opacity: 1;
+    /* Fail-safe visibility */
+    animation: appear-smooth 1.5s ease-out 0.5s both;
+}
+
+/* DIYAS */
+.diya {
+    position: absolute;
+    bottom: 15%;
+    /* Lifted up from 5% */
+    /* Standing on floor */
+    z-index: 12;
+    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.2));
+
+    /* ENTRANCE: 2nd Item (Delay 1.5s) */
+    opacity: 1;
+    /* Fail-safe visibility */
+    animation: appear-smooth-static 1.5s ease-out 1.5s both;
 }
 
 @keyframes sway {
@@ -1331,5 +1364,46 @@
             top: calc(var(--land-y) + 20px);
             opacity: 0;
         }
+    }
+}
+
+/* Diya Instruction Text */
+.diya-instruction {
+    position: absolute;
+    top: 40%;
+    /* Slightly above center to be on the bowl/flame area */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
+    animation: pulse-text 2s infinite;
+}
+
+.instruction-text {
+    font-size: 0.8rem;
+    color: #ffd700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+@keyframes pulse-text {
+
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
     }
 }

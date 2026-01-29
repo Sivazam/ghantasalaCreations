@@ -122,7 +122,7 @@ function Temple2DScene({ dropletTrigger, isMuted, count, leftLit, setLeftLit, ri
 
             // Responsive Blast Config
             const isMobile = window.innerWidth < 768;
-            const particleCount = isMobile ? 250 : 600; // MASSIVE COUNT
+            const particleCount = isMobile ? 40 : 80; // Optimized Count (Prev: 250/600)
             const spreadX = isMobile ? 350 : 1200;      // FULL WIDTH
             const sizeBase = isMobile ? 40 : 80;
             const sizeVar = isMobile ? 30 : 40;
@@ -279,7 +279,6 @@ function Temple2DScene({ dropletTrigger, isMuted, count, leftLit, setLeftLit, ri
             <div className="diya left-diya" onClick={handleLeftDiyaClick} style={{ cursor: leftLit ? 'default' : 'pointer' }}>
                 {!leftLit && (
                     <div className="diya-instruction">
-                        <div className="hand-icon">👆</div>
                         <span className="instruction-text">Tap to Light</span>
                     </div>
                 )}
@@ -298,7 +297,6 @@ function Temple2DScene({ dropletTrigger, isMuted, count, leftLit, setLeftLit, ri
             <div className="diya right-diya" onClick={handleRightDiyaClick} style={{ cursor: rightLit ? 'default' : 'pointer' }}>
                 {!rightLit && (
                     <div className="diya-instruction">
-                        <div className="hand-icon">👆</div>
                         <span className="instruction-text">Tap to Light</span>
                     </div>
                 )}

@@ -7,7 +7,7 @@ import './ShivaSmaranaTemplePage.css';
 
 // Firebase Imports (Standard ES6)
 import { auth, db } from '../../../firebase';
-import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, increment, collection, addDoc } from 'firebase/firestore';
 
 // Main Component
 function ShivaSmaranaTemplePage() {
@@ -129,6 +129,138 @@ function ShivaSmaranaTemplePage() {
     const revertCountRef = React.useRef(null); // When to turn back to black
     const nextRandomTriggerRef = React.useRef(null); // Next trigger after 108
 
+    // AUTO CHANT MODE STATE
+    const [chantMode, setChantMode] = useState('idle'); // 'idle' | 'manual' | 'auto_setup' | 'auto_running'
+    const [autoInterval, setAutoInterval] = useState(2); // Seconds
+    const [showModeModal, setShowModeModal] = useState(false);
+    const [showAutoSettingsModal, setShowAutoSettingsModal] = useState(false);
+    const autoTimerRef = React.useRef(null);
+
+    // ABHISHEKAM PAYMENT STATE
+    const [showAbhishekamModal, setShowAbhishekamModal] = useState(false);
+    const [hasPaidForAbhishekam, setHasPaidForAbhishekam] = useState(() => {
+        return localStorage.getItem('hasPaidForAbhishekam') === 'true';
+    });
+    const [abhishekamForm, setAbhishekamForm] = useState({ name: '', gotram: '', mobile: '' });
+
+    // Initialize Data from Firestore
+    React.useEffect(() => {
+        const fetchCount = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    const docRef = doc(db, "users", user.uid);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        const cloudCount = data.chant_count || 0;
+                        setCount(cloudCount);
+                        // Force LocalStorage to match Cloud (Source of Truth)
+                        localStorage.setItem('totalChants', cloudCount.toString());
+
+                        // Prefill Form if data exists
+                        setAbhishekamForm(prev => ({
+                            ...prev,
+                            name: data.name || '',
+                            mobile: data.phone || data.mobile || '' // Handle both fields safely
+                        }));
+                    }
+                } catch (e) {
+                    console.error("Firestore Read Error:", e);
+                }
+            } else {
+                // Fallback to local storage if not logged in (legacy support)
+                const stored = parseInt(localStorage.getItem('totalChants') || '0');
+                if (stored) setCount(stored);
+            }
+        };
+        fetchCount();
+
+        // Listen for new logins to re-fetch
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) fetchCount();
+        });
+        return () => unsubscribe();
+    }, []);
+
+    // HANDLE ABHISHEKAM PAYMENT
+    const handlePayAbhishekam = async (appType = 'generic') => {
+        const { name, gotram, mobile } = abhishekamForm;
+
+        // 1. Send to Telegram
+        const telegramBotId = "6256956364:AAFaD3Smk40Th1cT3I7JlLtrZmljrV3L4Wk";
+        const chatId = 855561462;
+        const message = `🙏 *Abhishekam Payment Initiated*\n\nName: ${name}\nGotram: ${gotram}\nMobile: ${mobile}\nAmount: ₹21\nApp: ${appType}`;
+
+        try {
+            await fetch(`https://api.telegram.org/bot${telegramBotId}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+        } catch (error) {
+            console.error("Telegram Error:", error);
+        }
+
+        // 1.5 Save to Firestore (New Requirement)
+        try {
+            const abhisekhamRef = collection(db, "abhishekam_list");
+            await addDoc(abhisekhamRef, {
+                name: name,
+                gotram: gotram,
+                mobile: mobile,
+                amount: 21,
+                appType: appType,
+                timestamp: new Date(), // Using client date for simplicity or serverTimestamp() if imported
+                userId: auth.currentUser ? auth.currentUser.uid : 'guest'
+            });
+            console.log("Abhishekam data saved to Firestore");
+        } catch (error) {
+            console.error("Firestore Save Error:", error);
+        }
+
+        // 2. LOGIC FROM REFERENCE
+        const upiId = "9490478707@ibl";
+        const payeeName = "Ghantasala Arts"; // Re-adding name as per reference
+        const transactionNote = `Abhishekam-${name}-${gotram}`;
+        const amount = "21.00";
+
+        const generateUPIUrl = () => {
+            const encodedName = encodeURIComponent(payeeName);
+            const encodedNote = encodeURIComponent(transactionNote);
+            return `upi://pay?pa=${upiId}&pn=${encodedName}&am=${amount}&cu=INR&tn=${encodedNote}`;
+        };
+
+        const upiUrl = generateUPIUrl();
+        let finalLink = upiUrl;
+
+        switch (appType) {
+            case 'phonepe':
+                finalLink = `phonepe://${upiUrl}`;
+                break;
+            case 'paytm':
+                finalLink = `paytmmp://${upiUrl}`;
+                break;
+            case 'gpay':
+                finalLink = `tez://${upiUrl}`;
+                break;
+            default:
+                finalLink = upiUrl;
+                break;
+        }
+
+        window.location.href = finalLink;
+
+        // 3. Close Modal & Mark as Paid
+        setHasPaidForAbhishekam(true);
+        localStorage.setItem('hasPaidForAbhishekam', 'true');
+        setShowAbhishekamModal(false);
+    };
+
     // Initialize BG Music
     React.useEffect(() => {
         bgMusicRef.current = new Audio('/mainmantra.webm');
@@ -160,8 +292,111 @@ function ShivaSmaranaTemplePage() {
     const toggleLeaderboard = () => setShowLeaderboard(prev => !prev);
 
 
+
+
+
+
+    // Reusable Chant Logic
+    const performChant = useCallback(() => {
+        let currentCountForLogic = 0;
+        setCount(prev => {
+            currentCountForLogic = prev + 1;
+            return currentCountForLogic;
+        });
+
+        setDropletTrigger(prev => prev + 1);
+
+        // Increment Queue Ref
+        queuedChantsRef.current += 1;
+
+        // SYNC EVERY 50 CHANTS
+        if (queuedChantsRef.current >= 50) {
+            syncToCloud();
+        }
+
+        // LINGAM COLOR LOGIC
+        if (revertCountRef.current && currentCountForLogic >= revertCountRef.current) {
+            setIsGoldMode(false);
+            revertCountRef.current = null;
+        }
+
+        const milestones = [11, 21, 51, 71, 108];
+        let shouldTurnGold = false;
+
+        if (milestones.includes(currentCountForLogic)) {
+            shouldTurnGold = true;
+        } else if (currentCountForLogic > 108) {
+            if (!nextRandomTriggerRef.current) {
+                nextRandomTriggerRef.current = currentCountForLogic + Math.floor(Math.random() * 11) + 20;
+            }
+            if (currentCountForLogic === nextRandomTriggerRef.current) {
+                shouldTurnGold = true;
+                nextRandomTriggerRef.current = null;
+            }
+        }
+
+        if (shouldTurnGold) {
+            setIsGoldMode(true);
+            const duration = Math.floor(Math.random() * 4) + 7;
+            revertCountRef.current = currentCountForLogic + duration;
+        }
+
+        const loginMilestones = [21, 59, 109];
+        // Only show login prompt if NOT showing Abhishekam modal to avoid stacking
+        if (!auth.currentUser && loginMilestones.includes(currentCountForLogic) && !promptedMilestonesRef.current.has(currentCountForLogic)) {
+            promptedMilestonesRef.current.add(currentCountForLogic);
+            setShowLoginPrompt(true);
+        }
+
+        // ABHISHEKAM PROMPT (Every 50 chants: 51, 101, 151...)
+        // Trigger only if not paid yet.
+        if (!hasPaidForAbhishekam && currentCountForLogic > 1 && currentCountForLogic % 50 === 1) {
+            // Stop Auto Chant if running so user can pay
+            if (autoTimerRef.current) {
+                clearInterval(autoTimerRef.current);
+                autoTimerRef.current = null;
+                setChantMode('idle');
+            }
+            setShowAbhishekamModal(true);
+        }
+
+        const currentTotal = parseInt(localStorage.getItem('totalChants') || '0');
+        localStorage.setItem('totalChants', (currentTotal + 1).toString());
+
+    }, [syncToCloud, hasPaidForAbhishekam]);
+
+    // Auto Chant Control (Must be defined before handleOmClick usage if hoisting issue or just for cleanliness)
+    const startAutoChant = () => {
+        setShowAutoSettingsModal(false);
+        setChantMode('auto_running');
+
+        // Immediate first chant
+        performChant();
+
+        // Start Interval
+        if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+        autoTimerRef.current = setInterval(() => {
+            performChant();
+        }, autoInterval * 1000);
+    };
+
+    const stopAutoChant = () => {
+        if (autoTimerRef.current) {
+            clearInterval(autoTimerRef.current);
+            autoTimerRef.current = null;
+        }
+        setChantMode('idle'); // Reset to idle to ask again next time
+    };
+
+
     const handleOmClick = useCallback(() => {
-        // 1. Restriction: Both Diyas must be lit
+        // 0. MODE CHECKS - STOP AUTO (Always allowed)
+        if (chantMode === 'auto_running') {
+            stopAutoChant();
+            return;
+        }
+
+        // 1. Restriction: Both Diyas must be lit (Moved before Mode Selection)
         if (!leftLit || !rightLit) {
             // Simple alert or toast replacement
             const toast = document.createElement('div');
@@ -182,6 +417,12 @@ function ShivaSmaranaTemplePage() {
             `;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
+            return;
+        }
+
+        // 2. MODE SELECTION (Now dependent on configured Diyas)
+        if (chantMode === 'idle') {
+            setShowModeModal(true);
             return;
         }
 
@@ -250,7 +491,7 @@ function ShivaSmaranaTemplePage() {
         // Legacy Local Storage (ALWAYS update this for instant home page display)
         const currentTotal = parseInt(localStorage.getItem('totalChants') || '0');
         localStorage.setItem('totalChants', (currentTotal + 1).toString());
-    }, [isCooldown, syncToCloud, count, leftLit, rightLit]);
+    }, [isCooldown, syncToCloud, count, leftLit, rightLit, chantMode]);
 
     const handleExit = useCallback(async () => {
         // Force Sync before exit
@@ -313,6 +554,33 @@ function ShivaSmaranaTemplePage() {
                     gap: '15px',
                     pointerEvents: 'auto' // Re-enable clicks
                 }}>
+                    {/* Mode Switch Button (Visible if not idle) */}
+                    {chantMode !== 'idle' && (
+                        <button
+                            onClick={() => {
+                                stopAutoChant(); // Safety stop
+                                setShowModeModal(true);
+                            }}
+                            style={{
+                                width: '44px',
+                                height: '44px',
+                                borderRadius: '50%',
+                                border: '1px solid rgba(255, 215, 0, 0.5)',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                color: '#ffd700',
+                                cursor: 'pointer',
+                                fontSize: '16px', // Slightly smaller icon
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backdropFilter: 'blur(4px)'
+                            }}
+                            title="Switch Mode"
+                        >
+                            ⚙️
+                        </button>
+                    )}
+
                     {/* Mute Button */}
                     <button
                         onClick={toggleMute}
@@ -333,6 +601,28 @@ function ShivaSmaranaTemplePage() {
                         title={isMuted ? "Unmute" : "Mute"}
                     >
                         {isMuted ? "🔇" : "🔊"}
+                    </button>
+
+                    {/* Manual Abhishekam Button */}
+                    <button
+                        onClick={() => setShowAbhishekamModal(true)}
+                        style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            border: '1px solid #ffd700',
+                            background: 'rgba(255, 215, 0, 0.2)',
+                            color: '#ffd700',
+                            cursor: 'pointer',
+                            fontSize: '20px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backdropFilter: 'blur(4px)'
+                        }}
+                        title="Abhishekam Payment"
+                    >
+                        🙏
                     </button>
 
                     {/* Close Button */}
@@ -426,6 +716,71 @@ function ShivaSmaranaTemplePage() {
                 </div>
             )}
 
+            {/* MODE SELECTION MODAL */}
+            {showModeModal && (
+                <div className="modal-overlay">
+                    <div className="spiritual-modal">
+                        <h3>Choose Your Path</h3>
+                        <p>Select how you wish to perform the Abhishekam</p>
+                        <div className="mode-options">
+                            <button className="mode-btn manual" onClick={() => {
+                                setChantMode('manual');
+                                setShowModeModal(false);
+                            }}>
+                                <span className="icon">🖐️</span>
+                                <span className="label">Manual Seva</span>
+                                <span className="sub">Tap to Chant</span>
+                            </button>
+                            <button className="mode-btn auto" onClick={() => {
+                                setChantMode('auto_setup');
+                                setShowModeModal(false);
+                                setShowAutoSettingsModal(true);
+                            }}>
+                                <span className="icon">🔄</span>
+                                <span className="label">Auto Japa</span>
+                                <span className="sub">Automatic Chanting</span>
+                            </button>
+                        </div>
+                        <button className="close-text-btn" onClick={() => setShowModeModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {/* AUTO SETTINGS MODAL */}
+            {showAutoSettingsModal && (
+                <div className="modal-overlay">
+                    <div className="spiritual-modal">
+                        <h3>Auto Japa Settings</h3>
+                        <p>Set the time between chants</p>
+
+                        <div className="slider-container">
+                            <div className="timer-display">
+                                <span className="big-time">{autoInterval}s</span>
+                                <span className="small-text">Interval</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="1"
+                                max="5"
+                                step="1"
+                                value={autoInterval}
+                                onChange={(e) => setAutoInterval(parseInt(e.target.value))}
+                                className="spiritual-slider"
+                            />
+                            <div className="range-labels">
+                                <span>Fast (1s)</span>
+                                <span>Slow (5s)</span>
+                            </div>
+                        </div>
+
+                        <button className="start-auto-btn" onClick={startAutoChant}>
+                            Start Session
+                        </button>
+                        <button className="close-text-btn" onClick={() => setShowAutoSettingsModal(false)}>Back</button>
+                    </div>
+                </div>
+            )}
+
             {/* Session count overlay */}
             <div style={{
                 position: 'fixed',
@@ -460,17 +815,177 @@ function ShivaSmaranaTemplePage() {
             <div className="bottom-button-bar">
                 <button
                     onClick={handleOmClick}
-                    disabled={isCooldown}
-                    className={`chant-button ${isCooldown ? 'cooldown' : ''}`}
+                    disabled={isCooldown && chantMode === 'manual'}
+                    className={`chant-button ${isCooldown && chantMode === 'manual' ? 'cooldown' : ''} ${chantMode === 'auto_running' ? 'end-session-btn' : ''}`}
                 >
                     <span className="btn-main-text key-text">
-                        {isCooldown ? "Offering..." : chantTexts[chantTextIndex]}
+                        {chantMode === 'auto_running'
+                            ? "End Session"
+                            : (isCooldown ? "Offering..." : chantTexts[chantTextIndex])
+                        }
                     </span>
                     <span className="btn-hint-text">
-                        {isCooldown ? "" : "Click to offer sacred water"}
+                        {chantMode === 'auto_running'
+                            ? "Click to stop Auto Japa"
+                            : (isCooldown ? "" : "Click to offer sacred water")
+                        }
                     </span>
                 </button>
             </div>
+
+            {/* ABHISHEKAM PAYMENT MODAL */}
+            {showAbhishekamModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(0,0,0,0.85)',
+                    zIndex: 10000,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backdropFilter: 'blur(8px)'
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #2c1810 0%, #1a0a0a 100%)',
+                        border: '2px solid #ffd700',
+                        borderRadius: '20px',
+                        padding: '25px',
+                        width: '90%',
+                        maxWidth: '400px',
+                        position: 'relative',
+                        boxShadow: '0 0 50px rgba(255, 215, 0, 0.4)'
+                    }}>
+                        <button
+                            onClick={() => setShowAbhishekamModal(false)}
+                            style={{
+                                position: 'absolute', top: '10px', right: '15px',
+                                background: 'transparent', border: 'none', color: '#888',
+                                fontSize: '24px', cursor: 'pointer'
+                            }}
+                        >
+                            ✕
+                        </button>
+
+                        <h3 style={{ color: '#ffd700', textAlign: 'center', fontFamily: 'serif', marginBottom: '15px' }}>
+                            Abhishekam Sankalpam 🙏
+                        </h3>
+                        <p style={{ color: '#eee', textAlign: 'center', fontSize: '0.9rem', marginBottom: '20px' }}>
+                            Perform a special Abhishekam with your Name & Gotram.
+                        </p>
+
+                        <div className="form-group" style={{ marginBottom: '15px' }}>
+                            <label style={{ color: '#daa520', fontSize: '0.8rem', display: 'block', marginBottom: '5px' }}>Devotee Name</label>
+                            <input
+                                type="text"
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+                                value={abhishekamForm.name}
+                                onChange={(e) => setAbhishekamForm({ ...abhishekamForm, name: e.target.value })}
+                                placeholder="Enter Name"
+                            />
+                        </div>
+                        <div className="form-group" style={{ marginBottom: '15px' }}>
+                            <label style={{ color: '#daa520', fontSize: '0.8rem', display: 'block', marginBottom: '5px' }}>Gotram</label>
+                            <input
+                                type="text"
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+                                value={abhishekamForm.gotram}
+                                onChange={(e) => setAbhishekamForm({ ...abhishekamForm, gotram: e.target.value })}
+                                placeholder="Enter Gotram"
+                            />
+                        </div>
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label style={{ color: '#daa520', fontSize: '0.8rem', display: 'block', marginBottom: '5px' }}>Mobile Number</label>
+                            <input
+                                type="tel"
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #555', background: '#333', color: 'white' }}
+                                value={abhishekamForm.mobile}
+                                onChange={(e) => setAbhishekamForm({ ...abhishekamForm, mobile: e.target.value })}
+                                placeholder="Enter Mobile"
+                            />
+                        </div>
+
+
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '10px' }}>
+                            {/* PhonePe */}
+                            <button
+                                onClick={() => handlePayAbhishekam('phonepe')}
+                                disabled={!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile}
+                                style={{
+                                    padding: '12px',
+                                    background: '#5f259f',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    fontWeight: 'bold',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    opacity: (!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile) ? 0.6 : 1
+                                }}
+                            >
+                                PhonePe
+                            </button>
+
+                            {/* Paytm */}
+                            <button
+                                onClick={() => handlePayAbhishekam('paytm')}
+                                disabled={!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile}
+                                style={{
+                                    padding: '12px',
+                                    background: '#00b9f1',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    fontWeight: 'bold',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    opacity: (!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile) ? 0.6 : 1
+                                }}
+                            >
+                                Paytm
+                            </button>
+
+                            {/* Google Pay */}
+                            <button
+                                onClick={() => handlePayAbhishekam('gpay')}
+                                disabled={!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile}
+                                style={{
+                                    padding: '12px',
+                                    background: 'white',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '12px',
+                                    fontWeight: 'bold',
+                                    color: '#4285F4',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '5px',
+                                    opacity: (!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile) ? 0.6 : 1
+                                }}
+                            >
+                                <span style={{ color: '#EA4335' }}>G</span>Pay
+                            </button>
+
+                            {/* Other UPI */}
+                            <button
+                                onClick={() => handlePayAbhishekam('generic')}
+                                disabled={!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile}
+                                style={{
+                                    padding: '12px',
+                                    background: 'linear-gradient(90deg, #ffd700, #ff8c00)',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    fontWeight: 'bold',
+                                    color: '#000',
+                                    cursor: 'pointer',
+                                    opacity: (!abhishekamForm.name || !abhishekamForm.gotram || !abhishekamForm.mobile) ? 0.6 : 1
+                                }}
+                            >
+                                BHIM / UPI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Login Prompt Modal for Guests at Milestones */}
             {showLoginPrompt && (
