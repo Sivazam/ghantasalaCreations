@@ -30,8 +30,9 @@ import { useNavigate } from 'react-router-dom';
 
 // Import Firebase (Standard ES6)
 import { auth, db } from './firebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { checkIsAdmin } from './features/dasara/firebase/dasaraFirestore';
 
 // Dasara Feature
 import { DasaraSection } from './features/dasara';
@@ -179,19 +180,18 @@ export default function MainHomePage(prop) {
   };
 
   const cat = [
-
     {
       image: 'https://cdn.shopify.com/s/files/1/0232/1317/8957/files/doshas.jpg?v=1661752899?ip=x480',
       title: 'వాత తత్వం లక్షణాలు',
       link: '/vaata_qna'
     },
     {
-      image: 'https://itbix.com/Content/prashnakundali_img/rect2.png',
+      image: '/qna_card.jpg',
       title: 'ప్రశ్న || సమాధానము',
       link: '/questions'
     },
     {
-      image: 'https://www.nicepng.com/png/full/248-2487041_each-direction-have-its-means-and-strength-vastu.png',
+      image: '/vastu_card.jpg',
       title: 'వాస్తు',
       link: ''
     },
@@ -214,8 +214,6 @@ export default function MainHomePage(prop) {
       title: 'జ్యోతిషం',
       link: ''
     }
-
-
   ]
   // మీ శరీర తత్వం ఏదో సులువుగా తెలుసుకోవాలనుకుంటున్నారా
 
@@ -269,31 +267,31 @@ export default function MainHomePage(prop) {
     }
   }, []);
 
-  // Fetch Total Chant Count (Firestore + Local Fallback)
-  // Fetch Total Chant Count (Firestore + Local Fallback)
+  // Fetch Total Chant Count and Devotee Auth State
   const [totalChants, setTotalChants] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
-    // 1. Listen for Auth Changes to fetch Cloud Data
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      setCurrentUser(user);
       if (user) {
-        setIsLoggedIn(true);
         try {
+          const adminStatus = await checkIsAdmin(user.uid);
+          setIsAdmin(adminStatus);
+
           const docRef = doc(db, "users", user.uid);
           const snap = await getDoc(docRef);
           if (snap.exists()) {
             setTotalChants(snap.data().chant_count || 0);
-            // Update local storage to match cloud
             localStorage.setItem('totalChants', (snap.data().chant_count || 0).toString());
           }
         } catch (e) {
           console.error("Home Fetch Error:", e);
         }
       } else {
-        setIsLoggedIn(false);
-        // 2. Fallback to Local Storage if no user
+        setIsAdmin(false);
         const stored = localStorage.getItem('totalChants');
         if (stored) {
           setTotalChants(parseInt(stored));
@@ -303,22 +301,48 @@ export default function MainHomePage(prop) {
     return () => unsubscribe();
   }, []);
 
+  const handleDirectGoogleLogin = async () => {
+    setAuthLoading(true);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDocRef);
+      if (!userSnap.exists()) {
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          name: user.displayName || 'Devotee',
+          email: user.email || '',
+          createdAt: new Date().toISOString()
+        }, { merge: true });
+      }
+      const adminStatus = await checkIsAdmin(user.uid);
+      setIsAdmin(adminStatus);
+    } catch (error) {
+      console.error("Login error:", error);
+      if (error.code !== 'auth/popup-closed-by-user') {
+        alert("Login failed. Please try again.");
+      }
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleDirectLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem('isGuestMode');
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   // --- FIREBASE AUTH & ONBOARDING ---
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showEntryModal, setShowEntryModal] = useState(false); // NEW: Entry modal state
   const [userForm, setUserForm] = useState({ name: '', city: '', phone: '' });
   const [loadingText, setLoadingText] = useState('');
-
-  // Listen for Auth State
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        console.log("User is signed in:", user.uid);
-        // Optionally fetch latest count here to prep UI
-      }
-    });
-    return () => unsubscribe();
-  }, []);
 
   const handleBannerClick = async () => {
     // 1. Check if user is ALREADY signed in
@@ -452,31 +476,96 @@ export default function MainHomePage(prop) {
 
 
       <div className='MainCont'>
-        {/* TOP BAR: Seamless Brown Temple Theme below Navbar */}
+        {/* TOP BAR: Seamless Brown Temple Theme below Navbar with merged spiritual pattern */}
         <div style={{
-          background: 'linear-gradient(180deg, #150505 0%, #2a0b0b 100%)',
-          padding: '6px 15px',
-          borderBottom: '1px solid rgba(255, 215, 0, 0.15)',
+          background: "linear-gradient(180deg, rgba(21, 5, 5, 0.92) 0%, rgba(42, 11, 11, 0.94) 100%), url('/spiritual_pattern.jpg') repeat center / 320px",
+          padding: '8px 15px',
+          borderBottom: '1.5px solid rgba(255, 215, 0, 0.25)',
+          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)'
         }}>
-          <div className="row" style={{ margin: 0, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="row" style={{ margin: 0, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
 
-            {/* LEFT: Total Chant Count (For ALL users - logged in or guest) */}
-            <div className="col-auto" style={{ padding: '4px 0', color: 'whitesmoke' }}>
-              {totalChants > 0 && (
-                <div style={{
-                  background: 'rgba(0,0,0,0.6)',
-                  padding: '5px 15px',
-                  borderRadius: '20px',
+            {/* LEFT: Total Chant Count + Login Button next to it */}
+            <div className="col-auto" style={{ padding: '4px 0', color: 'whitesmoke', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              {/* Chant Count Badge */}
+              <div style={{
+                background: 'rgba(0,0,0,0.6)',
+                padding: '5px 14px',
+                borderRadius: '20px',
+                border: '1px solid #ffd700',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 0 10px rgba(255, 215, 0, 0.25)'
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>🕉️</span>
+                <span style={{ fontWeight: 'bold', color: '#ffd700' }}>కౌంట్:</span>
+                <span style={{ fontWeight: 'bold', fontSize: '1.05rem', color: '#fff' }}>{totalChants.toLocaleString('en-IN')}</span>
+              </div>
+
+              {/* Login Button / Devotee Profile right next to count */}
+              {currentUser ? (
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px', 
+                  background: 'rgba(0,0,0,0.6)', 
+                  padding: '4px 12px', 
+                  borderRadius: '20px', 
                   border: '1px solid #ffd700',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.25)'
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.2)'
                 }}>
-                  <span style={{ fontSize: '1.2rem' }}>🕉️</span>
-                  <span style={{ fontWeight: 'bold', color: '#ffd700' }}>కౌంట్:</span>
-                  <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#fff' }}>{totalChants.toLocaleString('en-IN')}</span>
+                  <img 
+                    src={currentUser.photoURL || 'https://via.placeholder.com/32'} 
+                    alt="Profile" 
+                    style={{ width: '26px', height: '26px', borderRadius: '50%', border: '1px solid #ffd700' }} 
+                  />
+                  <span style={{ color: '#fff', fontSize: '0.85rem', fontWeight: 600 }}>
+                    {currentUser.displayName || currentUser.email?.split('@')[0]}
+                  </span>
+                  {isAdmin && (
+                    <span style={{ color: '#000', background: '#ffd700', fontSize: '0.65rem', fontWeight: 'bold', padding: '1px 5px', borderRadius: '4px' }}>
+                      👑 Admin
+                    </span>
+                  )}
+                  <button 
+                    onClick={handleDirectLogout}
+                    style={{
+                      background: 'transparent',
+                      border: '1px solid rgba(255,255,255,0.3)',
+                      color: '#ff6b6b',
+                      borderRadius: '10px',
+                      padding: '1px 7px',
+                      fontSize: '0.72rem',
+                      cursor: 'pointer',
+                      marginLeft: '4px'
+                    }}
+                    title="Logout"
+                  >
+                    Logout
+                  </button>
                 </div>
+              ) : (
+                <button 
+                  onClick={handleDirectGoogleLogin}
+                  disabled={authLoading}
+                  style={{
+                    background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
+                    color: '#000',
+                    border: 'none',
+                    borderRadius: '20px',
+                    padding: '5px 16px',
+                    fontSize: '0.85rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 0 10px rgba(255, 215, 0, 0.35)'
+                  }}
+                >
+                  <span>🔑</span> {authLoading ? 'లాగిన్...' : 'లాగిన్ / Login'}
+                </button>
               )}
             </div>
 
@@ -781,7 +870,8 @@ export default function MainHomePage(prop) {
                             component="img"
                             height="200"
                             image={x.image}
-                            alt="green iguana"
+                            alt={x.title}
+                            onError={(e) => { e.target.src = '/spiritual_pattern.jpg'; }}
                           />
                           <CardContent >
                             <Typography gutterBottom variant="h6" component="div" style={{ fontWeight: '700' }} >

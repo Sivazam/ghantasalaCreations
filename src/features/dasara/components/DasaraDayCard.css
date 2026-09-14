@@ -60,20 +60,21 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 36px;
-  height: 36px;
-  background: radial-gradient(circle, #421600 0%, #1a0500 100%);
-  border: 2px solid #ffd700;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, rgba(66, 22, 0, 0.94) 0%, rgba(26, 5, 0, 0.96) 100%);
+  border: 1.5px solid #ffd700;
   color: #ffd700;
-  font-weight: 900;
-  border-radius: 50%;
-  display: flex;
+  font-weight: 800;
+  border-radius: 14px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.55), 0 2px 6px rgba(0,0,0,0.6);
-  font-size: 0.95rem;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), 0 2px 6px rgba(0,0,0,0.6);
+  font-size: 0.8rem;
   font-family: 'Noto Serif Telugu', serif;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 .dasara-card-content {
@@ -162,11 +163,11 @@
     border-radius: 14px;
   }
   .dasara-card-day-badge {
-    width: 30px;
-    height: 30px;
-    font-size: 0.82rem;
-    top: 7px;
-    left: 7px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    top: 6px;
+    left: 6px;
+    border-radius: 10px;
   }
   .dasara-card-edit-btn {
     top: 7px;
@@ -193,9 +194,8 @@
 /* Tablet (500px - 768px) */
 @media (min-width: 500px) and (max-width: 768px) {
   .dasara-card-day-badge {
-    width: 34px;
-    height: 34px;
-    font-size: 0.9rem;
+    padding: 3px 9px;
+    font-size: 0.76rem;
   }
   .dasara-card-title {
     font-size: 0.88rem;
@@ -211,11 +211,11 @@
     border-radius: 18px;
   }
   .dasara-card-day-badge {
-    width: 40px;
-    height: 40px;
-    font-size: 1.05rem;
+    padding: 4px 12px;
+    font-size: 0.84rem;
     top: 12px;
     left: 12px;
+    border-radius: 16px;
   }
   .dasara-card-edit-btn {
     top: 12px;

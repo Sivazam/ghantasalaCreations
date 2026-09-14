@@ -101,7 +101,7 @@ const DasaraDayDetail = () => {
         <button className="dasara-detail-back-btn" onClick={() => navigate('/')} title="Go Back">
           &larr; <span style={{ fontSize: '1rem', marginLeft: '5px' }}>హోమ్</span>
         </button>
-        <h2 className="dasara-detail-title">దినం {dayData.dayNumber} - {dayData.tithiTelugu || `Day ${dayData.dayNumber}`}</h2>
+        <h2 className="dasara-detail-title">{dayData.dayNumber}వ రోజు - {dayData.tithiTelugu || `Day ${dayData.dayNumber}`}</h2>
         {isAdmin ? (
           <button 
             style={{
@@ -252,7 +252,7 @@ const DasaraDayDetail = () => {
       {/* Fixed Bottom Navigation */}
       <div className="dasara-day-nav">
         <button className="dasara-day-nav-btn" onClick={() => navigate(`/dasara/${prevDay}`)}>
-          &larr; Day {prevDay}
+          &larr; {prevDay}వ రోజు
         </button>
         <div className="dasara-day-dots">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -261,12 +261,12 @@ const DasaraDayDetail = () => {
               className={`dasara-day-dot ${num === dayData.dayNumber ? 'active' : ''}`}
               onClick={() => navigate(`/dasara/${num}`)}
               style={{ cursor: 'pointer' }}
-              title={`Day ${num}`}
+              title={`${num}వ రోజు`}
             ></div>
           ))}
         </div>
         <button className="dasara-day-nav-btn" onClick={() => navigate(`/dasara/${nextDay}`)}>
-          Day {nextDay} &rarr;
+          {nextDay}వ రోజు &rarr;
         </button>
       </div>
 

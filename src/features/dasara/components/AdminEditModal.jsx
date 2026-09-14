@@ -354,7 +354,7 @@ const AdminEditModal = ({ dayData, isOpen, onClose, onSave }) => {
         {/* Header */}
         <div style={styles.header}>
           <h2 style={styles.title}>
-            ✏️ Day {formData.dayNumber} ఎడిట్ చేయండి ({formData.titleTelugu})
+            ✏️ {formData.dayNumber}వ రోజు ఎడిట్ చేయండి ({formData.titleTelugu})
           </h2>
           <button style={styles.closeButton} onClick={onClose} title="Close">&times;</button>
         </div>

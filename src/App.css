@@ -40,16 +40,13 @@
 
 
 .Home{
-  /* background-image: url(/public/bg.webp); - removed - version change*/
-  /* background: linear-gradient(to bottom, #6699ff 0%, #0033cc 100%); -- change on request*/
-  /* background:linear-gradient(to bottom, #66ffff 0%, #0066ff 100%);
-  background-size: cover; */
-
-  background: rgb(2,0,36);
-background: linear-gradient(7deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-  /* height: 100%; */
-  /* width: 100%; */
-  /* padding: 0px 0px 50px 0px; */
+  background-color: #020024;
+  background-image: 
+    linear-gradient(7deg, rgba(2, 0, 36, 0.94) 0%, rgba(9, 9, 85, 0.92) 35%, rgba(0, 160, 210, 0.88) 100%),
+    url('./images/spiritual_pattern.jpg');
+  background-repeat: repeat;
+  background-size: auto, 360px;
+  background-attachment: fixed;
 }
 
 

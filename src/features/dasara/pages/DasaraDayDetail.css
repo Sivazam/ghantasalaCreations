@@ -11,7 +11,12 @@
 
 .dasara-detail-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #180505 0%, #280a0a 25%, #140303 100%);
+  background: 
+    linear-gradient(180deg, rgba(24, 5, 5, 0.94) 0%, rgba(40, 10, 10, 0.95) 25%, rgba(20, 3, 3, 0.98) 100%),
+    url('../../../images/spiritual_pattern.jpg');
+  background-repeat: repeat;
+  background-size: auto, 320px;
+  background-attachment: fixed;
   color: white;
   padding-bottom: 85px; /* Space for bottom nav */
   box-sizing: border-box;

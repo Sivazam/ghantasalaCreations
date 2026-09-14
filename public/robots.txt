@@ -1,3 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://ghantasalaarts-57d43.web.app/sitemap.xml
+Sitemap: https://ghantasalaarts.org/sitemap.xml

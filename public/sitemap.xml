@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Main Home Page -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/og-preview.jpg</image:loc>
+      <image:title>ఘంటసాల ఆర్ట్స్ - సనాతన ధర్మ వేదిక</image:title>
+    </image:image>
+  </url>
+
+  <!-- Dasara Navaratri Day 1 to 10 Pages -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/1</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day1.jpg</image:loc>
+      <image:title>1వ రోజు - శ్రీ బాలా త్రిపురసుందరీ దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/2</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day2.jpg</image:loc>
+      <image:title>2వ రోజు - శ్రీ గాయత్రీ దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/3</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day3.jpg</image:loc>
+      <image:title>3వ రోజు - శ్రీ అన్నపూర్ణా దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/4</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day4.jpg</image:loc>
+      <image:title>4వ రోజు - శ్రీ కాత్యాయనీ దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/5</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day5.jpg</image:loc>
+      <image:title>5వ రోజు - శ్రీ లలితా త్రిపురసుందరీ దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/6</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day6.jpg</image:loc>
+      <image:title>6వ రోజు - శ్రీ మహాలక్ష్మీ దేవి</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/7</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day7.jpg</image:loc>
+      <image:title>7వ రోజు - శ్రీ మహా సరస్వతీ దేవి (మూలా నక్షత్రం)</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/8</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day8.jpg</image:loc>
+      <image:title>8వ రోజు - శ్రీ దుర్గా దేవి (దుర్గాష్టమి)</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/9</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day9.jpg</image:loc>
+      <image:title>9వ రోజు - శ్రీ మహిషాసుర మర్దినీ దేవి (మహార్నవమి)</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/dasara/10</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://ghantasalaarts-57d43.web.app/dasara/day10.jpg</image:loc>
+      <image:title>10వ రోజు - శ్రీ రాజరాజేశ్వరీ దేవి (విజయదశమి)</image:title>
+    </image:image>
+  </url>
+
+  <!-- Shiva Smarana Feature Pages -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/shiva-smarana</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/shiva-smarana/temple</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/shiva-smarana/stats</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Nakshatras & Vivaham -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/nakshatras</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Projects -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/projects</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Gallery -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/gallery</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Questions & Answers -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/questions</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Vata QnA -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/vaata_qna</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- House / Vastu -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/house</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Venkateswara -->
+  <url>
+    <loc>https://ghantasalaarts-57d43.web.app/venkateswara</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

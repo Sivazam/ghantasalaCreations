@@ -16,7 +16,7 @@ const DasaraDayCard = ({ dayData, isAdmin, onEditClick }) => {
   return (
     <Link to={`/dasara/${dayNumber}`} className="dasara-day-card" style={{ textDecoration: 'none' }}>
       <div className="dasara-card-day-badge">
-        {dayNumber}
+        {dayNumber}వ రోజు
       </div>
       
       {isAdmin && (

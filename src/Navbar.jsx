@@ -1,217 +1,135 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import DP from './images/dp.png';
-import { auth, db } from './firebase';
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { checkIsAdmin } from './features/dasara/firebase/dasaraFirestore';
+import './Navbar.css';
 
-export default function Navrbar(){
-    const [currentUser, setCurrentUser] = useState(null);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [loading, setLoading] = useState(false);
+export default function Navrbar() {
+    const [isNavOpen, setIsNavOpen] = useState(false);
+    const location = useLocation();
+    const currentPath = location.pathname;
+    const currentHash = location.hash;
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            setCurrentUser(user);
-            if (user) {
-                const adminStatus = await checkIsAdmin(user.uid);
-                setIsAdmin(adminStatus);
-            } else {
-                setIsAdmin(false);
-            }
-        });
-        return () => unsubscribe();
-    }, []);
+    const handleComingSoon = (e, menuName) => {
+        if (e) e.preventDefault();
+        setIsNavOpen(false);
+        alert(`${menuName ? menuName + ': ' : ''}త్వరలో అందుబాటులోకి వస్తుంది (Coming soon)`);
+    };
 
-    const handleLogin = async () => {
-        setLoading(true);
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            
-            // Check if user doc exists in Firestore, if not create default
-            const userDocRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userDocRef);
-            if (!userSnap.exists()) {
-                await setDoc(userDocRef, {
-                    uid: user.uid,
-                    name: user.displayName || 'Devotee',
-                    email: user.email || '',
-                    createdAt: new Date().toISOString()
-                }, { merge: true });
-            }
-            const adminStatus = await checkIsAdmin(user.uid);
-            setIsAdmin(adminStatus);
-        } catch (error) {
-            console.error("Navbar Login Error:", error);
-            if (error.code !== 'auth/popup-closed-by-user') {
-                alert("Login failed. Please try again.");
-            }
-        } finally {
-            setLoading(false);
+    const handleDasaraClick = (e) => {
+        setIsNavOpen(false);
+        const el = document.getElementById('dasara-section');
+        if (el) {
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, '', '/#dasara-section');
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            localStorage.removeItem('isGuestMode');
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    };
+    // Active state detection
+    const isDasaraActive = currentPath.startsWith('/dasara') || (currentPath === '/' && currentHash === '#dasara-section');
+    const isVivahamActive = currentPath === '/nakshatras' || currentPath === '/nakshatra_detail';
+    const isGalleryActive = currentPath === '/gallery';
 
-    return(
+    return (
         <nav className="navbar navbar-expand-lg navbar-dark" id="navBar">
-            <span className="container-fluid" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Link className="navbar-brand" to="/" style={{ fontWeight: '700', display: 'flex', alignItems: 'center' }}>
-                    <img src={DP} width="45" height="45" className="d-inline-block align-middle icon" alt="Logo" />
-                    <span className="floating" style={{ fontSize: '20px', fontWeight: '900', textAlign: 'left', marginLeft: '8px' }}>Ghantasala arts</span>
+            <div className="container-fluid" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Link 
+                    className="navbar-brand" 
+                    to="/" 
+                    onClick={() => setIsNavOpen(false)}
+                    style={{ fontWeight: '700', display: 'flex', alignItems: 'center' }}
+                >
+                    <img src={DP} width="44" height="44" className="d-inline-block align-middle icon" alt="Logo" />
+                    <span className="navbar-brand-title" style={{ marginLeft: '10px' }}>
+                        Ghantasala arts
+                    </span>
                 </Link>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {/* Mobile Quick Login / Avatar */}
-                    <div className="d-lg-none">
-                        {currentUser ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <img 
-                                    src={currentUser.photoURL || 'https://via.placeholder.com/32'} 
-                                    alt="Profile" 
-                                    style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #ffd700' }} 
-                                />
-                                {isAdmin && <span style={{ fontSize: '0.75rem', background: '#ffd700', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: 'bold' }}>Admin</span>}
-                            </div>
-                        ) : (
-                            <button 
-                                onClick={handleLogin}
-                                disabled={loading}
-                                style={{
-                                    background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
-                                    color: '#000',
-                                    border: 'none',
-                                    borderRadius: '16px',
-                                    padding: '4px 12px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {loading ? '...' : '🔑 Login'}
-                            </button>
-                        )}
-                    </div>
-
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <div>
+                    <button 
+                        className="navbar-toggler custom-nav-toggler" 
+                        type="button" 
+                        aria-controls="navbarNav" 
+                        aria-expanded={isNavOpen} 
+                        aria-label="Toggle navigation"
+                        onClick={() => setIsNavOpen(prev => !prev)}
+                    >
                         <span className="navbar-toggler-icon"></span>
                     </button>
                 </div>
 
-                <div className="collapse navbar-collapse" id="navbarNav" style={{ margin: '0.5rem 0' }}>
-                    <ul className="navbar-nav ms-auto" style={{ alignItems: 'center', gap: '6px' }}>
-                        {/* Dasara Nav Link */}
+                <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`} id="navbarNav">
+                    <ul className="navbar-nav ms-auto" style={{ alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        
+                        {/* 1. Dasara Special */}
                         <li className="nav-item">
-                            <a className="nav-link" href="/#dasara-section">
-                                <button className="btn" style={{ color: '#ffd700', border: '1px solid #ffd700', background: 'rgba(255, 215, 0, 0.1)', fontWeight: 'bold' }}>
+                            <a 
+                                className="nav-link" 
+                                href="/#dasara-section" 
+                                onClick={handleDasaraClick}
+                            >
+                                <span className={`nav-pill-btn dasara-highlight ${isDasaraActive ? 'active-nav-btn' : ''}`}>
                                     🪷 దసరా నవరాత్రులు
-                                </button>
+                                </span>
                             </a>
                         </li>
 
+                        {/* 2. Vastu (Coming soon) */}
                         <li className="nav-item">
-                            <a className="nav-link" href="#" onClick={(e) => { e.preventDefault(); alert("Coming soon"); }}>
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>వాస్తు</button>
+                            <a className="nav-link" href="#" onClick={(e) => handleComingSoon(e, "వాస్తు")}>
+                                <span className="nav-pill-btn">వాస్తు</span>
                             </a>
                         </li>
+
+                        {/* 3. Astrology (Coming soon) */}
                         <li className="nav-item">
-                            <a className="nav-link" href="#" onClick={(e) => { e.preventDefault(); alert("Coming soon"); }}>
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>జ్యోతిష్యం</button>
+                            <a className="nav-link" href="#" onClick={(e) => handleComingSoon(e, "జ్యోతిష్యం")}>
+                                <span className="nav-pill-btn">జ్యోతిష్యం</span>
                             </a>
                         </li>
+
+                        {/* 4. Entertainment (Coming soon) */}
                         <li className="nav-item">
-                            <a className="nav-link" href="#" onClick={(e) => { e.preventDefault(); alert("Coming soon"); }}>
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>పూజలు</button>
+                            <a className="nav-link" href="#" onClick={(e) => handleComingSoon(e, "ఎంటర్టైన్మెంట్")}>
+                                <span className="nav-pill-btn">ఎంటర్టైన్మెంట్</span>
                             </a>
                         </li>
+
+                        {/* 5. Learning Gita (Coming soon) */}
                         <li className="nav-item">
-                            <Link className="nav-link" to="/nakshatras">
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>వివాహం</button>
-                            </Link>
+                            <a className="nav-link" href="#" onClick={(e) => handleComingSoon(e, "లెర్నింగ్ భగవద్గీత")}>
+                                <span className="nav-pill-btn">లెర్నింగ్ భగవద్గీత</span>
+                            </a>
                         </li>
+
+                        {/* 6. Marriage / Nakshatras */}
                         <li className="nav-item">
-                            <Link className="nav-link" to="/projects">
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>ప్రాజెక్టులు</button>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/gallery">
-                                <button className="btn" style={{ color: 'white', border: '1px solid yellow' }}>ఫొటో గ్యాలరీ</button>
+                            <Link 
+                                className="nav-link" 
+                                to="/nakshatras" 
+                                onClick={() => setIsNavOpen(false)}
+                            >
+                                <span className={`nav-pill-btn ${isVivahamActive ? 'active-nav-btn' : ''}`}>
+                                    వివాహం
+                                </span>
                             </Link>
                         </li>
 
-                        {/* Desktop Auth Section */}
-                        <li className="nav-item" style={{ marginLeft: '10px' }}>
-                            {currentUser ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.4)', padding: '5px 12px', borderRadius: '25px', border: '1px solid #ffd700' }}>
-                                    <img 
-                                        src={currentUser.photoURL || 'https://via.placeholder.com/32'} 
-                                        alt="Profile" 
-                                        style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid #ffd700' }} 
-                                    />
-                                    <div style={{ textAlign: 'left', lineHeight: '1.2' }}>
-                                        <span style={{ color: '#fff', fontSize: '0.85rem', fontWeight: 600, display: 'block' }}>
-                                            {currentUser.displayName || currentUser.email?.split('@')[0]}
-                                        </span>
-                                        {isAdmin && (
-                                            <span style={{ color: '#ffd700', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                                👑 Admin
-                                            </span>
-                                        )}
-                                    </div>
-                                    <button 
-                                        onClick={handleLogout}
-                                        style={{
-                                            background: 'transparent',
-                                            border: '1px solid rgba(255,255,255,0.4)',
-                                            color: '#ff6b6b',
-                                            borderRadius: '12px',
-                                            padding: '2px 8px',
-                                            fontSize: '0.75rem',
-                                            cursor: 'pointer',
-                                            marginLeft: '4px'
-                                        }}
-                                        title="Logout"
-                                    >
-                                        Logout
-                                    </button>
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={handleLogin}
-                                    disabled={loading}
-                                    style={{
-                                        background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
-                                        color: '#000',
-                                        border: 'none',
-                                        borderRadius: '20px',
-                                        padding: '8px 20px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '6px',
-                                        boxShadow: '0 0 10px rgba(255, 215, 0, 0.4)'
-                                    }}
-                                >
-                                    <span>🔑</span> {loading ? 'Logging in...' : 'లాగిన్ / Login'}
-                                </button>
-                            )}
+                        {/* 7. Photo Gallery */}
+                        <li className="nav-item">
+                            <Link 
+                                className="nav-link" 
+                                to="/gallery" 
+                                onClick={() => setIsNavOpen(false)}
+                            >
+                                <span className={`nav-pill-btn ${isGalleryActive ? 'active-nav-btn' : ''}`}>
+                                    ఫొటో గ్యాలరీ
+                                </span>
+                            </Link>
                         </li>
                     </ul>
                 </div>
-            </span>
+            </div>
         </nav>
     );
 }
