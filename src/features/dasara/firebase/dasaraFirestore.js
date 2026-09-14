@@ -1,39 +1,56 @@
 import { collection, doc, getDoc, getDocs, setDoc, writeBatch, query, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../../firebase';
+import { dasaraInitialData } from '../data/dasaraInitialData';
 
 /**
- * Fetch all dasara days, ordered by dayNumber
+ * Fetch all dasara days, merging Firestore edits with initial data so all 10 days are always shown
  */
 export const getDasaraDays = async () => {
   try {
     const dasaraRef = collection(db, 'dasaraDays');
     const q = query(dasaraRef, orderBy('dayNumber'));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const firestoreDays = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    const firestoreMap = new Map(firestoreDays.map(d => [Number(d.dayNumber), d]));
+    const mergedDays = dasaraInitialData.map(initialDay => {
+      const fromDb = firestoreMap.get(Number(initialDay.dayNumber));
+      if (fromDb) {
+        firestoreMap.delete(Number(initialDay.dayNumber));
+        return { ...initialDay, ...fromDb };
+      }
+      return initialDay;
+    });
+
+    const allDays = [...mergedDays, ...Array.from(firestoreMap.values())];
+    return allDays.sort((a, b) => a.dayNumber - b.dayNumber);
   } catch (error) {
     console.error('Error fetching Dasara days:', error);
-    throw error;
+    return dasaraInitialData;
   }
 };
 
 /**
- * Fetch a specific day by its dayNumber
+ * Fetch a specific day by its dayNumber, merging with initial data as fallback
  */
 export const getDasaraDay = async (dayNumber) => {
   try {
-    const dayDoc = doc(db, 'dasaraDays', `day${dayNumber}`);
+    const parsedNum = parseInt(dayNumber, 10);
+    const initial = dasaraInitialData.find(d => d.dayNumber === parsedNum);
+    const dayDoc = doc(db, 'dasaraDays', `day${parsedNum}`);
     const snapshot = await getDoc(dayDoc);
     if (snapshot.exists()) {
-      return { id: snapshot.id, ...snapshot.data() };
+      return { ...initial, id: snapshot.id, ...snapshot.data() };
     } else {
-      return null;
+      return initial || null;
     }
   } catch (error) {
     console.error(`Error fetching Dasara day ${dayNumber}:`, error);
-    throw error;
+    return dasaraInitialData.find(d => d.dayNumber === parseInt(dayNumber, 10)) || null;
   }
 };
+
 
 /**
  * Update a specific day

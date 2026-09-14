@@ -18,16 +18,13 @@ const DasaraDayDetail = () => {
   const fetchDayData = async () => {
     setLoading(true);
     try {
-      const parsedDayNum = parseInt(dayNumber);
+      const parsedDayNum = parseInt(dayNumber, 10);
+      const initial = dasaraInitialData.find(d => d.dayNumber === parsedDayNum);
       let data = await getDasaraDay(parsedDayNum);
-      
-      if (!data) {
-        data = dasaraInitialData.find(d => d.dayNumber === parsedDayNum);
-      }
-      setDayData(data);
+      setDayData(data ? { ...initial, ...data } : initial);
     } catch (error) {
       console.error("Error fetching day data:", error);
-      setDayData(dasaraInitialData.find(d => d.dayNumber === parseInt(dayNumber)));
+      setDayData(dasaraInitialData.find(d => d.dayNumber === parseInt(dayNumber, 10)));
     } finally {
       setLoading(false);
     }

@@ -16,11 +16,19 @@ const DasaraSection = () => {
     const fetchData = async () => {
       try {
         const fetchedDays = await getDasaraDays();
-        if (fetchedDays && fetchedDays.length > 0) {
-          setDays(fetchedDays.sort((a, b) => a.dayNumber - b.dayNumber));
-        } else {
-          setDays(dasaraInitialData.sort((a, b) => a.dayNumber - b.dayNumber));
-        }
+        
+        // Guarantee that all 10 days are always shown, with any edited days merged from Firestore
+        const firestoreMap = new Map((fetchedDays || []).map(d => [Number(d.dayNumber), d]));
+        const mergedDays = dasaraInitialData.map(initialDay => {
+          const fromDb = firestoreMap.get(Number(initialDay.dayNumber));
+          if (fromDb) {
+            firestoreMap.delete(Number(initialDay.dayNumber));
+            return { ...initialDay, ...fromDb };
+          }
+          return initialDay;
+        });
+        const allDays = [...mergedDays, ...Array.from(firestoreMap.values())].sort((a, b) => a.dayNumber - b.dayNumber);
+        setDays(allDays);
 
         const adminStatus = await checkIsAdmin(auth.currentUser?.uid);
         setIsAdmin(adminStatus);
