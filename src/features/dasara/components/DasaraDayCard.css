@@ -1,0 +1,240 @@
+@keyframes cardGlow {
+  0%, 100% { 
+    border-color: rgba(255, 215, 0, 0.35); 
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 215, 0, 0.1);
+  }
+  50% { 
+    border-color: rgba(255, 215, 0, 0.7); 
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 215, 0, 0.3);
+  }
+}
+
+.dasara-day-card {
+  display: block;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: #180808;
+  border: 2px solid rgba(255, 215, 0, 0.35);
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  aspect-ratio: 3/4;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 215, 0, 0.08);
+  animation: cardGlow 4s ease-in-out infinite;
+  text-decoration: none;
+}
+
+.dasara-day-card:hover {
+  transform: translateY(-7px) scale(1.02);
+  border-color: #ffd700;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.45);
+}
+
+.dasara-day-card:active {
+  transform: scale(0.97);
+}
+
+.dasara-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.dasara-day-card:hover .dasara-card-image {
+  transform: scale(1.05);
+}
+
+.dasara-card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.7) 70%, rgba(15,3,3,0.96) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.dasara-card-day-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle, #421600 0%, #1a0500 100%);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-weight: 900;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.55), 0 2px 6px rgba(0,0,0,0.6);
+  font-size: 0.95rem;
+  font-family: 'Noto Serif Telugu', serif;
+}
+
+.dasara-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 12px 14px 12px;
+  z-index: 2;
+}
+
+.dasara-card-title {
+  color: #ffffff;
+  font-family: 'Noto Serif Telugu', serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95);
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dasara-card-color-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.dasara-card-color-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+}
+
+.dasara-card-color-name {
+  font-size: 0.72rem;
+  color: #ffe8a1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dasara-card-color-strip {
+  height: 5px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -1px 6px rgba(255, 215, 0, 0.4);
+}
+
+.dasara-card-edit-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.78);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: bold;
+  z-index: 3;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dasara-card-edit-btn:hover {
+  background: #ffd700;
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* Mobile Small (< 420px) */
+@media (max-width: 420px) {
+  .dasara-day-card {
+    border-radius: 14px;
+  }
+  .dasara-card-day-badge {
+    width: 30px;
+    height: 30px;
+    font-size: 0.82rem;
+    top: 7px;
+    left: 7px;
+  }
+  .dasara-card-edit-btn {
+    top: 7px;
+    right: 7px;
+    padding: 3px 7px;
+    font-size: 0.7rem;
+  }
+  .dasara-card-content {
+    padding: 8px 9px 11px 9px;
+  }
+  .dasara-card-title {
+    font-size: 0.78rem;
+    line-height: 1.3;
+  }
+  .dasara-card-color-name {
+    font-size: 0.65rem;
+  }
+  .dasara-card-color-dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* Tablet (500px - 768px) */
+@media (min-width: 500px) and (max-width: 768px) {
+  .dasara-card-day-badge {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+  .dasara-card-title {
+    font-size: 0.88rem;
+  }
+  .dasara-card-color-name {
+    font-size: 0.72rem;
+  }
+}
+
+/* Desktop & Laptop (>= 768px) */
+@media (min-width: 768px) {
+  .dasara-day-card {
+    border-radius: 18px;
+  }
+  .dasara-card-day-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 1.05rem;
+    top: 12px;
+    left: 12px;
+  }
+  .dasara-card-edit-btn {
+    top: 12px;
+    right: 12px;
+    padding: 5px 12px;
+    font-size: 0.82rem;
+  }
+  .dasara-card-title {
+    font-size: 1.02rem;
+    line-height: 1.38;
+  }
+  .dasara-card-content {
+    padding: 14px 16px 18px 16px;
+  }
+  .dasara-card-color-name {
+    font-size: 0.78rem;
+  }
+  .dasara-card-color-dot {
+    width: 8px;
+    height: 8px;
+  }
+}

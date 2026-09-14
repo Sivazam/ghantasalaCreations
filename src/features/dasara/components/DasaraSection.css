@@ -1,0 +1,160 @@
+/* Mobile-first baseline */
+.dasara-section {
+  width: 100%;
+  background: linear-gradient(180deg, #2a0b0b 0%, #1c0606 35%, #0f0303 100%);
+  padding: 25px 12px 40px 12px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.dasara-section-header {
+  text-align: center;
+  font-family: 'Noto Serif Telugu', serif;
+  color: #ffd700;
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 2px 5px rgba(0, 0, 0, 0.8);
+  font-size: 1.65rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+  animation: customFloat 3s ease-in-out infinite;
+  letter-spacing: 0.5px;
+}
+
+@keyframes customFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.dasara-section-subtitle {
+  text-align: center;
+  color: #ffe8a1;
+  font-size: 0.88rem;
+  margin-bottom: 18px;
+  font-family: 'Noto Serif Telugu', serif;
+  opacity: 0.95;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  padding: 0 10px;
+}
+
+.dasara-section-divider {
+  width: 85%;
+  max-width: 340px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.7), transparent);
+  margin: 10px auto 26px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dasara-section-divider::before {
+  content: '🪔 ✦ 🪷 ✦ 🪔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1c0606;
+  padding: 0 10px;
+  font-size: 0.88rem;
+  color: #ffd700;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .dasara-section-divider {
+    max-width: 250px;
+    margin: 8px auto 20px;
+  }
+
+  .dasara-section-divider::before {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    padding: 0 6px;
+    white-space: nowrap;
+  }
+}
+
+.dasara-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Compact Mobile (under 380px like iPhone SE) */
+@media (max-width: 380px) {
+  .dasara-section {
+    padding: 18px 8px 30px 8px;
+  }
+  .dasara-section-header {
+    font-size: 1.4rem;
+  }
+  .dasara-section-subtitle {
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+  }
+  .dasara-grid {
+    gap: 8px;
+  }
+}
+
+/* Small Tablets & Large Phones (500px - 740px) */
+@media (min-width: 500px) {
+  .dasara-section {
+    padding: 30px 16px 40px 16px;
+  }
+  .dasara-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 720px;
+  }
+  .dasara-section-header {
+    font-size: 1.95rem;
+  }
+  .dasara-section-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* Standard Tablets (740px - 1050px) */
+@media (min-width: 740px) {
+  .dasara-section {
+    padding: 38px 24px 48px 24px;
+  }
+  .dasara-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 960px;
+  }
+  .dasara-section-header {
+    font-size: 2.3rem;
+  }
+  .dasara-section-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Laptops & Desktops (>= 1050px): Exactly 2 balanced rows of 5 cards */
+@media (min-width: 1050px) {
+  .dasara-section {
+    padding: 48px 30px 60px 30px;
+  }
+  .dasara-section-header {
+    font-size: 2.65rem;
+  }
+  .dasara-section-subtitle {
+    font-size: 1.08rem;
+  }
+  .dasara-grid {
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 1240px;
+    gap: 20px;
+  }
+}

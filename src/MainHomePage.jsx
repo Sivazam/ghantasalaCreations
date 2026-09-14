@@ -33,6 +33,9 @@ import { auth, db } from './firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
+// Dasara Feature
+import { DasaraSection } from './features/dasara';
+
 
 export default function MainHomePage(prop) {
 
@@ -449,34 +452,47 @@ export default function MainHomePage(prop) {
 
 
       <div className='MainCont'>
-        <div className="row" style={{ marginRight: '0px', paddingRight: '0px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* TOP BAR: Seamless Brown Temple Theme below Navbar */}
+        <div style={{
+          background: 'linear-gradient(180deg, #150505 0%, #2a0b0b 100%)',
+          padding: '6px 15px',
+          borderBottom: '1px solid rgba(255, 215, 0, 0.15)',
+        }}>
+          <div className="row" style={{ margin: 0, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-          {/* LEFT: Total Chant Count (For ALL users - logged in or guest) */}
-          <div className="col-auto" style={{ margin: '10px 20px', color: 'whitesmoke' }}>
-            {totalChants > 0 && (
-              <div style={{
-                background: 'rgba(0,0,0,0.5)',
-                padding: '5px 15px',
-                borderRadius: '20px',
-                border: '1px solid #ffd700',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <span style={{ fontSize: '1.2rem' }}>🕉️</span>
-                <span style={{ fontWeight: 'bold', color: '#ffd700' }}>Count:</span>
-                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{totalChants.toLocaleString('en-IN')}</span>
-              </div>
-            )}
-          </div>
+            {/* LEFT: Total Chant Count (For ALL users - logged in or guest) */}
+            <div className="col-auto" style={{ padding: '4px 0', color: 'whitesmoke' }}>
+              {totalChants > 0 && (
+                <div style={{
+                  background: 'rgba(0,0,0,0.6)',
+                  padding: '5px 15px',
+                  borderRadius: '20px',
+                  border: '1px solid #ffd700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.25)'
+                }}>
+                  <span style={{ fontSize: '1.2rem' }}>🕉️</span>
+                  <span style={{ fontWeight: 'bold', color: '#ffd700' }}>కౌంట్:</span>
+                  <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#fff' }}>{totalChants.toLocaleString('en-IN')}</span>
+                </div>
+              )}
+            </div>
 
-          {/* RIGHT: Social Icons */}
-          <div className="col-auto" style={{ margin: '10px', color: 'whitesmoke' }}>
-            <span style={{ display: 'flex', margin: '5px' }}>
-              <a href="https://api.whatsapp.com/send?phone=+919490478707&text=%20నమస్తే పంతులుగారు , నా సమస్య ఏమిటి అంటే " style={{ textDecoration: 'none' }}><WhatsAppIcon className="socialIcon" style={{ color: 'green', margin: '0 10px', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2rem', padding: '5px' }} /></a>
-              <a href="tel:+919490478707" style={{ textDecoration: 'none' }}><CallIcon className="socialIcon" style={{ color: '#537FE7', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2rem', padding: '5px' }} /></a>
-            </span>
+            {/* RIGHT: Social Icons */}
+            <div className="col-auto" style={{ padding: '4px 0', color: 'whitesmoke' }}>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <a href="https://api.whatsapp.com/send?phone=+919490478707&text=%20నమస్తే పంతులుగారు , నా సమస్య ఏమిటి అంటే " style={{ textDecoration: 'none' }} title="WhatsApp">
+                  <WhatsAppIcon className="socialIcon" style={{ color: 'green', margin: '0 8px', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2.1rem', padding: '5px', boxShadow: '0 0 8px rgba(0,255,0,0.3)' }} />
+                </a>
+                <a href="tel:+919490478707" style={{ textDecoration: 'none' }} title="Call">
+                  <CallIcon className="socialIcon" style={{ color: '#537FE7', cursor: "pointer", background: 'white', borderRadius: '50%', fontSize: '2.1rem', padding: '5px', boxShadow: '0 0 8px rgba(83,127,231,0.3)' }} />
+                </a>
+              </span>
+            </div>
           </div>
+        </div>
 
           {/* {showPopup ? (
                             <div className="popup-overlay " >
@@ -506,8 +522,6 @@ export default function MainHomePage(prop) {
                             </div>
                             </div>
                         ) : '' }; */}
-
-        </div>
 
         {/* ONBOARDING MODAL */}
         {showOnboarding && (
@@ -600,6 +614,10 @@ export default function MainHomePage(prop) {
             <h4 style={{ marginTop: '20px' }}>{loadingText}</h4>
           </div>
         )}
+
+        {/* ========== DASARA NAVARATRI SECTION ========== */}
+        <DasaraSection />
+        {/* ========== END DASARA NAVARATRI SECTION ========== */}
 
         {/* ========== SHIVA SMARANA ENTRY SECTION (IMAGE BASED) ========== */}
         <div

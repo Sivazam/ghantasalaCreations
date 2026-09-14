@@ -20,6 +20,9 @@ import ShivaParvathi from "./ShivaParvathi";
 import { ShivaSmaranaHomePage, ShivaSmaranaTemplePage } from "./features/shiva-smarana";
 import UserStatsPage from "./features/shiva-smarana/pages/UserStatsPage";
 
+// Dasara Feature
+import { DasaraDayDetail } from "./features/dasara";
+
 
 
 
@@ -50,6 +53,7 @@ export default function HomePage() {
                         <Route path="annaprasana" element={<Sample cName="galHero" bg="Home" />} />
                         <Route path="Namalu" element={<Namam cName="galHero" bg="Home" />} />
                         <Route path="Shiva" element={<ShivaParvathi cName="galHero" bg="Home" />} />
+                        <Route path="dasara/:dayNumber" element={<DasaraDayDetail />} />
                     </Route>
 
                     {/* Shiva Smarana Feature Routes */}
