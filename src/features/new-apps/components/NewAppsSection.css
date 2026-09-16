@@ -3,15 +3,18 @@
    ======================================================== */
 
 .new-apps-section {
+  width: 100%;
   position: relative;
-  padding: 30px 16px 40px 16px;
-  background: linear-gradient(180deg, rgba(8, 4, 22, 0.92) 0%, rgba(20, 10, 40, 0.95) 50%, rgba(8, 4, 22, 0.92) 100%);
-  background-image: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.08), transparent 70%), url('../../../images/spiritual_pattern.jpg');
+  padding: 35px 16px 45px 16px;
+  background: 
+    linear-gradient(180deg, rgba(14, 8, 45, 0.93) 0%, rgba(28, 14, 75, 0.94) 50%, rgba(14, 8, 45, 0.97) 100%),
+    url('../../../images/spiritual_pattern.jpg');
   background-repeat: repeat;
-  background-size: auto, 300px;
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  background-size: auto, 320px;
+  border-top: 1px solid rgba(255, 215, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.25);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .new-apps-container {
