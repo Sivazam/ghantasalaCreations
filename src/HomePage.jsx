@@ -23,6 +23,9 @@ import UserStatsPage from "./features/shiva-smarana/pages/UserStatsPage";
 // Dasara Feature
 import { DasaraDayDetail } from "./features/dasara";
 
+// New Apps Feature
+import { AppViewerPage } from "./features/new-apps";
+
 
 
 
@@ -54,6 +57,7 @@ export default function HomePage() {
                         <Route path="Namalu" element={<Namam cName="galHero" bg="Home" />} />
                         <Route path="Shiva" element={<ShivaParvathi cName="galHero" bg="Home" />} />
                         <Route path="dasara/:dayNumber" element={<DasaraDayDetail />} />
+                        <Route path="apps/:appId" element={<AppViewerPage />} />
                     </Route>
 
                     {/* Shiva Smarana Feature Routes */}

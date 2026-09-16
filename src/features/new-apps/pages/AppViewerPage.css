@@ -1,0 +1,181 @@
+/* ========================================================
+   APP VIEWER PAGE STYLES
+   ======================================================== */
+
+.app-viewer-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0b071a;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2500;
+}
+
+/* Header / Navigation Bar */
+.app-viewer-header {
+  height: 56px;
+  background: linear-gradient(90deg, #130926 0%, #1e0b38 50%, #130926 100%);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.app-viewer-header.fullscreen-hide {
+  display: none;
+}
+
+.app-viewer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.app-viewer-back-btn {
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.app-viewer-back-btn:hover {
+  background: #ffd700;
+  color: #0b071a;
+  transform: translateX(-2px);
+}
+
+.app-viewer-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #ffd700;
+  flex-shrink: 0;
+}
+
+.app-viewer-title {
+  color: #ffffff;
+  font-family: 'Noto Serif Telugu', serif, system-ui;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+@media (min-width: 768px) {
+  .app-viewer-title {
+    max-width: 450px;
+    font-size: 1.15rem;
+  }
+}
+
+.app-viewer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-viewer-action-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  color: #ffd700;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.app-viewer-action-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+/* Floating Exit Fullscreen Button */
+.app-viewer-exit-fullscreen-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.app-viewer-exit-fullscreen-btn:hover {
+  background: #ffd700;
+  color: #0b071a;
+}
+
+/* Frame Body */
+.app-viewer-frame-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.app-viewer-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Loading / Error States */
+.app-viewer-loading,
+.app-viewer-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0b071a;
+  color: #ffd700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 5;
+  padding: 20px;
+  text-align: center;
+}

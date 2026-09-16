@@ -37,6 +37,9 @@ import { checkIsAdmin } from './features/dasara/firebase/dasaraFirestore';
 // Dasara Feature
 import { DasaraSection } from './features/dasara';
 
+// New Apps Feature
+import { NewAppsSection } from './features/new-apps';
+
 
 export default function MainHomePage(prop) {
 
@@ -703,6 +706,10 @@ export default function MainHomePage(prop) {
             <h4 style={{ marginTop: '20px' }}>{loadingText}</h4>
           </div>
         )}
+
+        {/* ========== NEW APPS SECTION ========== */}
+        <NewAppsSection />
+        {/* ========== END NEW APPS SECTION ========== */}
 
         {/* ========== DASARA NAVARATRI SECTION ========== */}
         <DasaraSection />
