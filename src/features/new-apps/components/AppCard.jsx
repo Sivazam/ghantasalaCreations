@@ -84,7 +84,7 @@ export default function AppCard({
         </div>
       )}
 
-      {/* App Icon Container */}
+      {/* App Icon Container (Top-Left) */}
       <div className="app-icon-wrapper">
         <img
           src={app.iconUrl || '/spiritual_pattern.jpg'}
@@ -104,14 +104,14 @@ export default function AppCard({
       {app.description ? (
         <p className="app-desc">{app.description}</p>
       ) : (
-        <p className="app-desc" style={{ fontStyle: 'italic', opacity: 0.5 }}>
-          ఆధ్యాత్మిక అప్లికేషన్
+        <p className="app-desc" style={{ fontStyle: 'italic', opacity: 0.6 }}>
+          ఆధ్యాత్మిక అప్లికేషన్ మరియు సేవలు
         </p>
       )}
 
-      {/* Launch Action Tag */}
-      <div className="app-launch-tag">
-        <span>యాప్ తెరవండి ➔</span>
+      {/* Circular Arrow Button (Bottom-Right) */}
+      <div className="app-arrow-btn" title="ఓపెన్ చేయండి">
+        ➔
       </div>
     </div>
   );

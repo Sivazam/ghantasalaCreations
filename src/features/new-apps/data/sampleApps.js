@@ -4,10 +4,11 @@
 export const sampleApps = [
   {
     id: 'sample_gita_sloka',
-    title: 'శ్రీమద్భగవద్గీత శ్లోకాలు & అర్థాలు',
-    description: 'నిత్య పారాయణకు ముఖ్యమైన భగవద్గీత శ్లోకాలు, భావాలు మరియు అర్థాలు.',
+    title: 'శ్రీమద్భగవద్గీత శ్లోకాలు',
+    description: 'నిత్య పారాయణకు ముఖ్యమైన భగవద్గీత శ్లోకాలు, సమగ్ర ప్రతిపదార్థాలు మరియు సరళ భావాలు.',
     category: 'Spiritual',
-    iconUrl: '/shiva_entry_poster.jpg',
+    iconUrl: '/og-preview.jpg',
+    order: 0,
     createdAt: Date.now() - 86400000,
     htmlFileName: 'bhagavad_gita_daily.html',
     htmlFileSize: 8520,
@@ -40,7 +41,6 @@ export const sampleApps = [
       border-radius: 20px;
       font-size: 0.9rem;
       margin-bottom: 16px;
-      letter-spacing: 1px;
     }
     h1 {
       color: #ffd700;
@@ -142,9 +142,6 @@ export const sampleApps = [
       background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
       border: 1px solid rgba(255, 215, 0, 0.4);
-    }
-    button.btn-sec:hover {
-      background: rgba(255, 215, 0, 0.2);
     }
     .chant-counter {
       margin-top: 20px;
@@ -255,6 +252,73 @@ export const sampleApps = [
       document.getElementById('counterVal').innerText = chantCount;
       if (navigator.vibrate) navigator.vibrate(30);
     }
+  </script>
+</body>
+</html>`
+  },
+  {
+    id: 'sample_puja_vidhanam',
+    title: 'నిత్య పూజా విధానం',
+    description: 'షోడశోపచార పూజా క్రమం, కలశార్చన, గణపతి ప్రార్థన మరియు అర్చన మంత్రాలు.',
+    category: 'Spiritual',
+    iconUrl: '/vastu_card.jpg',
+    order: 1,
+    createdAt: Date.now() - 43200000,
+    htmlFileName: 'nitya_puja_vidhanam.html',
+    htmlFileSize: 4200,
+    htmlContent: `<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <title>నిత్య పూజా విధానం</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Serif Telugu', serif; background: #0c081e; color: #fff; padding: 24px; text-align: center; }
+    h1 { color: #ffd700; margin-bottom: 8px; }
+    .step { background: rgba(255,255,255,0.06); border: 1px solid #ffd700; border-radius: 16px; padding: 18px; margin: 16px auto; max-width: 600px; text-align: left; }
+    .step-title { color: #ffd700; font-weight: bold; font-size: 1.1rem; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h1>🪔 నిత్య పూజా విధానం</h1>
+  <p>ప్రతిరోజూ ఉదయం మరియు సాయంత్రం ఆచరించదగిన పూజా క్రమము</p>
+  <div class="step"><div class="step-title">1. ఆచమనం</div>ఓం కేశవాయ స్వాహా, ఓం నారాయణాయ స్వాహా, ఓం మాధవాయ స్వాహా...</div>
+  <div class="step"><div class="step-title">2. గణపతి ప్రార్థన</div>శుక్లాంబరధరం విష్ణుం శశివర్ణం చతుర్భుజం | ప్రసన్నవదనం ధ్యాయేత్ సర్వవిఘ్నోపశాంతయే ||</div>
+  <div class="step"><div class="step-title">3. దీపారాధన</div>దీపజ్యోతిః పరబ్రహ్మ దీపజ్యోతిర్జనార్దనః | దీపో హరతు మే పాపం సంధ్యాదీప నమోస్తుతే ||</div>
+</body>
+</html>`
+  },
+  {
+    id: 'sample_mantra_counter',
+    title: 'దైవ నామ జప మాల',
+    description: 'ఓం నమః శివాయ, గాయత్రీ మంత్రం మరియు మహామృత్యుంజయ మంత్రాల డిజిటల్ జప సాధన.',
+    category: 'Spiritual',
+    iconUrl: '/shiva_entry_poster.jpg',
+    order: 2,
+    createdAt: Date.now() - 21600000,
+    htmlFileName: 'japa_mala_counter.html',
+    htmlFileSize: 3800,
+    htmlContent: `<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <title>దైవ నామ జప మాల</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Serif Telugu', serif; background: #0b071a; color: #fff; padding: 24px; text-align: center; }
+    h1 { color: #ffd700; }
+    .circle-btn { width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ff9800); color: #0b071a; border: none; font-size: 1.4rem; font-weight: bold; cursor: pointer; margin: 30px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(255,215,0,0.4); }
+    .count { font-size: 3rem; color: #ffd700; font-weight: bold; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>📿 దైవ నామ జప సాధన</h1>
+  <div class="count" id="c">0</div>
+  <p>108 జప సంఖ్య పూర్తి చేయండి</p>
+  <button class="circle-btn" onclick="inc()">జపించు 🙏</button>
+  <script>
+    let n = 0;
+    function inc() { n++; document.getElementById('c').innerText = n; if(n===108) alert('108 జపం పూర్తయినది! హరి ఓం!'); }
   </script>
 </body>
 </html>`

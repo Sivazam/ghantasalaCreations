@@ -12,6 +12,7 @@ export default function NewAppsSection() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingApp, setEditingApp] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const loadApps = async () => {
     try {
@@ -64,7 +65,6 @@ export default function NewAppsSection() {
   const handleDeleteApp = async (app) => {
     try {
       await deleteNewApp(app.id, app.htmlUrl, app.iconUrl);
-      // Remove from local state immediately
       setApps((prev) => prev.filter((a) => a.id !== app.id));
     } catch (error) {
       alert('యాప్ తొలగించడంలో లోపం: ' + error.message);
@@ -107,27 +107,42 @@ export default function NewAppsSection() {
     }
   };
 
+  // Filter apps based on search query
+  const filteredApps = apps.filter((app) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      (app.title && app.title.toLowerCase().includes(q)) ||
+      (app.description && app.description.toLowerCase().includes(q))
+    );
+  });
+
   return (
     <section className="new-apps-section" id="new-apps-section">
       <div className="new-apps-container">
-        {/* Section Header */}
-        <div className="new-apps-header-row">
-          <div className="new-apps-title-group">
-            <div className="new-apps-badge">
-              <span>🪔</span>
-              <span>ప్రత్యేక అప్లికేషన్లు</span>
-            </div>
-            <h2 className="new-apps-title">
-              <span>✨ New Apps | కొత్త యాప్‌లు</span>
-            </h2>
-            <p className="new-apps-subtitle">
-              మీ ఆధ్యాత్మిక సాధన మరియు జ్ఞానం కోసం సరికొత్త వెబ్ అప్లికేషన్లు
-            </p>
+        {/* Centered Header Area */}
+        <div className="new-apps-header-center">
+          <span className="new-apps-top-label">మా విభాగాలు</span>
+          <h2 className="new-apps-title">ముఖ్యమైన యాప్‌లు</h2>
+          <p className="new-apps-subtitle">
+            మీ ఆధ్యాత్మిక సాధన మరియు జ్ఞానం కోసం సరికొత్త వెబ్ అప్లికేషన్లు
+          </p>
+
+          {/* Search Bar Pill */}
+          <div className="new-apps-search-container">
+            <input
+              type="text"
+              className="new-apps-search-input"
+              placeholder="యాప్‌లలో వెతకండి..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <span className="new-apps-search-icon">🔍</span>
           </div>
 
           {/* Admin Upload Button */}
           {isAdmin && (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div className="new-apps-admin-row">
               <button
                 className="new-apps-admin-btn"
                 onClick={handleOpenUpload}
@@ -142,16 +157,22 @@ export default function NewAppsSection() {
 
         {/* Apps Grid */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: '#ffd700' }}>
-            <div className="spinner-border text-warning" role="status"></div>
-            <div style={{ marginTop: '12px', fontSize: '0.9rem' }}>యాప్‌లు లోడ్ అవుతున్నాయి...</div>
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#012e3a' }}>
+            <div className="spinner-border text-dark" role="status"></div>
+            <div style={{ marginTop: '12px', fontSize: '0.95rem', fontWeight: 600 }}>యాప్‌లు లోడ్ అవుతున్నాయి...</div>
           </div>
-        ) : apps.length === 0 ? (
+        ) : filteredApps.length === 0 ? (
           <div className="new-apps-empty">
             <div className="new-apps-empty-icon">📱</div>
-            <h3>ఇంకా ఏ యాప్‌లు అప్‌లోడ్ చేయలేదు</h3>
-            <p>అడ్మిన్ ద్వారా త్వరలో కొత్త ఆధ్యాత్మిక అప్లికేషన్లు జోడించబడతాయి.</p>
-            {isAdmin && (
+            <h3>
+              {searchQuery ? 'యాప్‌లు కనుగొనబడలేదు' : 'ఇంకా ఏ యాప్‌లు అప్‌లోడ్ చేయలేదు'}
+            </h3>
+            <p>
+              {searchQuery
+                ? `"${searchQuery}" కు సరిపోలే ఫలితాలు లేవు. దయచేసి వేరే పదం ప్రయత్నించండి.`
+                : 'అడ్మిన్ ద్వారా త్వరలో కొత్త ఆధ్యాత్మిక అప్లికేషన్లు జోడించబడతాయి.'}
+            </p>
+            {isAdmin && !searchQuery && (
               <button
                 className="new-apps-admin-btn"
                 style={{ marginTop: '16px' }}
@@ -163,12 +184,12 @@ export default function NewAppsSection() {
           </div>
         ) : (
           <div className="new-apps-grid">
-            {apps.map((app, index) => (
+            {filteredApps.map((app, index) => (
               <AppCard
                 key={app.id}
                 app={app}
                 index={index}
-                totalApps={apps.length}
+                totalApps={filteredApps.length}
                 isAdmin={isAdmin}
                 onEdit={handleEditApp}
                 onDelete={handleDeleteApp}
