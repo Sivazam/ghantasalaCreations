@@ -15,6 +15,66 @@ import { checkIsAdmin } from '../../dasara/firebase/dasaraFirestore';
 const APPS_COLLECTION = 'newApps';
 
 /**
+ * Compress an image file to a lightweight Base64 data URI (max 180x180 px).
+ * Typical size is 4KB - 12KB, perfectly suited for direct Firestore storage
+ * without depending on Firebase Storage bucket quota.
+ */
+export const compressImageToBase64 = (file, maxWidth = 180, maxHeight = 180, quality = 0.85) => {
+  return new Promise((resolve) => {
+    if (!file) {
+      resolve('');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Try webp first for maximum compression, fallback to jpeg
+        try {
+          const dataUrl = canvas.toDataURL('image/webp', quality);
+          if (dataUrl && dataUrl.startsWith('data:image/webp')) {
+            resolve(dataUrl);
+            return;
+          }
+        } catch (webpErr) {
+          // ignore
+        }
+
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => {
+        resolve(e.target.result || '');
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve('');
+    reader.readAsDataURL(file);
+  });
+};
+
+/**
  * Sort apps by order (ascending), then by createdAt (descending)
  */
 export const sortApps = (apps) => {
@@ -82,7 +142,9 @@ const readFileAsText = (file) => {
 };
 
 /**
- * Upload HTML and optional icon file to Firebase Storage & Firestore
+ * Upload HTML and optional icon file to Firestore & Firebase Storage
+ * Resilient against Storage quota-exceeded: compresses icon to Base64
+ * and stores HTML text directly in Firestore.
  */
 export const createNewApp = async ({
   title,
@@ -115,7 +177,31 @@ export const createNewApp = async ({
     throw new Error('Failed to read HTML file content: ' + err.message);
   }
 
-  // Upload HTML file to Firebase Storage
+  // 1. Prepare icon: compress to Base64 first so we ALWAYS have the image
+  if (iconFile) {
+    try {
+      const base64 = await compressImageToBase64(iconFile);
+      if (base64) {
+        finalIconUrl = base64;
+      }
+    } catch (e) {
+      console.warn('Base64 compression fallback error:', e);
+    }
+  }
+
+  // 2. Attempt Storage upload for icon (optional optimization)
+  if (iconFile) {
+    try {
+      const ext = iconFile.name.split('.').pop() || 'png';
+      const iconStorageRef = ref(storage, `apps/icons/${appId}.${ext}`);
+      const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
+      finalIconUrl = await getDownloadURL(iconSnapshot.ref);
+    } catch (iconErr) {
+      console.warn('Firebase Storage icon upload failed (quota exceeded), using compressed Base64:', iconErr);
+    }
+  }
+
+  // 3. Attempt Storage upload for HTML file
   try {
     const htmlStorageRef = ref(storage, `apps/html/${appId}_${htmlFile.name}`);
     const htmlMetadata = {
@@ -124,19 +210,7 @@ export const createNewApp = async ({
     const htmlSnapshot = await uploadBytes(htmlStorageRef, htmlFile, htmlMetadata);
     htmlStorageUrl = await getDownloadURL(htmlSnapshot.ref);
   } catch (storageErr) {
-    console.warn('Firebase Storage upload for HTML failed, will rely on cached content:', storageErr);
-  }
-
-  // Upload Icon image if provided
-  if (iconFile) {
-    try {
-      const ext = iconFile.name.split('.').pop() || 'png';
-      const iconStorageRef = ref(storage, `apps/icons/${appId}.${ext}`);
-      const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
-      finalIconUrl = await getDownloadURL(iconSnapshot.ref);
-    } catch (iconErr) {
-      console.warn('Icon upload to Storage failed:', iconErr);
-    }
+    console.warn('Firebase Storage HTML upload failed (quota exceeded), cached in Firestore:', storageErr);
   }
 
   // Fallback if no icon URL
@@ -171,6 +245,8 @@ export const createNewApp = async ({
 
 /**
  * Update an existing app
+ * Resilient against Storage quota-exceeded: compresses icon to Base64
+ * and stores HTML text directly in Firestore.
  */
 export const updateNewApp = async (appId, {
   title,
@@ -192,23 +268,45 @@ export const updateNewApp = async (appId, {
   if (iconUrl !== undefined) updates.iconUrl = iconUrl;
   if (order !== undefined) updates.order = Number(order);
 
+  // Handle icon update
   if (iconFile) {
-    const ext = iconFile.name.split('.').pop() || 'png';
-    const iconStorageRef = ref(storage, `apps/icons/${appId}_${Date.now()}.${ext}`);
-    const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
-    updates.iconUrl = await getDownloadURL(iconSnapshot.ref);
+    // 1. Compress to lightweight Base64 data URI first
+    try {
+      const base64 = await compressImageToBase64(iconFile);
+      if (base64) {
+        updates.iconUrl = base64;
+      }
+    } catch (e) {
+      console.warn('Base64 compression error on update:', e);
+    }
+
+    // 2. Attempt Firebase Storage upload
+    try {
+      const ext = iconFile.name.split('.').pop() || 'png';
+      const iconStorageRef = ref(storage, `apps/icons/${appId}_${Date.now()}.${ext}`);
+      const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
+      updates.iconUrl = await getDownloadURL(iconSnapshot.ref);
+    } catch (iconErr) {
+      console.warn('Firebase Storage upload failed (quota exceeded), preserved compressed Base64:', iconErr);
+    }
   }
 
+  // Handle HTML file update
   if (htmlFile) {
     const htmlContent = await readFileAsText(htmlFile);
-    const htmlStorageRef = ref(storage, `apps/html/${appId}_${Date.now()}_${htmlFile.name}`);
-    const htmlMetadata = { contentType: 'text/html; charset=utf-8' };
-    const htmlSnapshot = await uploadBytes(htmlStorageRef, htmlFile, htmlMetadata);
-    updates.htmlUrl = await getDownloadURL(htmlSnapshot.ref);
     updates.htmlFileName = htmlFile.name;
     updates.htmlFileSize = htmlFile.size;
     if (htmlContent.length < 750000) {
       updates.htmlContent = htmlContent;
+    }
+
+    try {
+      const htmlStorageRef = ref(storage, `apps/html/${appId}_${Date.now()}_${htmlFile.name}`);
+      const htmlMetadata = { contentType: 'text/html; charset=utf-8' };
+      const htmlSnapshot = await uploadBytes(htmlStorageRef, htmlFile, htmlMetadata);
+      updates.htmlUrl = await getDownloadURL(htmlSnapshot.ref);
+    } catch (storageErr) {
+      console.warn('Firebase Storage HTML upload failed (quota exceeded), cached in Firestore:', storageErr);
     }
   }
 

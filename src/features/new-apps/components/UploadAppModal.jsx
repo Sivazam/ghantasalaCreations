@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createNewApp, updateNewApp, deleteNewApp } from '../firebase/newAppsFirestore';
+import { createNewApp, updateNewApp, deleteNewApp, compressImageToBase64 } from '../firebase/newAppsFirestore';
 
 // Curated devotional & utility avatars
 const RANDOM_AVATARS = [
@@ -141,12 +141,23 @@ export default function UploadAppModal({ isOpen, onClose, onSaved, editingApp = 
     setFaviconExtracted(false);
   };
 
-  const handleIconChange = (e) => {
+  const handleIconChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setIconFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setIconPreview(previewUrl);
+      try {
+        const compressedBase64 = await compressImageToBase64(file);
+        if (compressedBase64) {
+          setIconPreview(compressedBase64);
+          setIconUrl(compressedBase64);
+        } else {
+          const previewUrl = URL.createObjectURL(file);
+          setIconPreview(previewUrl);
+        }
+      } catch (err) {
+        const previewUrl = URL.createObjectURL(file);
+        setIconPreview(previewUrl);
+      }
       setFaviconExtracted(false);
     }
   };
