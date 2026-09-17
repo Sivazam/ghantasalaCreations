@@ -15,14 +15,14 @@ import { checkIsAdmin } from '../../dasara/firebase/dasaraFirestore';
 const APPS_COLLECTION = 'newApps';
 
 /**
- * Compress an image file to a lightweight Base64 data URI (max 180x180 px).
- * Typical size is 4KB - 12KB, perfectly suited for direct Firestore storage
- * without depending on Firebase Storage bucket quota.
+ * Compress an image file to a lightweight WebP/JPEG Blob and Base64 data URI (max 180x180 px).
+ * Typical size is 4KB - 10KB (99% smaller than raw camera/desktop images),
+ * perfectly suited for direct Firestore storage or tiny Cloud Storage footprint.
  */
-export const compressImageToBase64 = (file, maxWidth = 180, maxHeight = 180, quality = 0.85) => {
+export const compressImageFile = (file, maxWidth = 180, maxHeight = 180, quality = 0.82) => {
   return new Promise((resolve) => {
     if (!file) {
-      resolve('');
+      resolve({ blob: null, dataUrl: '' });
       return;
     }
 
@@ -51,27 +51,35 @@ export const compressImageToBase64 = (file, maxWidth = 180, maxHeight = 180, qua
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Try webp first for maximum compression, fallback to jpeg
+        let dataUrl = '';
         try {
-          const dataUrl = canvas.toDataURL('image/webp', quality);
-          if (dataUrl && dataUrl.startsWith('data:image/webp')) {
-            resolve(dataUrl);
-            return;
-          }
-        } catch (webpErr) {
-          // ignore
+          dataUrl = canvas.toDataURL('image/webp', quality);
+        } catch (err) {
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
         }
 
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        canvas.toBlob(
+          (blob) => {
+            resolve({ blob: blob || file, dataUrl });
+          },
+          'image/webp',
+          quality
+        );
       };
       img.onerror = () => {
-        resolve(e.target.result || '');
+        resolve({ blob: file, dataUrl: e.target.result || '' });
       };
       img.src = e.target.result;
     };
-    reader.onerror = () => resolve('');
+    reader.onerror = () => resolve({ blob: file, dataUrl: '' });
     reader.readAsDataURL(file);
   });
+};
+
+// Backward-compatible helper returning just dataUrl
+export const compressImageToBase64 = async (file, maxWidth = 180, maxHeight = 180, quality = 0.82) => {
+  const { dataUrl } = await compressImageFile(file, maxWidth, maxHeight, quality);
+  return dataUrl;
 };
 
 /**
@@ -143,7 +151,7 @@ const readFileAsText = (file) => {
 
 /**
  * Upload HTML and optional icon file to Firestore & Firebase Storage
- * Resilient against Storage quota-exceeded: compresses icon to Base64
+ * Resilient against Storage quota-exceeded: compresses icon to lightweight WebP/Base64
  * and stores HTML text directly in Firestore.
  */
 export const createNewApp = async ({
@@ -177,27 +185,28 @@ export const createNewApp = async ({
     throw new Error('Failed to read HTML file content: ' + err.message);
   }
 
-  // 1. Prepare icon: compress to Base64 first so we ALWAYS have the image
+  // 1. Prepare icon: compress to tiny WebP/Base64 first (4KB-10KB)
+  let compressedBlob = null;
   if (iconFile) {
     try {
-      const base64 = await compressImageToBase64(iconFile);
-      if (base64) {
-        finalIconUrl = base64;
+      const { blob, dataUrl } = await compressImageFile(iconFile, 180, 180, 0.82);
+      compressedBlob = blob;
+      if (dataUrl) {
+        finalIconUrl = dataUrl;
       }
     } catch (e) {
       console.warn('Base64 compression fallback error:', e);
     }
   }
 
-  // 2. Attempt Storage upload for icon (optional optimization)
-  if (iconFile) {
+  // 2. Attempt Storage upload for icon with compressed blob (not original heavy file!)
+  if (iconFile && compressedBlob) {
     try {
-      const ext = iconFile.name.split('.').pop() || 'png';
-      const iconStorageRef = ref(storage, `apps/icons/${appId}.${ext}`);
-      const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
+      const iconStorageRef = ref(storage, `apps/icons/${appId}.webp`);
+      const iconSnapshot = await uploadBytes(iconStorageRef, compressedBlob, { contentType: 'image/webp' });
       finalIconUrl = await getDownloadURL(iconSnapshot.ref);
     } catch (iconErr) {
-      console.warn('Firebase Storage icon upload failed (quota exceeded), using compressed Base64:', iconErr);
+      console.warn('Firebase Storage icon upload bypassed (quota/network), using compressed Base64:', iconErr);
     }
   }
 
@@ -210,7 +219,7 @@ export const createNewApp = async ({
     const htmlSnapshot = await uploadBytes(htmlStorageRef, htmlFile, htmlMetadata);
     htmlStorageUrl = await getDownloadURL(htmlSnapshot.ref);
   } catch (storageErr) {
-    console.warn('Firebase Storage HTML upload failed (quota exceeded), cached in Firestore:', storageErr);
+    console.warn('Firebase Storage HTML upload bypassed (quota/network), cached in Firestore:', storageErr);
   }
 
   // Fallback if no icon URL
@@ -245,7 +254,7 @@ export const createNewApp = async ({
 
 /**
  * Update an existing app
- * Resilient against Storage quota-exceeded: compresses icon to Base64
+ * Resilient against Storage quota-exceeded: compresses icon to tiny WebP/Base64
  * and stores HTML text directly in Firestore.
  */
 export const updateNewApp = async (appId, {
@@ -268,26 +277,27 @@ export const updateNewApp = async (appId, {
   if (iconUrl !== undefined) updates.iconUrl = iconUrl;
   if (order !== undefined) updates.order = Number(order);
 
-  // Handle icon update
+  // Handle icon update with compression
   if (iconFile) {
-    // 1. Compress to lightweight Base64 data URI first
+    let compressedBlob = null;
     try {
-      const base64 = await compressImageToBase64(iconFile);
-      if (base64) {
-        updates.iconUrl = base64;
+      const { blob, dataUrl } = await compressImageFile(iconFile, 180, 180, 0.82);
+      compressedBlob = blob;
+      if (dataUrl) {
+        updates.iconUrl = dataUrl;
       }
     } catch (e) {
       console.warn('Base64 compression error on update:', e);
     }
 
-    // 2. Attempt Firebase Storage upload
-    try {
-      const ext = iconFile.name.split('.').pop() || 'png';
-      const iconStorageRef = ref(storage, `apps/icons/${appId}_${Date.now()}.${ext}`);
-      const iconSnapshot = await uploadBytes(iconStorageRef, iconFile);
-      updates.iconUrl = await getDownloadURL(iconSnapshot.ref);
-    } catch (iconErr) {
-      console.warn('Firebase Storage upload failed (quota exceeded), preserved compressed Base64:', iconErr);
+    if (compressedBlob) {
+      try {
+        const iconStorageRef = ref(storage, `apps/icons/${appId}_${Date.now()}.webp`);
+        const iconSnapshot = await uploadBytes(iconStorageRef, compressedBlob, { contentType: 'image/webp' });
+        updates.iconUrl = await getDownloadURL(iconSnapshot.ref);
+      } catch (iconErr) {
+        console.warn('Firebase Storage upload bypassed (quota/network), preserved compressed Base64:', iconErr);
+      }
     }
   }
 
@@ -306,7 +316,7 @@ export const updateNewApp = async (appId, {
       const htmlSnapshot = await uploadBytes(htmlStorageRef, htmlFile, htmlMetadata);
       updates.htmlUrl = await getDownloadURL(htmlSnapshot.ref);
     } catch (storageErr) {
-      console.warn('Firebase Storage HTML upload failed (quota exceeded), cached in Firestore:', storageErr);
+      console.warn('Firebase Storage HTML upload bypassed (quota/network), cached in Firestore:', storageErr);
     }
   }
 
