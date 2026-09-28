@@ -1,0 +1,199 @@
+/* Homepage Gallery Slideshow Styling - Luxury Deep Teal & Golden Theme */
+
+.home-gallery-wrapper {
+  max-width: 1250px;
+  margin: 45px auto 35px;
+  padding: 0 18px;
+}
+
+.home-gallery-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.home-gallery-badge {
+  display: inline-block;
+  color: #e60000;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+.home-gallery-title {
+  color: #063f42;
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 800;
+  margin: 4px 0 10px;
+  font-family: 'Noto Serif Telugu', serif;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.home-gallery-subtitle {
+  color: #175254;
+  font-size: clamp(14px, 1.8vw, 17px);
+  max-width: 620px;
+  margin: 0 auto;
+  font-family: 'Noto Sans Telugu', sans-serif;
+  line-height: 1.6;
+}
+
+/* Slide Cards */
+.home-gallery-card-item {
+  padding: 10px 12px;
+}
+
+.home-gallery-card {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(8, 105, 105, 0.96), rgba(5, 70, 73, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 14px 35px rgba(0, 55, 58, 0.22);
+  cursor: pointer;
+  aspect-ratio: 4 / 3;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.home-gallery-card:hover {
+  transform: translateY(-7px) scale(1.02);
+  box-shadow: 0 22px 50px rgba(0, 55, 58, 0.38);
+  border-color: #ffd700;
+}
+
+.home-gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.home-gallery-card:hover .home-gallery-img {
+  transform: scale(1.08);
+}
+
+/* Overlay gradient and tag */
+.home-gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(4, 40, 42, 0.85) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 14px 16px;
+  pointer-events: none;
+}
+
+.home-gallery-tag {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+/* View Full Gallery Button Container */
+.home-gallery-cta-wrap {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.home-gallery-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(145deg, #0c7775, #063f42);
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 13px 28px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(255, 215, 0, 0.6);
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(0, 55, 58, 0.28);
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+.home-gallery-cta-btn:hover {
+  background: #ffd700;
+  color: #063f42 !important;
+  border-color: #ffd700;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 35px rgba(255, 215, 0, 0.35);
+}
+
+/* Lightbox Modal */
+.gallery-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 15, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  z-index: 5000;
+  padding: 20px;
+  animation: fadeIn 0.25s ease both;
+}
+
+.gallery-modal-content {
+  position: relative;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery-modal-img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 16px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+}
+
+.gallery-modal-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  background: #e60000;
+  color: #ffffff;
+  border: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.gallery-modal-close:hover {
+  transform: scale(1.1) rotate(90deg);
+}
+
+@media (max-width: 600px) {
+  .home-gallery-card {
+    aspect-ratio: 16 / 10;
+  }
+
+  .home-gallery-cta-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+    font-size: 0.92rem;
+  }
+}

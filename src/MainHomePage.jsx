@@ -43,6 +43,9 @@ import { NewAppsSection } from './features/new-apps';
 // Hero Section
 import HeroSection from './components/HeroSection';
 
+// Home Gallery Slideshow
+import HomeGallerySlideshow from './components/HomeGallerySlideshow';
+
 
 export default function MainHomePage(prop) {
 
@@ -780,55 +783,30 @@ export default function MainHomePage(prop) {
         </div>
         {/* ========== END SHIVA SMARANA ENTRY SECTION ========== */}
 
-        <div className='container-fluid ' style={{ margin: '15px 0' }}  >
+        {/* ========== HOMEPAGE GALLERY SLIDESHOW ========== */}
+        <HomeGallerySlideshow />
+        {/* ========== END HOMEPAGE GALLERY SLIDESHOW ========== */}
+
+        <div className='container-fluid ' style={{ margin: '25px 0' }}  >
           <Grid className='row' container spacing={2}>
             <Grid className='col-8' item lg={8} md={12} xs={12} sm={12} >
               <Item>
-                <div style={{ marginBottom: '20px' }}>
-                  <Carousel responsive={zodiacRes} >
-                    {arr.map((x, i) =>
-                      <a key={i} href={x.link} style={{ textDecoration: 'none' }}>
-                        <img alt="img" src={x.img} height={'100px'} width={'auto'} style={{ borderRadius: '50%', filter: 'drop-shadow(5px 5px 5px #222)' }} />
-                        <p style={{ marginTop: '5px', color: 'white', fontWeight: 600, filter: 'drop-shadow(5px 5px 5px #222)' }}>{x.name}</p>
-                      </a>
-                    )}
-
-                  </Carousel>
+                <div style={{ textAlign: 'center', marginBottom: '18px' }}>
+                  <span style={{ color: '#fed000', fontWeight: 800, fontSize: '0.88rem', letterSpacing: '0.5px' }}>
+                    ✦ ద్వాదశ రాశులు
+                  </span>
+                  <h3 style={{ color: '#ffffff', fontWeight: 800, fontSize: '1.6rem', margin: '4px 0 12px', fontFamily: 'Noto Serif Telugu, serif' }}>
+                    రాశి చక్రం &amp; నక్షత్ర వివరాలు
+                  </h3>
                 </div>
-                <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
-                  <ol className="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                  </ol>
-                  <div className="carousel-inner">
-                    <div className="carousel-item active">
-                      <img id="sliderImage" className="d-block w-100" src="https://img.freepik.com/free-vector/illustration-horoscope_53876-20594.jpg" alt="First slide" />
-                    </div>
-                    <div className="carousel-item">
-                      <img id="sliderImage" className="d-block w-100" src="https://ak9.picdn.net/shutterstock/videos/6542729/thumb/1.jpg?ip=x480" alt="Second slide" />
-                    </div>
-                    <div className="carousel-item">
-                      <img id="sliderImage" className="d-block w-100" src="https://www.templepurohit.com/wp-content/uploads/2015/08/Free-Astrology-Predictions-Panchang-Detailed-Horoscope-Report-Hindu-Astrology-1.jpg" alt="Third slide" />
-                    </div>
-                    <div className="carousel-item">
-                      <img id="sliderImage" className="d-block w-100" src="https://www.shutterstock.com/image-vector/silhouette-meditating-woman-lotus-position-260nw-1766776265.jpg" alt="Third slide" />
-                    </div>
-                    <div className="carousel-item">
-                      <img id="sliderImage" className="d-block w-100" src="https://media.gettyimages.com/id/940166200/video/chinese-fengshui-compass.jpg?s=640x640&k=20&c=vvrnfR7lEGEuJmi6MgvR5PeZze1Xiaxxy2NlT1ufAC8=" alt="Third slide" />
-                    </div>
-                  </div>
-                  <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Previous</span>
-                  </a>
-                  {/* <div className="user-stats-card">
-                    <div className="stat-item">
-                      <span className="stat-label">Total Chant Count</span>
-                      <span className="stat-value">{totalChants.toLocaleString('en-IN')}</span>
-                    </div>
-                  </div> */}
-                </div>
+                <Carousel responsive={zodiacRes} infinite={true} autoPlay={true} autoPlaySpeed={3000}>
+                  {arr.map((x, i) =>
+                    <a key={i} href={x.link} style={{ textDecoration: 'none', display: 'block', textAlign: 'center', padding: '0 8px' }}>
+                      <img alt={x.name} src={x.img} height={'90px'} width={'auto'} style={{ borderRadius: '50%', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.5))', transition: 'transform 0.3s ease' }} />
+                      <p style={{ marginTop: '8px', color: '#ffd700', fontWeight: 700, fontSize: '0.95rem' }}>{x.name}</p>
+                    </a>
+                  )}
+                </Carousel>
               </Item>
             </Grid>
 
