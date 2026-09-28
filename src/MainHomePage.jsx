@@ -40,6 +40,9 @@ import { DasaraSection } from './features/dasara';
 // New Apps Feature
 import { NewAppsSection } from './features/new-apps';
 
+// Hero Section
+import HeroSection from './components/HeroSection';
+
 
 export default function MainHomePage(prop) {
 
@@ -168,10 +171,13 @@ export default function MainHomePage(prop) {
   }));
 
   const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: 'rgba(255  , 255, 255, 0.1)',
+    background: 'linear-gradient(145deg, rgba(8, 105, 105, 0.94), rgba(5, 70, 73, 0.95))',
     padding: theme.spacing(3),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    color: '#ffffff',
+    borderRadius: '20px',
+    border: '1px solid rgba(255, 255, 255, 0.28)',
+    boxShadow: '0 12px 35px rgba(0, 55, 58, 0.25)',
   }));
 
 
@@ -302,6 +308,18 @@ export default function MainHomePage(prop) {
       }
     });
     return () => unsubscribe();
+  }, []);
+
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      setScrollProgress(pct);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleDirectGoogleLogin = async () => {
@@ -474,17 +492,18 @@ export default function MainHomePage(prop) {
 
   return (
     <div className={prop.cName} style={{ marginBottom: '0px' }} >
+      <div className="top-scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
       <Navrbar />
 
 
 
       <div className='MainCont'>
-        {/* TOP BAR: Seamless Brown Temple Theme below Navbar with merged spiritual pattern */}
+        {/* TOP BAR: Luxury Deep Teal & Gold spiritual bar */}
         <div style={{
-          background: "linear-gradient(180deg, rgba(21, 5, 5, 0.92) 0%, rgba(42, 11, 11, 0.94) 100%), url('/spiritual_pattern.jpg') repeat center / 320px",
-          padding: '8px 15px',
-          borderBottom: '1.5px solid rgba(255, 215, 0, 0.25)',
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)'
+          background: "linear-gradient(180deg, rgba(7, 63, 66, 0.96) 0%, rgba(4, 48, 51, 0.98) 100%)",
+          padding: '8px 16px',
+          borderBottom: '1.5px solid rgba(255, 215, 0, 0.35)',
+          boxShadow: '0 4px 15px rgba(0, 40, 42, 0.25)'
         }}>
           <div className="row" style={{ margin: 0, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
 
@@ -707,6 +726,10 @@ export default function MainHomePage(prop) {
           </div>
         )}
 
+        {/* ========== HERO SECTION (LUXURY GURUJI VISUAL & ORBIT) ========== */}
+        <HeroSection />
+        {/* ========== END HERO SECTION ========== */}
+
         {/* ========== NEW APPS SECTION ========== */}
         <NewAppsSection />
         {/* ========== END NEW APPS SECTION ========== */}
@@ -864,24 +887,43 @@ export default function MainHomePage(prop) {
                         autoPlay
                     /> */}
 
-            <Grid item xs={12} style={{ color: '#fff', textAlign: 'center' }}>
-              <h1 style={{ margin: '20px 0' }}>కేటగిరీలు</h1>
+            <Grid item xs={12} style={{ textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', margin: '25px 0 15px' }}>
+                <span style={{ color: '#e60000', fontWeight: 800, fontSize: '0.95rem', display: 'block', letterSpacing: '0.5px' }}>
+                  వివిధ విభాగాలు
+                </span>
+                <h2 style={{ color: '#063f42', fontWeight: 800, fontSize: '2.3rem', margin: '5px 0', fontFamily: 'Noto Serif Telugu, serif' }}>
+                  కేటగిరీలు
+                </h2>
+              </div>
               <Carousel responsive={responsive}>
                 {cat.map((x, i) =>
 
-                  <div key={i} style={{ margin: '9px 20px' }}>
+                  <div key={i} style={{ margin: '9px 15px' }}>
                     <a href={x.link} style={{ textDecoration: 'none' }}>
-                      <Card sx={{ maxWidth: 345 }}>
+                      <Card sx={{ 
+                        maxWidth: 345, 
+                        background: 'linear-gradient(145deg, rgba(8, 105, 105, 0.96), rgba(5, 70, 73, 0.95))', 
+                        borderRadius: '20px', 
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                        boxShadow: '0 12px 30px rgba(0, 55, 58, 0.22)',
+                        overflow: 'hidden',
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-5px)',
+                          boxShadow: '0 18px 40px rgba(0, 55, 58, 0.35)'
+                        }
+                      }}>
                         <CardActionArea>
                           <CardMedia
                             component="img"
-                            height="200"
+                            height="190"
                             image={x.image}
                             alt={x.title}
                             onError={(e) => { e.target.src = '/spiritual_pattern.jpg'; }}
                           />
-                          <CardContent >
-                            <Typography gutterBottom variant="h6" component="div" style={{ fontWeight: '700' }} >
+                          <CardContent style={{ padding: '14px', background: 'rgba(0,0,0,0.12)' }}>
+                            <Typography gutterBottom variant="h6" component="div" style={{ fontWeight: '700', color: '#ffffff', fontSize: '1.05rem', margin: 0 }} >
                               {x.title}
                             </Typography>
                           </CardContent>

@@ -1,11 +1,12 @@
 /* Premium Spiritual Top Navbar Styling */
 
 #navBar {
-  background: rgba(18, 6, 6, 0.95) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  padding: 8px 16px;
+  background: rgba(7, 63, 66, 0.92) !important;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 2px solid #ffd700;
+  box-shadow: 0 8px 30px rgba(0, 40, 42, 0.35);
+  padding: 10px 20px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -14,11 +15,15 @@
 
 .navbar-brand-title {
   font-family: 'Noto Serif Telugu', serif;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   letter-spacing: 0.5px;
+}
+
+.navbar-brand-title span {
+  color: #ffd700;
 }
 
 /* Toggler Button */

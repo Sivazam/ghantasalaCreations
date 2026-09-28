@@ -25,6 +25,16 @@ export default function Navrbar() {
         }
     };
 
+    const handleAppsClick = (e) => {
+        setIsNavOpen(false);
+        const el = document.getElementById('new-apps-section') || document.querySelector('.new-apps-section-wrapper');
+        if (el) {
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, '', '/#new-apps-section');
+        }
+    };
+
     // Active state detection
     const isDasaraActive = currentPath.startsWith('/dasara') || (currentPath === '/' && currentHash === '#dasara-section');
     const isVivahamActive = currentPath === '/nakshatras' || currentPath === '/nakshatra_detail';
@@ -41,7 +51,7 @@ export default function Navrbar() {
                 >
                     <img src={DP} width="44" height="44" className="d-inline-block align-middle icon" alt="Logo" />
                     <span className="navbar-brand-title" style={{ marginLeft: '10px' }}>
-                        Ghantasala arts
+                        ఘంటసాల <span>ఆర్ట్స్</span>
                     </span>
                 </Link>
 
@@ -61,6 +71,19 @@ export default function Navrbar() {
                 <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`} id="navbarNav">
                     <ul className="navbar-nav ms-auto" style={{ alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                         
+                        {/* New Apps Nav Pill */}
+                        <li className="nav-item">
+                            <a 
+                                className="nav-link" 
+                                href="/#new-apps-section" 
+                                onClick={handleAppsClick}
+                            >
+                                <span className="nav-pill-btn">
+                                    ✨ ముఖ్యమైన యాప్‌లు
+                                </span>
+                            </a>
+                        </li>
+
                         {/* 1. Dasara Special */}
                         <li className="nav-item">
                             <a 

@@ -39,14 +39,45 @@
 }
 
 
-.Home{
-  background-color: #020024;
-  background-image: 
-    linear-gradient(7deg, rgba(2, 0, 36, 0.94) 0%, rgba(9, 9, 85, 0.92) 35%, rgba(0, 160, 210, 0.88) 100%),
-    url('./images/spiritual_pattern.jpg');
-  background-repeat: repeat;
-  background-size: auto, 360px;
-  background-attachment: fixed;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Noto+Serif+Telugu:wght@400;600;700;800&display=swap');
+
+:root {
+  --yellow: #fff000;
+  --yellow2: #ffd900;
+  --teal: #0c7775;
+  --teal-dark: #07595b;
+  --teal-deep: #063f42;
+  --purple: #a500e8;
+  --red: #e60000;
+  --white: #fff;
+  --ink: #073b3d;
+  --glass: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.38);
+  --shadow: 0 18px 45px rgba(0, 55, 58, 0.25);
+}
+
+.top-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), #ffffff, var(--red));
+  z-index: 99999;
+  box-shadow: 0 0 12px #ffffff;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
+.Home {
+  min-height: 100vh;
+  color: var(--teal-deep);
+  background:
+    radial-gradient(circle at 15% 8%, rgba(165, 0, 232, 0.15), transparent 26%),
+    radial-gradient(circle at 90% 35%, rgba(12, 119, 117, 0.14), transparent 28%),
+    radial-gradient(circle at 50% 80%, rgba(230, 0, 0, 0.06), transparent 30%),
+    linear-gradient(135deg, #fff900 0%, #ffe300 52%, #fff100 100%);
+  position: relative;
 }
 
 
@@ -392,10 +423,12 @@ background-size: cover;
   height: 300vh;
 }*/
 
-#homeBg{
-background: rgb(2,0,36);
-background: linear-gradient(7deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-min-height: 150vh;
+#homeBg {
+  background:
+    radial-gradient(circle at 15% 8%, rgba(165, 0, 232, 0.15), transparent 26%),
+    radial-gradient(circle at 90% 35%, rgba(12, 119, 117, 0.14), transparent 28%),
+    linear-gradient(135deg, #fff900 0%, #ffe300 52%, #fff100 100%);
+  min-height: 100vh;
 }
 
 .heroSec{
