@@ -190,7 +190,7 @@ export default function Footer() {
                             <li className="footer-contact-item">
                                 <LocationOnIcon className="footer-contact-icon" />
                                 <div className="footer-contact-text">
-                                    <strong>స్థానం:</strong> ఘంటసాల గ్రామం, కృష్ణా జిల్లా, ఆంధ్రప్రదేశ్.
+                                    <strong>స్థానం:</strong> Near Railway quarter, Rajahmundry
                                 </div>
                             </li>
                             <li className="footer-contact-item">
