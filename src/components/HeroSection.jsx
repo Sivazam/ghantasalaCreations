@@ -93,12 +93,15 @@ export default function HeroSection() {
                 
                 {/* Center White Disc with Guruji's Portrait */}
                 <div className="ghanta-target-center">
-                  <img 
-                    src="/guruji_hero.png" 
-                    alt="శ్రీ ఘంటసాల గురువుగారు" 
-                    className="ghanta-target-guruji-img" 
-                    loading="eager"
-                  />
+                  <picture className="ghanta-target-picture">
+                    <source srcSet="/guruji_circle.webp" type="image/webp" />
+                    <img 
+                      src="/guruji_circle.png" 
+                      alt="శ్రీ ఘంటసాల గురువుగారు" 
+                      className="ghanta-target-guruji-img" 
+                      loading="eager"
+                    />
+                  </picture>
                 </div>
               </div>
 
