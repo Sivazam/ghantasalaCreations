@@ -81,32 +81,43 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Right Column: Orbit, Divine Backlight & Guruji Cutout */}
+        {/* Right Column: Concentric Teal Target Discs, Center White Frame & 3 Red Badges */}
         <div className="ghanta-hero-visual">
-          <div className="ghanta-orbit-container">
-            {/* Divine Golden Halo Aura */}
-            <div className="ghanta-divine-aura" aria-hidden="true"></div>
+          <div className="ghanta-target-wrapper">
+            
+            {/* Outer Teal Disc */}
+            <div className="ghanta-target-outer">
+              
+              {/* Inner Dark Teal Disc */}
+              <div className="ghanta-target-inner">
+                
+                {/* Center White Disc with Guruji's Portrait */}
+                <div className="ghanta-target-center">
+                  <img 
+                    src="/guruji_hero.png" 
+                    alt="శ్రీ ఘంటసాల గురువుగారు" 
+                    className="ghanta-target-guruji-img" 
+                    loading="eager"
+                  />
+                </div>
+              </div>
 
-            {/* Concentric Rotating Teal & Golden Orbit */}
-            <div className="ghanta-orbit">
-              {/* High-definition, smoothly cut-out floating portrait */}
-              <img 
-                src="/guruji_hero.png" 
-                alt="శ్రీ ఘంటసాల గురువుగారు" 
-                className="ghanta-guruji-img" 
-                loading="eager"
-              />
-            </div>
+              {/* 3 Red Pill Badges matching user's design */}
+              {/* Left Badge: నిత్యపూజలు */}
+              <div className="ghanta-target-badge badge-left">
+                నిత్యపూజలు
+              </div>
 
-            {/* Floating Glassmorphic Chips */}
-            <div className="ghanta-float-chip ghanta-chip-1">
-              <span>🕉️</span> వేద జ్ఞానం
-            </div>
-            <div className="ghanta-float-chip ghanta-chip-2">
-              <span>🪷</span> నిత్య పూజలు
-            </div>
-            <div className="ghanta-float-chip ghanta-chip-3">
-              <span>⭐</span> జ్యోతిష్య మార్గదర్శనం
+              {/* Right Badge: వేదజ్ఞానం */}
+              <div className="ghanta-target-badge badge-right">
+                వేదజ్ఞానం
+              </div>
+
+              {/* Bottom Badge: జ్యోతిష్య మార్గదర్శనం */}
+              <div className="ghanta-target-badge badge-bottom">
+                జ్యోతిష్య మార్గదర్శనం
+              </div>
+
             </div>
           </div>
         </div>
